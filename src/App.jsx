@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 
-const API = 'https://petclub-backend-production.up.railway.app/api';
-const APP_URL = 'https://petclub-app.vercel.app';
+const API = 'https://api.mypetclub.app/api';
+const APP_URL = 'https://app.mypetclub.app';
 const QR_URL = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(APP_URL)}&color=1a1a2e&bgcolor=ffffff&margin=10`;
 
 const IMG = {
@@ -355,108 +355,334 @@ function GetApp() {
   );
 }
 
-/* ══════════ JOIN / SIGNUP ══════════ */
+/* ══════════ JOIN / SIGNUP — Groomit-inspired step flow ══════════ */
+const JOIN_ROLES = [
+  {
+    id: 'owner',
+    icon: '🐾',
+    title: 'Pet Owner',
+    subtitle: 'I want to book services',
+    perks: ['Book grooming, training & vet care', 'Live GPS tracking of your pro', 'Digital health records for your pet'],
+    color: '#f97316',
+    bg: 'bg-orange-50',
+    border: 'border-orange-200',
+    ring: 'ring-orange-400',
+    tag: 'Most Popular',
+    tagColor: 'bg-orange-100 text-orange-700',
+  },
+  {
+    id: 'groomer',
+    icon: '✂️',
+    title: 'Groomer',
+    subtitle: 'I offer grooming services',
+    perks: ['Get discovered by pet owners', 'Manage bookings & availability', 'Grow 5-star reviews'],
+    color: '#7c3aed',
+    bg: 'bg-violet-50',
+    border: 'border-violet-200',
+    ring: 'ring-violet-400',
+    tag: 'High Earning',
+    tagColor: 'bg-violet-100 text-violet-700',
+  },
+  {
+    id: 'trainer',
+    icon: '🎓',
+    title: 'Trainer',
+    subtitle: 'I provide dog training',
+    perks: ['Set your own schedule & rates', 'Certified trainer badge', 'Track client progress'],
+    color: '#2563eb',
+    bg: 'bg-blue-50',
+    border: 'border-blue-200',
+    ring: 'ring-blue-400',
+    tag: 'In Demand',
+    tagColor: 'bg-blue-100 text-blue-700',
+  },
+  {
+    id: 'vet',
+    icon: '🏥',
+    title: 'Veterinarian',
+    subtitle: 'I provide vet care',
+    perks: ['In-clinic & home visit bookings', 'Digital prescription records', 'Verified vet badge'],
+    color: '#059669',
+    bg: 'bg-emerald-50',
+    border: 'border-emerald-200',
+    ring: 'ring-emerald-400',
+    tag: 'Trusted',
+    tagColor: 'bg-emerald-100 text-emerald-700',
+  },
+];
+
+const LEFT_PANELS = {
+  owner: {
+    headline: 'Your pet deserves the best.',
+    sub: 'Join 50,000+ pet parents who book verified groomers, trainers & vets — with live GPS tracking.',
+    img: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=900&auto=format&fit=crop&q=85',
+    stats: [{ v: '50K+', l: 'Happy Pets' }, { v: '4.9★', l: 'Rating' }, { v: '100+', l: 'Cities' }],
+  },
+  groomer: {
+    headline: 'Grow your grooming business.',
+    sub: 'Join our verified groomer network and get discovered by thousands of pet owners in your city.',
+    img: 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=900&auto=format&fit=crop&q=85',
+    stats: [{ v: '1.2K+', l: 'Active Pros' }, { v: '₹25K+', l: 'Avg Monthly' }, { v: '24h', l: 'Verification' }],
+  },
+  trainer: {
+    headline: 'Turn your passion into income.',
+    sub: 'Connect with pet owners who need expert training. Set your rates, manage your schedule, grow your brand.',
+    img: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=900&auto=format&fit=crop&q=85',
+    stats: [{ v: '₹699+', l: 'Per Session' }, { v: 'Flex', l: 'Schedule' }, { v: '24h', l: 'Approval' }],
+  },
+  vet: {
+    headline: 'Reach more patients digitally.',
+    sub: 'Offer in-clinic and home visit care to verified pet owners. Digital records, seamless booking.',
+    img: 'https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?w=900&auto=format&fit=crop&q=85',
+    stats: [{ v: 'Verified', l: 'Badge' }, { v: 'Digital', l: 'Rx Records' }, { v: '24/7', l: 'Bookings' }],
+  },
+};
+
 function JoinSection() {
-  const [cc, setCC] = useState('91');
-  const [form, setForm] = useState({ name: '', phone: '', email: '', city: '', pettype: '' });
-  const [state, setState] = useState('idle');
-  const [error, setError] = useState('');
-  const country = COUNTRIES.find(c => c.code === cc);
+  const [step, setStep]       = useState(1);   // 1=choose role, 2=enter details, 3=done
+  const [role, setRole]       = useState(null);
+  const [cc,   setCC]         = useState('91');
+  const [form, setForm]       = useState({ name: '', phone: '', email: '' });
+  const [loading, setLoading] = useState(false);
+  const [error,   setError]   = useState('');
+
+  const selectedRole  = JOIN_ROLES.find(r => r.id === role);
+  const country       = COUNTRIES.find(c => c.code === cc);
+  const panel         = LEFT_PANELS[role] || LEFT_PANELS.owner;
+
+  const pickRole = (id) => { setRole(id); setStep(2); setError(''); };
 
   const submit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!form.name.trim()) { setError('Please enter your name'); return; }
-    if (!form.phone || form.phone.length < 6) { setError('Enter a valid phone number'); return; }
-    if (!form.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) { setError('Enter a valid email address'); return; }
-    setState('loading');
+    if (!form.name.trim())  return setError('Please enter your name');
+    if (!form.phone || form.phone.length < 6) return setError('Enter a valid phone number');
+    if (!form.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) return setError('Enter a valid email');
+    setLoading(true);
     try {
-      const res = await fetch(`${API}/contact/send-link`, {
+      await fetch(`${API}/contact/send-link`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: form.name.trim(), phone: `+${cc}${form.phone}`, email: form.email.trim(), city: form.city, pettype: form.pettype }),
+        body: JSON.stringify({ name: form.name.trim(), phone: `+${cc}${form.phone}`, email: form.email.trim(), role }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed');
-      setState('done');
-    } catch (err) { setState('idle'); setError(err.message || 'Something went wrong. Please try again.'); }
+      setStep(3);
+    } catch { setError('Something went wrong. Please try again.'); }
+    finally { setLoading(false); }
   };
 
-  if (state === 'done') return (
-    <section id="join" className="section-pad bg-orange-50">
-      <div className="container text-center">
-        <div className="text-6xl mb-6">🎉</div>
-        <h2 className="text-3xl font-black text-gray-900 mb-3">You&apos;re in!</h2>
-        <p className="text-gray-500 mb-6">We&apos;ve sent the app link to your phone and email. Welcome to PETclub!</p>
-        <a href={APP_URL} target="_blank" rel="noreferrer" className="btn-primary">Open PETclub App →</a>
-      </div>
-    </section>
-  );
-
   return (
-    <section id="join" className="section-pad bg-orange-50">
-      <div className="container">
-        <div className="max-w-2xl mx-auto">
-          <div className="text-center mb-10">
-            <span className="text-orange-500 text-sm font-bold tracking-widest uppercase">Join Free</span>
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mt-3 mb-3">Start Your Pet&apos;s Journey</h2>
-            <p className="text-gray-500 text-lg">Sign up and we&apos;ll send the app link directly to your phone and email.</p>
-          </div>
-
-          <div className="bg-white rounded-3xl shadow-card p-8 border border-orange-100">
-            {error && <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-5">⚠ {error}</div>}
-            <form onSubmit={submit} className="space-y-4">
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">Full Name *</label>
-                  <input type="text" placeholder="Arjun Mehta" required className="input-clean"
-                    value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">Mobile Number *</label>
-                  <div className="flex gap-2 mb-2">
-                    {COUNTRIES.map(c => (
-                      <button key={c.code} type="button" onClick={() => { setCC(c.code); setForm(f => ({ ...f, phone: '' })); }}
-                        className={`flex-1 py-1.5 text-xs font-bold rounded-lg border-2 transition-all ${cc === c.code ? 'border-orange-400 bg-orange-50 text-orange-600' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}>
-                        {c.flag} +{c.code}
-                      </button>
-                    ))}
+    <section id="join" className="bg-white">
+      {/* ── Step progress bar ── */}
+      <div className="border-b border-gray-100">
+        <div className="container flex items-center gap-0 py-0">
+          {['Choose Your Role', 'Your Details', 'All Set!'].map((label, i) => {
+            const n = i + 1;
+            const done    = step > n;
+            const current = step === n;
+            return (
+              <div key={label} className="flex items-center flex-1">
+                <div className={`flex items-center gap-2.5 py-4 text-sm font-semibold transition-colors ${current ? 'text-orange-500' : done ? 'text-emerald-600' : 'text-gray-400'}`}>
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black transition-all ${current ? 'bg-orange-500 text-white shadow-brand' : done ? 'bg-emerald-500 text-white' : 'bg-gray-100 text-gray-400'}`}>
+                    {done ? '✓' : n}
                   </div>
-                  <div className="flex border border-gray-200 rounded-xl overflow-hidden focus-within:border-orange-400 focus-within:ring-2 focus-within:ring-orange-100">
-                    <span className="bg-gray-50 px-3 py-3 text-sm font-semibold text-gray-500 border-r border-gray-200 whitespace-nowrap">{country?.flag} +{cc}</span>
-                    <input type="tel" inputMode="numeric" placeholder={country?.ph} required maxLength={15} className="flex-1 px-3 py-3 text-sm focus:outline-none"
-                      value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value.replace(/\D/g, '').slice(0, 15) }))} />
-                  </div>
+                  <span className="hidden sm:inline">{label}</span>
                 </div>
+                {i < 2 && <div className={`flex-1 h-px mx-3 transition-colors ${step > n ? 'bg-emerald-300' : 'bg-gray-100'}`} />}
               </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">Email Address *</label>
-                <input type="email" placeholder="you@example.com" required className="input-clean"
-                  value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
-              </div>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">City</label>
-                  <input type="text" placeholder="Mumbai / Dallas" className="input-clean"
-                    value={form.city} onChange={e => setForm(f => ({ ...f, city: e.target.value }))} />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-1.5 uppercase tracking-wide">Pet Type</label>
-                  <select className="input-clean bg-white" value={form.pettype} onChange={e => setForm(f => ({ ...f, pettype: e.target.value }))}>
-                    <option value="">Select pet…</option>
-                    <option>🐕 Dog</option><option>🐈 Cat</option><option>🐦 Bird</option><option>🐰 Rabbit</option><option>Other</option>
-                  </select>
-                </div>
-              </div>
-              <button type="submit" disabled={state === 'loading'}
-                className="btn-primary w-full mt-2 disabled:opacity-60 disabled:cursor-not-allowed text-base">
-                {state === 'loading' ? 'Sending…' : '🐾 Get App Link — It\'s Free'}
-              </button>
-              <p className="text-center text-xs text-gray-400">We&apos;ll send the app link to your phone & email. No spam, ever.</p>
-            </form>
-          </div>
+            );
+          })}
         </div>
       </div>
+
+      {/* ── STEP 1: Role picker ── */}
+      {step === 1 && (
+        <div className="section-pad">
+          <div className="container">
+            <div className="text-center mb-12">
+              <span className="text-orange-500 text-sm font-bold tracking-widest uppercase">Get Started Free</span>
+              <h2 className="text-4xl md:text-5xl font-black text-gray-900 mt-3 mb-3">Who are you joining as?</h2>
+              <p className="text-gray-500 text-lg">Pick your role — you can always add more later.</p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
+              {JOIN_ROLES.map(r => (
+                <button key={r.id} type="button" onClick={() => pickRole(r.id)}
+                  className={`group relative text-left rounded-3xl border-2 p-6 transition-all duration-200 hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] ${r.bg} ${r.border}`}>
+                  {/* Tag */}
+                  <span className={`absolute top-4 right-4 text-[10px] font-bold px-2 py-0.5 rounded-full ${r.tagColor}`}>{r.tag}</span>
+
+                  {/* Icon */}
+                  <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-3xl mb-5 group-hover:scale-110 transition-transform">
+                    {r.icon}
+                  </div>
+
+                  <div className="font-extrabold text-gray-900 text-lg mb-0.5">{r.title}</div>
+                  <div className="text-sm text-gray-500 mb-5">{r.subtitle}</div>
+
+                  <ul className="space-y-2">
+                    {r.perks.map(p => (
+                      <li key={p} className="flex items-start gap-2 text-xs text-gray-600">
+                        <span style={{ color: r.color }} className="font-black mt-0.5 shrink-0">✓</span>
+                        {p}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* CTA arrow */}
+                  <div className="flex items-center gap-1.5 mt-6 text-sm font-bold transition-all" style={{ color: r.color }}>
+                    Get started <span className="group-hover:translate-x-1 transition-transform inline-block">→</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <p className="text-center text-sm text-gray-400 mt-8">
+              Already have an account?{' '}
+              <a href={APP_URL} target="_blank" rel="noreferrer" className="text-orange-500 font-bold hover:underline">Sign in →</a>
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── STEP 2: Details form (split-screen) ── */}
+      {step === 2 && selectedRole && (
+        <div className="min-h-[600px] grid lg:grid-cols-2">
+
+          {/* Left — value panel */}
+          <div className="relative overflow-hidden bg-gray-900 flex flex-col justify-end p-10 min-h-[280px] lg:min-h-0">
+            <img src={panel.img} alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-40" />
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-900/60 to-transparent" />
+
+            <div className="relative z-10">
+              {/* Role badge */}
+              <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold text-white mb-6"
+                style={{ background: selectedRole.color + '33', border: `1px solid ${selectedRole.color}66` }}>
+                <span>{selectedRole.icon}</span> {selectedRole.title}
+              </div>
+
+              <h2 className="text-3xl md:text-4xl font-black text-white leading-tight mb-4">{panel.headline}</h2>
+              <p className="text-gray-300 text-base leading-relaxed mb-8 max-w-sm">{panel.sub}</p>
+
+              {/* Stats row */}
+              <div className="flex gap-6">
+                {panel.stats.map(s => (
+                  <div key={s.l}>
+                    <div className="text-xl font-black text-white">{s.v}</div>
+                    <div className="text-xs text-gray-400 font-medium">{s.l}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Trust line */}
+              <div className="flex items-center gap-2 mt-8 pt-6 border-t border-white/10">
+                <span className="text-amber-400">★★★★★</span>
+                <span className="text-gray-400 text-xs">Rated 4.9 by 45,000+ users</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right — form */}
+          <div className="flex flex-col justify-center p-8 lg:p-14 bg-white">
+            {/* Back + heading */}
+            <button onClick={() => { setStep(1); setRole(null); setError(''); }}
+              className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-700 mb-8 transition-colors group w-fit">
+              <span className="group-hover:-translate-x-0.5 transition-transform inline-block">←</span> Back
+            </button>
+
+            <div className="mb-8">
+              <h3 className="text-2xl font-black text-gray-900 mb-1">Create your account</h3>
+              <p className="text-gray-500 text-sm">Takes under 60 seconds. No password needed.</p>
+            </div>
+
+            {error && (
+              <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-2xl mb-5">
+                <span>⚠</span> {error}
+              </div>
+            )}
+
+            <form onSubmit={submit} className="space-y-5">
+              {/* Name */}
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Full Name</label>
+                <input type="text" placeholder={role === 'owner' ? 'Arjun Mehta' : 'Dr. Priya Sharma'}
+                  className="w-full border-2 border-gray-100 rounded-2xl px-4 py-3.5 text-sm font-medium focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-50 transition-all placeholder-gray-300"
+                  value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+              </div>
+
+              {/* Phone with country */}
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Mobile Number</label>
+                <div className="flex border-2 border-gray-100 rounded-2xl overflow-hidden focus-within:border-orange-400 focus-within:ring-4 focus-within:ring-orange-50 transition-all">
+                  <div className="relative">
+                    <select value={cc} onChange={e => { setCC(e.target.value); setForm(f => ({ ...f, phone: '' })); }}
+                      className="appearance-none bg-gray-50 border-r-2 border-gray-100 px-4 py-3.5 text-sm font-bold text-gray-700 focus:outline-none pr-8 cursor-pointer">
+                      {COUNTRIES.map(c => <option key={c.code} value={c.code}>{c.flag} +{c.code}</option>)}
+                    </select>
+                    <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs">▾</span>
+                  </div>
+                  <input type="tel" inputMode="numeric" placeholder={country?.ph} maxLength={15}
+                    className="flex-1 px-4 py-3.5 text-sm font-medium focus:outline-none placeholder-gray-300"
+                    value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value.replace(/\D/g, '').slice(0, 15) }))} />
+                </div>
+              </div>
+
+              {/* Email */}
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Email Address</label>
+                <input type="email" placeholder="you@example.com"
+                  className="w-full border-2 border-gray-100 rounded-2xl px-4 py-3.5 text-sm font-medium focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-50 transition-all placeholder-gray-300"
+                  value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
+              </div>
+
+              {/* Submit */}
+              <button type="submit" disabled={loading}
+                className="w-full font-black py-4 rounded-2xl text-white text-sm transition-all disabled:opacity-60 shadow-brand hover:opacity-90 active:scale-[0.98]"
+                style={{ background: `linear-gradient(135deg, ${selectedRole.color}, ${selectedRole.color}dd)` }}>
+                {loading ? 'Creating account…' : `Continue as ${selectedRole.title} →`}
+              </button>
+            </form>
+
+            {/* Trust badges */}
+            <div className="flex items-center justify-center gap-5 mt-7 pt-6 border-t border-gray-50">
+              {['🔒 No password', '⚡ 60 sec setup', '🚫 No spam ever'].map(t => (
+                <span key={t} className="text-xs text-gray-400 font-medium">{t}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── STEP 3: Success ── */}
+      {step === 3 && (
+        <div className="section-pad">
+          <div className="container">
+            <div className="max-w-lg mx-auto text-center">
+              {/* Animated checkmark */}
+              <div className="w-24 h-24 rounded-full bg-emerald-50 border-2 border-emerald-200 flex items-center justify-center text-5xl mx-auto mb-8">
+                🎉
+              </div>
+              <h2 className="text-4xl font-black text-gray-900 mb-3">You&apos;re all set!</h2>
+              <p className="text-gray-500 text-lg mb-3">
+                We&apos;ve sent the app link to <strong>{form.email}</strong>
+              </p>
+              <p className="text-gray-400 text-sm mb-10">
+                {selectedRole?.id === 'owner'
+                  ? 'Open the app, add your pet, and book your first service in under 2 minutes.'
+                  : 'Open the app to complete your professional profile. Verification takes 24–48 hours.'}
+              </p>
+
+              <a href={APP_URL} target="_blank" rel="noreferrer"
+                className="inline-flex items-center gap-3 bg-orange-500 hover:bg-orange-600 text-white font-black px-8 py-4 rounded-2xl text-base transition-all shadow-brand hover:shadow-lg active:scale-[0.98]">
+                {selectedRole?.icon} Open PETclub App →
+              </a>
+
+              <p className="text-xs text-gray-400 mt-5">
+                Or scan the QR code in the <a href="#getapp" className="text-orange-500 font-semibold hover:underline">Get App section</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
@@ -495,7 +721,7 @@ function Contact() {
               {[
                 { icon: '📧', title: 'Email', val: 'support@petclub.in' },
                 { icon: '📱', title: 'WhatsApp', val: '+1 (469) 751-2039' },
-                { icon: '📍', title: 'HQ', val: 'Bengaluru, Karnataka, India' },
+                { icon: '📍', title: 'HQ', val: 'Sahara, LB Nagar, Hyderabad – 500074' },
                 { icon: '⏰', title: 'Support Hours', val: 'Mon–Sat, 9 AM – 7 PM IST' },
               ].map(item => (
                 <div key={item.title} className="flex items-center gap-4">
@@ -589,9 +815,11 @@ function Footer() {
           </div>
         </div>
         <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-          <span>© 2025 PETclub India Pvt Ltd. Made with 🐾 for pets everywhere.</span>
+          <span>© 2026 PETclub India. Made with 🐾 for pets everywhere.</span>
           <div className="flex gap-5">
-            {['Privacy', 'Terms', 'Cookies'].map(l => <a key={l} href="#" className="hover:text-white transition-colors">{l}</a>)}
+            <a href="/privacy.html" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Privacy</a>
+            <a href="/terms.html" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Terms</a>
+            <a href="/privacy.html#cookies" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Cookies</a>
           </div>
         </div>
       </div>
