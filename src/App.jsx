@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 
-const API = 'https://api.mypetclub.app/api';
-const APP_URL = 'https://app.mypetclub.app';
+const API     = import.meta.env.VITE_API_URL  || 'https://api.mypetclub.app/api';
+const APP_URL = import.meta.env.VITE_APP_URL  || 'https://app.mypetclub.app';
+const SUPPORT_EMAIL = import.meta.env.VITE_SUPPORT_EMAIL || 'support@mypetclub.app';
+const WHATSAPP_IN   = import.meta.env.VITE_WHATSAPP_IN   || '916305301132';
+const WHATSAPP_US   = import.meta.env.VITE_WHATSAPP_US   || '16097215754';
+const HQ_ADDRESS    = import.meta.env.VITE_HQ_ADDRESS    || 'Sahara, LB Nagar, Hyderabad – 500074';
 const QR_URL = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(APP_URL)}&color=1a1a2e&bgcolor=ffffff&margin=10`;
 
 const IMG = {
@@ -18,7 +22,7 @@ const IMG = {
 
 const SERVICES = [
   { icon: '✂️', title: 'Grooming', price: 'from ₹499', desc: 'Bath, haircut, nail trim & styling at your doorstep by certified groomers.', img: IMG.grooming, tag: 'Most Popular', color: 'orange', bookable: true },
-  { icon: '🎓', title: 'Training', price: 'from ₹699', desc: 'Obedience, agility & behaviour training by certified professional trainers.', img: IMG.training, tag: 'High Demand', color: 'purple', bookable: true },
+  { icon: '🐕‍🦺', title: 'Training', price: 'from ₹699', desc: 'Obedience, agility & behaviour training by certified professional trainers.', img: IMG.training, tag: 'High Demand', color: 'purple', bookable: true },
   { icon: '🏥', title: 'Vet Care', price: 'from ₹399', desc: 'In-home vet visits, vaccinations & digital health records for your pet.', img: IMG.vet, tag: 'Trusted', color: 'rose', bookable: true },
   { icon: '🍖', title: 'Pet Food', price: 'Free Delivery', desc: 'Premium nutrition, treats & supplements delivered to your door daily.', img: IMG.food, tag: 'Coming Soon', color: 'green', bookable: false },
 ];
@@ -83,7 +87,7 @@ function InquiryModal({ service, onClose }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: form.name.trim(),
-          phone: form.phone ? `+91${form.phone.replace(/\D/g, '')}` : '+910000000000',
+          phone: form.phone ? `+91${form.phone.replace(/\D/g, '')}` : null,
           email: form.email.trim(),
           service,
           message: `[${service} Inquiry]\n\n${form.message.trim()}`,
@@ -908,22 +912,22 @@ function Contact() {
               {[
                 {
                   icon: '📧', title: 'Email',
-                  content: <a href="mailto:support@mypetclub.app" className="text-gray-500 text-sm hover:text-orange-500 transition-colors">support@mypetclub.app</a>,
+                  content: <a href={`mailto:${SUPPORT_EMAIL}`} className="text-gray-500 text-sm hover:text-orange-500 transition-colors">{SUPPORT_EMAIL}</a>,
                 },
                 {
                   icon: '📱', title: 'WhatsApp',
                   content: (
                     <div className="space-y-1">
-                      <a href="https://wa.me/916305301132" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-green-600 transition-colors">
-                        🇮🇳 <span>+91 6305301132</span>
+                      <a href={`https://wa.me/${WHATSAPP_IN}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-green-600 transition-colors">
+                        🇮🇳 <span>+{WHATSAPP_IN.replace(/^91/, '91 ')}</span>
                       </a>
-                      <a href="https://wa.me/16097215754" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-green-600 transition-colors">
-                        🇺🇸 <span>+1 (609) 721-5754</span>
+                      <a href={`https://wa.me/${WHATSAPP_US}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-green-600 transition-colors">
+                        🇺🇸 <span>+{WHATSAPP_US.replace(/^1/, '1 ')}</span>
                       </a>
                     </div>
                   ),
                 },
-                { icon: '📍', title: 'HQ', content: <span className="text-gray-500 text-sm">Sahara, LB Nagar, Hyderabad – 500074</span> },
+                { icon: '📍', title: 'HQ', content: <span className="text-gray-500 text-sm">{HQ_ADDRESS}</span> },
                 { icon: '⏰', title: 'Support Hours', content: <span className="text-gray-500 text-sm">Mon–Sat, 9 AM – 7 PM IST</span> },
               ].map(item => (
                 <div key={item.title} className="flex items-center gap-4">
@@ -1028,7 +1032,7 @@ function Footer() {
           </div>
         </div>
         <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-          <span>© 2026 PETclub India. Made with 🐾 for pets everywhere.</span>
+          <span>© {new Date().getFullYear()} PETclub India. Made with 🐾 for pets everywhere.</span>
           <div className="flex gap-5">
             <a href="/privacy.html" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Privacy</a>
             <a href="/terms.html" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Terms</a>
