@@ -16,10 +16,10 @@ const IMG = {
 };
 
 const SERVICES = [
-  { icon: '✂️', title: 'Grooming', price: 'from ₹499', desc: 'Bath, haircut, nail trim & styling at your doorstep by certified groomers.', img: IMG.grooming, tag: 'Most Popular', color: 'orange' },
-  { icon: '🎓', title: 'Training', price: 'from ₹699', desc: 'Obedience, agility & behaviour training by certified professional trainers.', img: IMG.training, tag: 'High Demand', color: 'purple' },
-  { icon: '🏥', title: 'Vet Care', price: 'from ₹399', desc: 'In-home vet visits, vaccinations & digital health records for your pet.', img: IMG.vet, tag: 'Trusted', color: 'rose' },
-  { icon: '🍖', title: 'Pet Food', price: 'Free Delivery', desc: 'Premium nutrition, treats & supplements delivered to your door daily.', img: IMG.food, tag: 'Fast Delivery', color: 'green' },
+  { icon: '✂️', title: 'Grooming', price: 'from ₹499', desc: 'Bath, haircut, nail trim & styling at your doorstep by certified groomers.', img: IMG.grooming, tag: 'Most Popular', color: 'orange', bookable: true },
+  { icon: '🎓', title: 'Training', price: 'from ₹699', desc: 'Obedience, agility & behaviour training by certified professional trainers.', img: IMG.training, tag: 'High Demand', color: 'purple', bookable: true },
+  { icon: '🏥', title: 'Vet Care', price: 'from ₹399', desc: 'In-home vet visits, vaccinations & digital health records for your pet.', img: IMG.vet, tag: 'Trusted', color: 'rose', bookable: true },
+  { icon: '🍖', title: 'Pet Food', price: 'Free Delivery', desc: 'Premium nutrition, treats & supplements delivered to your door daily.', img: IMG.food, tag: 'Coming Soon', color: 'green', bookable: false },
 ];
 
 const STEPS = [
@@ -43,6 +43,167 @@ const COUNTRIES = [
 /* ── Shared UI ── */
 function Stars({ n }) {
   return <span className="text-amber-400">{'★'.repeat(n)}{'☆'.repeat(5 - n)}</span>;
+}
+
+/* ══════════ INQUIRY MODAL (Pet Food / Pet Boarding) ══════════ */
+const INQUIRY_CONFIG = {
+  'Pet Food': {
+    icon: '🍖',
+    color: '#16a34a',
+    tagline: 'Premium pet nutrition delivered to your door.',
+    placeholder: 'e.g. My Labrador needs grain-free dry food, 10 kg bag monthly. Currently using Royal Canin. Please share available brands & prices.',
+    label: 'Tell us what your pet needs',
+  },
+  'Pet Boarding': {
+    icon: '🏠',
+    color: '#f97316',
+    tagline: 'Safe, caring home-away-from-home for your pet.',
+    placeholder: 'e.g. Need boarding for a 2-year-old Beagle from Dec 20–27. Looking for home-style stay with daily walks. Is pick-up/drop available?',
+    label: 'Tell us your boarding requirements',
+  },
+};
+
+function InquiryModal({ service, onClose }) {
+  const cfg = INQUIRY_CONFIG[service] || INQUIRY_CONFIG['Pet Food'];
+  const [form, setForm] = useState({ name: '', phone: '', email: '', message: '' });
+  const [state, setState] = useState('idle'); // idle | loading | done
+  const [error, setError] = useState('');
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setError('');
+    if (!form.name.trim())  return setError('Please enter your name.');
+    if (!form.email.trim()) return setError('Please enter your email.');
+    if (!form.message.trim()) return setError('Please describe what you need — our team will tailor the response to your pet!');
+    setState('loading');
+    try {
+      const res = await fetch(`${API}/contact/send-link`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          phone: form.phone ? `+91${form.phone.replace(/\D/g, '')}` : '+910000000000',
+          email: form.email.trim(),
+          service,
+          message: `[${service} Inquiry]\n\n${form.message.trim()}`,
+        }),
+      });
+      if (!res.ok) throw new Error();
+      setState('done');
+    } catch {
+      setState('idle');
+      setError('Something went wrong. Please try again.');
+    }
+  };
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 9000,
+      background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: '16px',
+    }} onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+      <div style={{
+        background: '#fff', borderRadius: 28, width: '100%', maxWidth: 520,
+        boxShadow: '0 24px 80px rgba(0,0,0,0.3)', overflow: 'hidden',
+        maxHeight: '90vh', overflowY: 'auto',
+      }}>
+        {/* Header */}
+        <div style={{ background: `linear-gradient(135deg, ${cfg.color}, ${cfg.color}cc)`, padding: '28px 32px 24px' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+            <div>
+              <div style={{ fontSize: 40, marginBottom: 8 }}>{cfg.icon}</div>
+              <h2 style={{ color: '#fff', fontWeight: 900, fontSize: 22, margin: 0 }}>{service}</h2>
+              <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: 14, margin: '4px 0 0' }}>{cfg.tagline}</p>
+            </div>
+            <button onClick={onClose} style={{
+              background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: 12,
+              width: 36, height: 36, color: '#fff', fontSize: 18, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: 12,
+            }}>✕</button>
+          </div>
+          <div style={{
+            marginTop: 16, background: 'rgba(255,255,255,0.15)', borderRadius: 12,
+            padding: '10px 16px', fontSize: 13, color: 'rgba(255,255,255,0.9)', fontWeight: 600,
+          }}>
+            🚀 Launching soon! Fill the form below and our team will reach out to you <strong>within 24 hours</strong>.
+          </div>
+        </div>
+
+        {/* Body */}
+        <div style={{ padding: '28px 32px' }}>
+          {state === 'done' ? (
+            <div style={{ textAlign: 'center', padding: '20px 0' }}>
+              <div style={{ fontSize: 56, marginBottom: 12 }}>✅</div>
+              <h3 style={{ fontWeight: 900, fontSize: 22, color: '#111', marginBottom: 8 }}>Request Received!</h3>
+              <p style={{ color: '#6b7280', fontSize: 15, lineHeight: 1.6 }}>
+                Thanks, <strong>{form.name.split(' ')[0]}</strong>! Our team will review your request and reach out to <strong>{form.email}</strong> within 24 hours.
+              </p>
+              <button onClick={onClose} style={{
+                marginTop: 24, background: cfg.color, color: '#fff', border: 'none',
+                borderRadius: 14, padding: '12px 32px', fontWeight: 800, fontSize: 15, cursor: 'pointer',
+              }}>Close →</button>
+            </div>
+          ) : (
+            <form onSubmit={submit}>
+              {error && (
+                <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: 12, padding: '10px 16px', fontSize: 13, marginBottom: 16 }}>
+                  ⚠ {error}
+                </div>
+              )}
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>Full Name *</label>
+                  <input type="text" placeholder="Arjun Mehta" required
+                    style={{ width: '100%', border: '2px solid #f3f4f6', borderRadius: 12, padding: '10px 14px', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
+                    value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>Phone</label>
+                  <input type="tel" placeholder="9876543210"
+                    style={{ width: '100%', border: '2px solid #f3f4f6', borderRadius: 12, padding: '10px 14px', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
+                    value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value.replace(/\D/g,'').slice(0,10) }))} />
+                </div>
+              </div>
+
+              <div style={{ marginBottom: 12 }}>
+                <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>Email *</label>
+                <input type="email" placeholder="you@example.com" required
+                  style={{ width: '100%', border: '2px solid #f3f4f6', borderRadius: 12, padding: '10px 14px', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
+                  value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
+              </div>
+
+              <div style={{ marginBottom: 20 }}>
+                <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>
+                  {cfg.label} <span style={{ color: '#ef4444' }}>*</span>
+                </label>
+                <textarea rows={5} placeholder={cfg.placeholder} required
+                  style={{ width: '100%', border: '2px solid #f3f4f6', borderRadius: 12, padding: '10px 14px', fontSize: 13, outline: 'none', resize: 'vertical', lineHeight: 1.6, boxSizing: 'border-box' }}
+                  value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} />
+                <p style={{ fontSize: 11, color: '#9ca3af', marginTop: 4 }}>The more detail you give, the faster we can help you!</p>
+              </div>
+
+              <button type="submit" disabled={state === 'loading'}
+                style={{
+                  width: '100%', background: cfg.color, color: '#fff', border: 'none',
+                  borderRadius: 14, padding: '14px', fontWeight: 900, fontSize: 15,
+                  cursor: 'pointer', opacity: state === 'loading' ? 0.7 : 1,
+                }}>
+                {state === 'loading' ? 'Sending…' : `📩 Send Inquiry — We'll Reach Out ASAP`}
+              </button>
+
+              <div style={{ display: 'flex', justifyContent: 'center', gap: 20, marginTop: 14 }}>
+                {['🔒 Privacy protected', '⚡ 24h response', '🚫 No spam'].map(t => (
+                  <span key={t} style={{ fontSize: 11, color: '#9ca3af' }}>{t}</span>
+                ))}
+              </div>
+            </form>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 /* ══════════ NAVBAR ══════════ */
@@ -182,6 +343,8 @@ function Hero() {
 
 /* ══════════ SERVICES ══════════ */
 function Services() {
+  const [inquiryService, setInquiryService] = useState(null);
+
   const colorMap = {
     orange: 'bg-orange-50 text-orange-600 border-orange-100',
     purple: 'bg-purple-50 text-purple-600 border-purple-100',
@@ -205,28 +368,51 @@ function Services() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {SERVICES.map(s => (
-            <a key={s.title} href={APP_URL} target="_blank" rel="noreferrer" className="card-service group">
-              <div className="relative h-48 overflow-hidden">
-                <img src={s.img} alt={s.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                <span className={`absolute top-3 left-3 text-xs font-bold px-2.5 py-1 rounded-full ${tagColorMap[s.color]}`}>{s.tag}</span>
-                <div className="absolute bottom-3 left-3 text-3xl">{s.icon}</div>
-              </div>
-              <div className="p-5">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-extrabold text-gray-900 text-lg">{s.title}</h3>
-                  <span className="text-sm font-bold text-orange-500">{s.price}</span>
+          {SERVICES.map(s => {
+            const inner = (
+              <>
+                <div className="relative h-48 overflow-hidden">
+                  <img src={s.img} alt={s.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <span className={`absolute top-3 left-3 text-xs font-bold px-2.5 py-1 rounded-full ${tagColorMap[s.color]}`}>{s.tag}</span>
+                  {!s.bookable && (
+                    <span className="absolute top-3 right-3 text-xs font-bold px-2.5 py-1 rounded-full bg-white/90 text-gray-700">✉ Inquiry</span>
+                  )}
+                  <div className="absolute bottom-3 left-3 text-3xl">{s.icon}</div>
                 </div>
-                <p className="text-gray-500 text-sm leading-relaxed mb-4">{s.desc}</p>
-                <div className="flex items-center text-orange-500 font-bold text-sm group-hover:gap-2 gap-1 transition-all">
-                  Book Now <span className="group-hover:translate-x-1 transition-transform">→</span>
+                <div className="p-5">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-extrabold text-gray-900 text-lg">{s.title}</h3>
+                    <span className="text-sm font-bold text-orange-500">{s.price}</span>
+                  </div>
+                  <p className="text-gray-500 text-sm leading-relaxed mb-4">{s.desc}</p>
+                  {s.bookable ? (
+                    <div className="flex items-center text-orange-500 font-bold text-sm group-hover:gap-2 gap-1 transition-all">
+                      Book Now <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center text-green-600 font-bold text-sm group-hover:gap-2 gap-1 transition-all">
+                      Get in Touch <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                  )}
                 </div>
-              </div>
-            </a>
-          ))}
+              </>
+            );
+
+            return s.bookable ? (
+              <a key={s.title} href={APP_URL} target="_blank" rel="noreferrer" className="card-service group">
+                {inner}
+              </a>
+            ) : (
+              <button key={s.title} type="button" onClick={() => setInquiryService(s.title)} className="card-service group text-left">
+                {inner}
+              </button>
+            );
+          })}
         </div>
       </div>
+
+      {inquiryService && <InquiryModal service={inquiryService} onClose={() => setInquiryService(null)} />}
     </section>
   );
 }
@@ -779,6 +965,10 @@ function Contact() {
 
 /* ══════════ FOOTER ══════════ */
 function Footer() {
+  const [inquiryService, setInquiryService] = useState(null);
+  const BOOKABLE_SERVICES = ['Grooming', 'Training', 'Vet Care'];
+  const INQUIRY_SERVICES  = ['Pet Food', 'Pet Boarding'];
+
   return (
     <footer className="bg-gray-950 text-gray-400 pt-16 pb-8">
       <div className="container">
@@ -795,9 +985,16 @@ function Footer() {
           </div>
           <div>
             <h4 className="font-bold text-white mb-4 text-sm uppercase tracking-wide">Services</h4>
-            {['Grooming', 'Training', 'Vet Care', 'Pet Food', 'Pet Boarding'].map(s => (
+            {BOOKABLE_SERVICES.map(s => (
               <a key={s} href={APP_URL} target="_blank" rel="noreferrer" className="block text-sm hover:text-orange-400 transition-colors py-1">{s}</a>
             ))}
+            {INQUIRY_SERVICES.map(s => (
+              <button key={s} type="button" onClick={() => setInquiryService(s)}
+                className="block text-sm hover:text-orange-400 transition-colors py-1 text-left w-full">
+                {s} <span className="text-xs text-gray-600 ml-1">✉</span>
+              </button>
+            ))}
+            {inquiryService && <InquiryModal service={inquiryService} onClose={() => setInquiryService(null)} />}
           </div>
           <div>
             <h4 className="font-bold text-white mb-4 text-sm uppercase tracking-wide">Company</h4>
