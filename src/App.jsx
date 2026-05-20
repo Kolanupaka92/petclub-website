@@ -905,7 +905,7 @@ function Contact() {
             <p className="text-gray-500 text-lg mb-10">Questions, partnerships, or just want to say hi — we&apos;d love to hear from you.</p>
             <div className="space-y-6">
               {[
-                { icon: '📧', title: 'Email', val: 'support@petclub.in' },
+                { icon: '📧', title: 'Email', val: 'support@mypetclub.app' },
                 { icon: '📱', title: 'WhatsApp', val: '+1 (469) 751-2039' },
                 { icon: '📍', title: 'HQ', val: 'Sahara, LB Nagar, Hyderabad – 500074' },
                 { icon: '⏰', title: 'Support Hours', val: 'Mon–Sat, 9 AM – 7 PM IST' },
