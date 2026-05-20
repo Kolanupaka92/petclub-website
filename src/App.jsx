@@ -905,14 +905,29 @@ function Contact() {
             <p className="text-gray-500 text-lg mb-10">Questions, partnerships, or just want to say hi — we&apos;d love to hear from you.</p>
             <div className="space-y-6">
               {[
-                { icon: '📧', title: 'Email', val: 'support@mypetclub.app' },
-                { icon: '📱', title: 'WhatsApp', val: '+1 (469) 751-2039' },
-                { icon: '📍', title: 'HQ', val: 'Sahara, LB Nagar, Hyderabad – 500074' },
-                { icon: '⏰', title: 'Support Hours', val: 'Mon–Sat, 9 AM – 7 PM IST' },
+                {
+                  icon: '📧', title: 'Email',
+                  content: <a href="mailto:support@mypetclub.app" className="text-gray-500 text-sm hover:text-orange-500 transition-colors">support@mypetclub.app</a>,
+                },
+                {
+                  icon: '📱', title: 'WhatsApp',
+                  content: (
+                    <div className="space-y-1">
+                      <a href="https://wa.me/916305301132" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-green-600 transition-colors">
+                        🇮🇳 <span>+91 6305301132</span>
+                      </a>
+                      <a href="https://wa.me/16097215754" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-green-600 transition-colors">
+                        🇺🇸 <span>+1 (609) 721-5754</span>
+                      </a>
+                    </div>
+                  ),
+                },
+                { icon: '📍', title: 'HQ', content: <span className="text-gray-500 text-sm">Sahara, LB Nagar, Hyderabad – 500074</span> },
+                { icon: '⏰', title: 'Support Hours', content: <span className="text-gray-500 text-sm">Mon–Sat, 9 AM – 7 PM IST</span> },
               ].map(item => (
                 <div key={item.title} className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-orange-50 border border-orange-100 rounded-2xl flex items-center justify-center text-xl shrink-0">{item.icon}</div>
-                  <div><div className="font-bold text-gray-900 text-sm">{item.title}</div><div className="text-gray-500 text-sm">{item.val}</div></div>
+                  <div><div className="font-bold text-gray-900 text-sm mb-0.5">{item.title}</div>{item.content}</div>
                 </div>
               ))}
             </div>
