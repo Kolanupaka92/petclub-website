@@ -1,0 +1,13 @@
+steps:
+  # Install dependencies
+  - name: 'node:22-alpine'
+    entrypoint: npm
+    args: ['ci']
+
+  # Build the website (catches any compile errors before Vercel deploys)
+  - name: 'node:22-alpine'
+    entrypoint: npm
+    args: ['run', 'build']
+
+options:
+  logging: CLOUD_LOGGING_ONLY
