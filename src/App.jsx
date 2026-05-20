@@ -10,9 +10,10 @@ const IMG = {
   training:  'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&auto=format&fit=crop&q=80',
   vet:       'https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?w=600&auto=format&fit=crop&q=80',
   food:      'https://images.unsplash.com/photo-1568640347023-a616a30bc3bd?w=600&auto=format&fit=crop&q=80',
-  dog1:      'https://images.unsplash.com/photo-1560807707-8cc77767d783?w=400&auto=format&fit=crop&q=80',
-  dog2:      'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=400&auto=format&fit=crop&q=80',
-  dog3:      'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=400&auto=format&fit=crop&q=80',
+  // Hero floating gallery — mixed dog & cat
+  pet1:      'https://images.unsplash.com/photo-1560807707-8cc77767d783?w=400&auto=format&fit=crop&q=80',  // dog
+  pet2:      'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&auto=format&fit=crop&q=80', // cat — orange tabby
+  pet3:      'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=400&auto=format&fit=crop&q=80', // cat — cuddly
 };
 
 const SERVICES = [
@@ -280,13 +281,13 @@ function Hero() {
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background image */}
       <div className="absolute inset-0">
-        <img src={IMG.hero} alt="Happy dog" className="w-full h-full object-cover object-center" />
+        <img src={IMG.hero} alt="Happy pets" className="w-full h-full object-cover object-center" />
         <div className="absolute inset-0 bg-gradient-to-r from-gray-950/85 via-gray-900/60 to-gray-900/30" />
       </div>
 
       {/* Floating pet images — desktop only */}
       <div className="absolute right-8 top-1/2 -translate-y-1/2 hidden xl:flex flex-col gap-4 z-10">
-        {[IMG.dog1, IMG.dog2, IMG.dog3].map((img, i) => (
+        {[IMG.pet1, IMG.pet2, IMG.pet3].map((img, i) => (
           <div key={i} className="w-24 h-24 rounded-2xl overflow-hidden border-2 border-white/30 shadow-2xl"
             style={{ animation: `float ${3 + i}s ease-in-out infinite`, animationDelay: `${i * 0.5}s` }}>
             <img src={img} alt="pet" className="w-full h-full object-cover" />
