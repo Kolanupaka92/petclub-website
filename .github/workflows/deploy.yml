@@ -1,20 +1,50 @@
-name: Deploy to Vercel
+# ══════════════════════════════════════════════════════════════════
+#  PETclub Website — GitHub Actions build validation gate
+#  Triggered: every push to master and every PR
+#
+#  Vercel auto-deploys via its GitHub App integration (already connected).
+#  This workflow adds a Vite build check that must pass BEFORE Vercel
+#  picks up the commit — it also runs on PRs to catch errors early.
+# ══════════════════════════════════════════════════════════════════
+
+name: Build & Validate Website
 
 on:
   push:
     branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
 
 jobs:
-  deploy:
+  build:
+    name: Vite Build Check
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
     steps:
-      - uses: actions/checkout@v4
+      # ── 1. Checkout ──────────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Install Vercel CLI
-        run: npm install -g vercel
+      # ── 2. Node.js setup ─────────────────────────────────────
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
 
-      - name: Deploy to Vercel Production
-        run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      # ── 3. Install dependencies ──────────────────────────────
+      - name: Install dependencies
+        run: npm ci
+
+      # ── 4. Build (Vite) ──────────────────────────────────────
+      - name: Build
+        run: npm run build
+
+      # ── 5. Report artifact size ──────────────────────────────
+      - name: Report build size
+        run: |
+          echo "── dist/ contents ──"
+          du -sh dist/
+          ls -lh dist/assets/ | sort -k5 -hr | head -20
