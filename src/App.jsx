@@ -234,9 +234,9 @@ function Navbar() {
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-sm border-b border-gray-100' : 'bg-transparent'}`}>
       <div className="container h-18 flex items-center justify-between py-4">
         <a href="#" className="flex items-center gap-2.5">
-          <div className="w-9 h-9 bg-orange-500 rounded-xl flex items-center justify-center text-white text-lg font-black">🐾</div>
+          <img src="/icon.svg" alt="PETclub" className="w-9 h-9 rounded-xl" />
           <span className={`font-extrabold text-xl transition-colors ${scrolled ? 'text-gray-900' : 'text-white'}`}>
-            PET<span className="text-orange-400">club</span>
+            PET<span className={scrolled ? 'text-orange-500' : 'text-orange-400'}>club</span>
           </span>
         </a>
 
