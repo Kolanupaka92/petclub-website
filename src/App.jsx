@@ -1003,12 +1003,17 @@ function Footer() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center text-white text-sm font-black">🐾</div>
+              <img src="/icon.svg" alt="PETclub" className="w-8 h-8 rounded-lg" />
               <span className="font-extrabold text-white text-lg">PET<span className="text-orange-400">club</span></span>
             </div>
             <p className="text-sm leading-relaxed mb-4">India&apos;s #1 platform for pet grooming, training, vet care & food delivery. Now serving the USA too.</p>
             <div className="flex gap-3">
-              {['🇮🇳 India', '🇺🇸 USA'].map(c => <span key={c} className="text-xs bg-white/5 border border-white/10 px-3 py-1 rounded-full">{c}</span>)}
+              <span className="inline-flex items-center gap-1.5 text-xs bg-white/5 border border-white/10 px-3 py-1 rounded-full">
+                <img src="https://flagcdn.com/20x15/in.png" alt="IN" className="rounded-sm" /> India
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-xs bg-white/5 border border-white/10 px-3 py-1 rounded-full">
+                <img src="https://flagcdn.com/20x15/us.png" alt="US" className="rounded-sm" /> USA
+              </span>
             </div>
           </div>
           <div>
