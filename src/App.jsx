@@ -927,10 +927,10 @@ function Contact() {
                   content: (
                     <div className="space-y-1">
                       <a href={`https://wa.me/${WHATSAPP_IN}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-green-600 transition-colors">
-                        🇮🇳 <span>+{WHATSAPP_IN.replace(/^91/, '91 ')}</span>
+                        <img src="https://flagcdn.com/20x15/in.png" alt="IN" className="rounded-sm" /> <span>+{WHATSAPP_IN.replace(/^91/, '91 ')}</span>
                       </a>
                       <a href={`https://wa.me/${WHATSAPP_US}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-green-600 transition-colors">
-                        🇺🇸 <span>+{WHATSAPP_US.replace(/^1/, '1 ')}</span>
+                        <img src="https://flagcdn.com/20x15/us.png" alt="US" className="rounded-sm" /> <span>+{WHATSAPP_US.replace(/^1/, '1 ')}</span>
                       </a>
                     </div>
                   ),
