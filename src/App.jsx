@@ -41,8 +41,8 @@ const REVIEWS = [
 ];
 
 const COUNTRIES = [
-  { code: '91', flag: '🇮🇳', label: 'India (+91)', ph: '9876543210' },
-  { code: '1',  flag: '🇺🇸', label: 'USA (+1)',    ph: '4155552671' },
+  { code: '91', flag: 'https://flagcdn.com/20x15/in.png', flagAlt: 'IN', label: 'India (+91)', ph: '9876543210' },
+  { code: '1',  flag: 'https://flagcdn.com/20x15/us.png', flagAlt: 'US', label: 'USA (+1)',    ph: '4155552671' },
 ];
 
 /* ── Shared UI ── */
@@ -302,7 +302,11 @@ function Hero() {
       <div className="container relative z-10 pt-20 pb-16">
         <div className="max-w-2xl">
           <div className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-400/30 text-orange-300 text-xs font-bold px-4 py-2 rounded-full mb-8 backdrop-blur-sm">
-            🇮🇳&nbsp;India&apos;s #1 Pet Care Platform &nbsp;·&nbsp; 🇺🇸&nbsp;Now in USA
+            <img src="https://flagcdn.com/20x15/in.png" alt="India" className="inline-block rounded-sm" />
+            India&apos;s #1 Pet Care Platform
+            <span className="opacity-50">·</span>
+            <img src="https://flagcdn.com/20x15/us.png" alt="USA" className="inline-block rounded-sm" />
+            Now in USA
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.05] mb-6">
@@ -311,7 +315,7 @@ function Hero() {
           </h1>
 
           <p className="text-lg sm:text-xl text-white/80 mb-10 leading-relaxed max-w-lg">
-            Book trusted groomers, trainers & vets — verified, insured, and loved by 50,000+ pet parents across India and the USA.
+            Book trusted groomers, trainers & vets — verified, background-checked, and loved by 50,000+ pet parents across India and the USA.
           </p>
 
           <div className="flex flex-wrap gap-4 mb-12">
@@ -461,7 +465,11 @@ function Reviews() {
         <div className="text-center mb-14">
           <span className="text-orange-500 text-sm font-bold tracking-widest uppercase">Testimonials</span>
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 mt-3 mb-2">Loved Across Two Countries</h2>
-          <p className="text-gray-500 text-lg">Real stories from real pet parents 🇮🇳 🇺🇸</p>
+          <p className="text-gray-500 text-lg inline-flex items-center gap-1.5">
+            Real stories from real pet parents&nbsp;
+            <img src="https://flagcdn.com/20x15/in.png" alt="India" className="inline-block rounded-sm" />
+            <img src="https://flagcdn.com/20x15/us.png" alt="USA" className="inline-block rounded-sm" />
+          </p>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -807,7 +815,7 @@ function JoinSection() {
                   <div className="relative">
                     <select value={cc} onChange={e => { setCC(e.target.value); setForm(f => ({ ...f, phone: '' })); }}
                       className="appearance-none bg-gray-50 border-r-2 border-gray-100 px-4 py-3.5 text-sm font-bold text-gray-700 focus:outline-none pr-8 cursor-pointer">
-                      {COUNTRIES.map(c => <option key={c.code} value={c.code}>{c.flag} +{c.code}</option>)}
+                      {COUNTRIES.map(c => <option key={c.code} value={c.code}>{c.flagAlt} +{c.code}</option>)}
                     </select>
                     <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs">▾</span>
                   </div>
