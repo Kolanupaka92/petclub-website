@@ -250,9 +250,9 @@ function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          <a href={APP_URL} target="_blank" rel="noreferrer"
+          <a href={`${APP_URL}?signin=1`} target="_blank" rel="noreferrer"
             className="bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all shadow-brand hover:shadow-lg">
-            Open App →
+            Sign In →
           </a>
         </div>
 
@@ -269,9 +269,9 @@ function Navbar() {
               {l.label}
             </a>
           ))}
-          <a href={APP_URL} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}
+          <a href={`${APP_URL}?signin=1`} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}
             className="block bg-orange-500 text-white font-bold text-center py-3 rounded-xl mt-3">
-            Open App →
+            Sign In →
           </a>
         </div>
       )}
@@ -498,7 +498,6 @@ function Hero() {
 
               {/* Service Provider path */}
               <a href="#join"
-                onClick={() => { setTimeout(() => document.querySelector('[data-role="groomer"]')?.click(), 100); }}
                 className="group relative bg-white/8 hover:bg-white/12 border border-white/15 rounded-2xl p-5 transition-all hover:shadow-xl active:scale-[0.98] text-left">
                 <div className="text-2xl mb-2">💼</div>
                 <div className="font-extrabold text-white text-base mb-0.5">I&apos;m a Professional</div>
@@ -829,7 +828,7 @@ function JoinSection() {
   const [step, setStep]       = useState(1);   // 1=choose role, 2=enter details, 3=done
   const [role, setRole]       = useState(null);
   const [cc,   setCC]         = useState('91');
-  const [form, setForm]       = useState({ name: '', phone: '', email: '' });
+  const [form, setForm]       = useState({ name: '', phone: '', email: '', city: '' });
   const [loading, setLoading] = useState(false);
   const [error,   setError]   = useState('');
 
@@ -850,7 +849,7 @@ function JoinSection() {
       await fetch(`${API}/contact/send-link`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: form.name.trim(), phone: `+${cc}${form.phone}`, email: form.email.trim(), role }),
+        body: JSON.stringify({ name: form.name.trim(), phone: `+${cc}${form.phone}`, email: form.email.trim(), role, city: form.city.trim() }),
       });
       setStep(3);
     } catch { setError('Something went wrong. Please try again.'); }
@@ -937,7 +936,7 @@ function JoinSection() {
 
             <p className="text-center text-sm text-gray-400 mt-8">
               Already have an account?{' '}
-              <a href={APP_URL} target="_blank" rel="noreferrer" className="text-orange-500 font-bold hover:underline">Sign in →</a>
+              <a href={`${APP_URL}?signin=1`} target="_blank" rel="noreferrer" className="text-orange-500 font-bold hover:underline">Sign in →</a>
             </p>
           </div>
         </div>
@@ -1003,7 +1002,7 @@ function JoinSection() {
               {/* Name */}
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Full Name</label>
-                <input type="text" placeholder={role === 'owner' ? 'Arjun Mehta' : 'Dr. Priya Sharma'}
+                <input type="text" placeholder={role === 'owner' ? 'Arjun Mehta' : role === 'vet' ? 'Dr. Priya Sharma' : role === 'trainer' ? 'Ravi Kumar' : 'Sai Krishna'}
                   className="w-full border-2 border-gray-100 rounded-2xl px-4 py-3.5 text-sm font-medium focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-50 transition-all placeholder-gray-300"
                   value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
               </div>
@@ -1032,6 +1031,36 @@ function JoinSection() {
                   className="w-full border-2 border-gray-100 rounded-2xl px-4 py-3.5 text-sm font-medium focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-50 transition-all placeholder-gray-300"
                   value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
               </div>
+
+              {/* City — shown for all roles */}
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                  Your City {role !== 'owner' && <span className="text-gray-400 normal-case font-normal">— where you operate</span>}
+                </label>
+                <input type="text" placeholder={role === 'owner' ? 'Mumbai, Delhi, Hyderabad…' : 'e.g. Hyderabad'}
+                  className="w-full border-2 border-gray-100 rounded-2xl px-4 py-3.5 text-sm font-medium focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-50 transition-all placeholder-gray-300"
+                  value={form.city} onChange={e => setForm(f => ({ ...f, city: e.target.value }))} />
+              </div>
+
+              {/* Role-specific info badge */}
+              {role === 'groomer' && (
+                <div className="flex items-start gap-3 bg-violet-50 border border-violet-100 rounded-2xl px-4 py-3 text-xs text-violet-800">
+                  <span className="text-base shrink-0">✂️</span>
+                  <span>After joining, upload your grooming portfolio & ID for 24h verification. You'll get a <strong>Verified Groomer</strong> badge.</span>
+                </div>
+              )}
+              {role === 'trainer' && (
+                <div className="flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-2xl px-4 py-3 text-xs text-blue-800">
+                  <span className="text-base shrink-0">🎓</span>
+                  <span>Upload your training certification in the app. Certified trainers earn a <strong>Certified Trainer</strong> badge within 24h.</span>
+                </div>
+              )}
+              {role === 'vet' && (
+                <div className="flex items-start gap-3 bg-emerald-50 border border-emerald-100 rounded-2xl px-4 py-3 text-xs text-emerald-800">
+                  <span className="text-base shrink-0">🏥</span>
+                  <span>Upload your veterinary license & registration in the app. Verified vets get a <strong>Verified Vet</strong> badge within 24h.</span>
+                </div>
+              )}
 
               {/* Submit */}
               <button type="submit" disabled={loading}
