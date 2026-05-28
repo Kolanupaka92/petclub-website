@@ -11,7 +11,7 @@ const QR_URL = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${
 // All images: free Unsplash License — commercial use permitted, no attribution required.
 // Verified free (not Unsplash+) on 2025-05-27.
 const IMG = {
-  hero:      'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1800&auto=format&fit=crop&q=85',
+  hero:      'https://images.unsplash.com/photo-1607696442638-93393692197a?w=1800&auto=format&fit=crop&q=85', // dog running in field — free Unsplash License, verified 2025-05-27
   // Service images — each unique, verified free license
   grooming:  'https://images.unsplash.com/photo-1611173622933-91942d394b04?w=700&auto=format&fit=crop&q=85', // Pomeranian wrapped in towel at grooming spa — Lucija Ros
   training:  'https://images.unsplash.com/photo-1551779891-b83901e1f8b3?w=700&auto=format&fit=crop&q=85', // woman training/playing with dog in forest — Murilo Viviani
