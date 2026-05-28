@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 const API     = import.meta.env.VITE_API_URL  || 'https://api.mypetclub.app/api';
 const APP_URL = import.meta.env.VITE_APP_URL  || 'https://app.mypetclub.app';
@@ -8,30 +8,59 @@ const WHATSAPP_US   = import.meta.env.VITE_WHATSAPP_US   || '16097215754';
 const HQ_ADDRESS    = import.meta.env.VITE_HQ_ADDRESS    || 'Sahara, LB Nagar, Hyderabad – 500074';
 const QR_URL = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(APP_URL)}&color=1a1a2e&bgcolor=ffffff&margin=10`;
 
-// All images: free Unsplash License — commercial use permitted, no attribution required.
-// Verified free (not Unsplash+) on 2025-05-27.
-const IMG = {
-  hero:      'https://images.unsplash.com/photo-1607696442638-93393692197a?w=1800&auto=format&fit=crop&q=85', // dog running in field — free Unsplash License, verified 2025-05-27
-  // Service images — each unique, verified free license
-  grooming:  'https://images.unsplash.com/photo-1611173622933-91942d394b04?w=700&auto=format&fit=crop&q=85', // Pomeranian wrapped in towel at grooming spa — Lucija Ros
-  training:  'https://images.unsplash.com/photo-1551779891-b83901e1f8b3?w=700&auto=format&fit=crop&q=85', // woman training/playing with dog in forest — Murilo Viviani
-  vet:       'https://images.unsplash.com/photo-1630438994394-3deff7a591bf?w=700&auto=format&fit=crop&q=85', // dog at vet clinic — Karsten Winegeart
-  walker:    'https://images.unsplash.com/photo-1618946019619-9d7b7d86b48f?w=700&auto=format&fit=crop&q=85', // woman walking black labrador on forest path — Honest Paws
-  boarding:  'https://images.unsplash.com/photo-1551928692-6954104dee5a?w=700&auto=format&fit=crop&q=85', // dog resting on bed in cozy home — Irina
-  food:      'https://images.unsplash.com/photo-1714068691210-073dc52c6c1d?w=700&auto=format&fit=crop&q=85', // dog eating kibble from bowl
-  // Hero floating gallery — mixed dog & cat
-  pet1:      'https://images.unsplash.com/photo-1560807707-8cc77767d783?w=400&auto=format&fit=crop&q=80',  // dog
-  pet2:      'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&auto=format&fit=crop&q=80', // cat — orange tabby
-  pet3:      'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=400&auto=format&fit=crop&q=80', // cat — cuddly
-};
+/* ── Warm palette ── */
+const WARM_DARK  = '#0c0500';
+const WARM_DARK2 = '#120700';
+const WARM_DARK3 = '#1c0e00';
+const WARM_CREAM = '#fff8f0';
+const WARM_CREAM2 = '#fff1e0';
+const ORANGE  = '#f97316';
+const ORANGE2 = '#ea580c';
+const AMBER   = '#f59e0b';
 
 const SERVICES = [
-  { icon: '✂️', title: 'Grooming', price: 'from ₹499', desc: 'Bath, haircut, nail trim & styling at your doorstep by certified groomers.', img: IMG.grooming, tag: 'Most Popular', color: 'orange', bookable: true },
-  { icon: '🐕‍🦺', title: 'Training', price: 'from ₹699', desc: 'Obedience, agility & behaviour training by certified professional trainers.', img: IMG.training, tag: 'High Demand', color: 'purple', bookable: true },
-  { icon: '🏥', title: 'Vet Care', price: 'from ₹399', desc: 'In-home vet visits, vaccinations & digital health records for your pet.', img: IMG.vet, tag: 'Trusted', color: 'rose', bookable: true },
-  { icon: '🦮', title: 'Dog Walking', price: 'from ₹299', desc: 'GPS-tracked solo & group walks by verified walkers. Live updates sent to you.', img: IMG.walker, tag: 'New', color: 'green', bookable: true },
-  { icon: '🏠', title: 'Pet Boarding', price: 'from ₹499/night', desc: 'Cage-free home stays with verified boarders. Daily photos & updates guaranteed.', img: IMG.boarding, tag: 'New', color: 'amber', bookable: true },
-  { icon: '🍖', title: 'Pet Food', price: 'Free Delivery', desc: 'Premium nutrition, treats & supplements delivered to your door daily.', img: IMG.food, tag: 'Coming Soon', color: 'teal', bookable: false },
+  {
+    icon: '✂️', title: 'Grooming', price: 'from ₹499',
+    desc: 'Bath, haircut, nail trim & full styling for dogs AND cats — at your doorstep by certified groomers.',
+    gradFrom: '#9a3412', gradTo: '#f97316',
+    tag: 'Most Popular', tagBg: '#fff7ed', tagColor: '#c2410c',
+    bookable: true, catFriendly: true,
+  },
+  {
+    icon: '🐕‍🦺', title: 'Training', price: 'from ₹699',
+    desc: 'Obedience, agility & behaviour training by certified professional trainers.',
+    gradFrom: '#4c1d95', gradTo: '#8b5cf6',
+    tag: 'High Demand', tagBg: '#f5f3ff', tagColor: '#6d28d9',
+    bookable: true, catFriendly: false,
+  },
+  {
+    icon: '🏥', title: 'Vet Care', price: 'from ₹399',
+    desc: 'In-home vet visits, vaccinations & digital health records for cats and dogs alike.',
+    gradFrom: '#065f46', gradTo: '#34d399',
+    tag: 'Trusted', tagBg: '#ecfdf5', tagColor: '#047857',
+    bookable: true, catFriendly: true,
+  },
+  {
+    icon: '🦮', title: 'Dog Walking', price: 'from ₹299',
+    desc: 'GPS-tracked solo & group walks by verified walkers. Live updates sent to you.',
+    gradFrom: '#14532d', gradTo: '#4ade80',
+    tag: 'New', tagBg: '#f0fdf4', tagColor: '#15803d',
+    bookable: true, catFriendly: false,
+  },
+  {
+    icon: '🏠', title: 'Pet Boarding', price: 'from ₹499/night',
+    desc: 'Cage-free home stays for dogs & cats with verified boarders. Daily photos guaranteed.',
+    gradFrom: '#78350f', gradTo: '#f59e0b',
+    tag: 'New', tagBg: '#fffbeb', tagColor: '#b45309',
+    bookable: true, catFriendly: true,
+  },
+  {
+    icon: '🍖', title: 'Pet Food', price: 'Free Delivery',
+    desc: 'Premium nutrition, treats & supplements for cats and dogs delivered to your door.',
+    gradFrom: '#0e7490', gradTo: '#22d3ee',
+    tag: 'Coming Soon', tagBg: '#ecfeff', tagColor: '#0e7490',
+    bookable: false, catFriendly: true,
+  },
 ];
 
 const STEPS = [
@@ -42,9 +71,9 @@ const STEPS = [
 
 const REVIEWS = [
   { name: 'Priya Sharma', city: 'Mumbai', pet: 'Bruno, Golden Retriever', stars: 5, text: 'The groomer arrived exactly on time and Bruno looks absolutely stunning. Booking through PETclub was super easy — took less than 2 minutes!', avatar: 'P' },
+  { name: 'Kavita Reddy', city: 'Hyderabad', pet: 'Whiskers, Persian Cat', stars: 5, text: 'Booking the vet for Whiskers through PETclub was so easy. All her vaccination records are now in the app. Cat parents — this is made for us too!', avatar: 'K' },
   { name: 'Rajiv Nair', city: 'Bengaluru', pet: 'Milo, Labrador', stars: 5, text: 'Our trainer Arjun transformed Milo\'s behaviour in just 4 sessions. The digital tracking in the app is brilliant — I can see every session note.', avatar: 'R' },
-  { name: 'Kavita Reddy', city: 'Hyderabad', pet: 'Whiskers, Persian Cat', stars: 5, text: 'Booking the vet through PETclub saved me so much stress. All of Whiskers\' vaccination records are now in the app. Absolutely love it!', avatar: 'K' },
-  { name: 'James Wilson', city: 'Dallas, TX', pet: 'Max, German Shepherd', stars: 5, text: 'Used it while visiting India with Max. The service was incredible — professional, punctual, and so caring. Way better than anything back home!', avatar: 'J' },
+  { name: 'James Wilson', city: 'Dallas, TX', pet: 'Max & Luna, GSD + Tabby', stars: 5, text: 'Used PETclub for both my German Shepherd and my cat Luna. The vet handled both perfectly. Incredible service, far better than anything back home!', avatar: 'J' },
 ];
 
 const COUNTRIES = [
@@ -52,33 +81,84 @@ const COUNTRIES = [
   { code: '1',  flag: 'https://flagcdn.com/20x15/us.png', flagAlt: 'US', label: 'USA (+1)',    ph: '4155552671' },
 ];
 
-/* ── Shared UI ── */
-function Stars({ n }) {
-  return <span className="text-amber-400">{'★'.repeat(n)}{'☆'.repeat(5 - n)}</span>;
-}
-
-/* ══════════ INQUIRY MODAL (Pet Food / Pet Boarding) ══════════ */
+/* ── Inquiry modal config ── */
 const INQUIRY_CONFIG = {
   'Pet Food': {
-    icon: '🍖',
-    color: '#16a34a',
+    icon: '🍖', color: '#0891b2',
     tagline: 'Premium pet nutrition delivered to your door.',
-    placeholder: 'e.g. My Labrador needs grain-free dry food, 10 kg bag monthly. Currently using Royal Canin. Please share available brands & prices.',
+    placeholder: 'e.g. My Labrador needs grain-free dry food, 10 kg bag monthly. Or: my Persian cat needs hairball control wet food.',
     label: 'Tell us what your pet needs',
   },
   'Pet Boarding': {
-    icon: '🏠',
-    color: '#f97316',
+    icon: '🏠', color: ORANGE,
     tagline: 'Safe, caring home-away-from-home for your pet.',
-    placeholder: 'e.g. Need boarding for a 2-year-old Beagle from Dec 20–27. Looking for home-style stay with daily walks. Is pick-up/drop available?',
+    placeholder: 'e.g. Need boarding for a 2-year-old Beagle from Dec 20–27. Or: indoor cat who needs daily feeding & playtime while I travel.',
     label: 'Tell us your boarding requirements',
   },
 };
 
+/* ══════════ SHARED SVG ILLUSTRATIONS ══════════ */
+function CatFace({ size = 120, color = '#fff', opacity = 1 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" style={{ opacity }}>
+      {/* Ears */}
+      <polygon points="18,42 28,12 40,38" fill={color} />
+      <polygon points="60,38 72,12 82,42" fill={color} />
+      {/* Inner ears */}
+      <polygon points="24,38 30,20 37,36" fill={color} opacity="0.35" />
+      <polygon points="63,36 70,20 76,38" fill={color} opacity="0.35" />
+      {/* Head */}
+      <ellipse cx="50" cy="60" rx="30" ry="28" fill={color} />
+      {/* Eyes */}
+      <ellipse cx="37" cy="55" rx="5" ry="6" fill={WARM_DARK} />
+      <ellipse cx="63" cy="55" rx="5" ry="6" fill={WARM_DARK} />
+      <circle cx="39" cy="53" r="1.5" fill="white" />
+      <circle cx="65" cy="53" r="1.5" fill="white" />
+      {/* Nose */}
+      <polygon points="50,64 46,69 54,69" fill="#f9a8d4" />
+      {/* Mouth */}
+      <path d="M46,70 Q50,74 54,70" stroke={WARM_DARK} strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      {/* Whiskers left */}
+      <line x1="10" y1="64" x2="43" y2="66" stroke={WARM_DARK} strokeWidth="1.2" opacity="0.4" />
+      <line x1="10" y1="69" x2="43" y2="70" stroke={WARM_DARK} strokeWidth="1.2" opacity="0.4" />
+      {/* Whiskers right */}
+      <line x1="57" y1="66" x2="90" y2="64" stroke={WARM_DARK} strokeWidth="1.2" opacity="0.4" />
+      <line x1="57" y1="70" x2="90" y2="69" stroke={WARM_DARK} strokeWidth="1.2" opacity="0.4" />
+    </svg>
+  );
+}
+
+function DogFace({ size = 120, color = '#fff', opacity = 1 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" style={{ opacity }}>
+      {/* Floppy ears */}
+      <ellipse cx="22" cy="52" rx="13" ry="20" fill={color} opacity="0.75" transform="rotate(-10,22,52)" />
+      <ellipse cx="78" cy="52" rx="13" ry="20" fill={color} opacity="0.75" transform="rotate(10,78,52)" />
+      {/* Head */}
+      <circle cx="50" cy="50" r="27" fill={color} />
+      {/* Snout */}
+      <ellipse cx="50" cy="64" rx="14" ry="10" fill={color} opacity="0.6" />
+      {/* Nose */}
+      <ellipse cx="50" cy="58" rx="7" ry="5" fill={WARM_DARK} />
+      <ellipse cx="48" cy="57" rx="2" ry="1.5" fill="white" opacity="0.5" />
+      {/* Eyes */}
+      <circle cx="37" cy="44" r="5.5" fill={WARM_DARK} />
+      <circle cx="63" cy="44" r="5.5" fill={WARM_DARK} />
+      <circle cx="39" cy="42" r="1.8" fill="white" />
+      <circle cx="65" cy="42" r="1.8" fill="white" />
+      {/* Mouth */}
+      <path d="M43,68 Q50,73 57,68" stroke={WARM_DARK} strokeWidth="1.8" fill="none" strokeLinecap="round" />
+      {/* Tongue */}
+      <ellipse cx="50" cy="73" rx="5" ry="4" fill="#f9a8d4" />
+    </svg>
+  );
+}
+
+/* ══════════ INQUIRY MODAL ══════════ */
 function InquiryModal({ service, onClose }) {
   const cfg = INQUIRY_CONFIG[service] || INQUIRY_CONFIG['Pet Food'];
   const [form, setForm] = useState({ name: '', phone: '', email: '', message: '' });
-  const [state, setState] = useState('idle'); // idle | loading | done
+  const [state, setState] = useState('idle');
   const [error, setError] = useState('');
 
   const submit = async (e) => {
@@ -86,17 +166,14 @@ function InquiryModal({ service, onClose }) {
     setError('');
     if (!form.name.trim())  return setError('Please enter your name.');
     if (!form.email.trim()) return setError('Please enter your email.');
-    if (!form.message.trim()) return setError('Please describe what you need — our team will tailor the response to your pet!');
+    if (!form.message.trim()) return setError('Please describe what you need!');
     setState('loading');
     try {
       const res = await fetch(`${API}/contact/send-link`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: form.name.trim(),
-          phone: form.phone ? `+91${form.phone.replace(/\D/g, '')}` : null,
-          email: form.email.trim(),
-          service,
+          name: form.name.trim(), phone: form.phone ? `+91${form.phone.replace(/\D/g, '')}` : null,
+          email: form.email.trim(), service,
           message: `[${service} Inquiry]\n\n${form.message.trim()}`,
         }),
       });
@@ -112,15 +189,13 @@ function InquiryModal({ service, onClose }) {
     <div style={{
       position: 'fixed', inset: 0, zIndex: 9000,
       background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '16px',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px',
     }} onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
       <div style={{
         background: '#fff', borderRadius: 28, width: '100%', maxWidth: 520,
         boxShadow: '0 24px 80px rgba(0,0,0,0.3)', overflow: 'hidden',
         maxHeight: '90vh', overflowY: 'auto',
       }}>
-        {/* Header */}
         <div style={{ background: `linear-gradient(135deg, ${cfg.color}, ${cfg.color}cc)`, padding: '28px 32px 24px' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
             <div>
@@ -134,36 +209,23 @@ function InquiryModal({ service, onClose }) {
               display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: 12,
             }}>✕</button>
           </div>
-          <div style={{
-            marginTop: 16, background: 'rgba(255,255,255,0.15)', borderRadius: 12,
-            padding: '10px 16px', fontSize: 13, color: 'rgba(255,255,255,0.9)', fontWeight: 600,
-          }}>
-            🚀 Launching soon! Fill the form below and our team will reach out to you <strong>within 24 hours</strong>.
+          <div style={{ marginTop: 16, background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '10px 16px', fontSize: 13, color: 'rgba(255,255,255,0.9)', fontWeight: 600 }}>
+            🚀 Launching soon! Fill the form and our team will reach out within <strong>24 hours</strong>.
           </div>
         </div>
-
-        {/* Body */}
         <div style={{ padding: '28px 32px' }}>
           {state === 'done' ? (
             <div style={{ textAlign: 'center', padding: '20px 0' }}>
               <div style={{ fontSize: 56, marginBottom: 12 }}>✅</div>
               <h3 style={{ fontWeight: 900, fontSize: 22, color: '#111', marginBottom: 8 }}>Request Received!</h3>
               <p style={{ color: '#6b7280', fontSize: 15, lineHeight: 1.6 }}>
-                Thanks, <strong>{form.name.split(' ')[0]}</strong>! Our team will review your request and reach out to <strong>{form.email}</strong> within 24 hours.
+                Thanks, <strong>{form.name.split(' ')[0]}</strong>! We'll reach out to <strong>{form.email}</strong> within 24 hours.
               </p>
-              <button onClick={onClose} style={{
-                marginTop: 24, background: cfg.color, color: '#fff', border: 'none',
-                borderRadius: 14, padding: '12px 32px', fontWeight: 800, fontSize: 15, cursor: 'pointer',
-              }}>Close →</button>
+              <button onClick={onClose} style={{ marginTop: 24, background: cfg.color, color: '#fff', border: 'none', borderRadius: 14, padding: '12px 32px', fontWeight: 800, fontSize: 15, cursor: 'pointer' }}>Close →</button>
             </div>
           ) : (
             <form onSubmit={submit}>
-              {error && (
-                <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: 12, padding: '10px 16px', fontSize: 13, marginBottom: 16 }}>
-                  ⚠ {error}
-                </div>
-              )}
-
+              {error && <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: 12, padding: '10px 16px', fontSize: 13, marginBottom: 16 }}>⚠ {error}</div>}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
                 <div>
                   <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>Full Name *</label>
@@ -178,33 +240,22 @@ function InquiryModal({ service, onClose }) {
                     value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value.replace(/\D/g,'').slice(0,10) }))} />
                 </div>
               </div>
-
               <div style={{ marginBottom: 12 }}>
                 <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>Email *</label>
                 <input type="email" placeholder="you@example.com" required
                   style={{ width: '100%', border: '2px solid #f3f4f6', borderRadius: 12, padding: '10px 14px', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
                   value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
               </div>
-
               <div style={{ marginBottom: 20 }}>
-                <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>
-                  {cfg.label} <span style={{ color: '#ef4444' }}>*</span>
-                </label>
+                <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>{cfg.label} <span style={{ color: '#ef4444' }}>*</span></label>
                 <textarea rows={5} placeholder={cfg.placeholder} required
                   style={{ width: '100%', border: '2px solid #f3f4f6', borderRadius: 12, padding: '10px 14px', fontSize: 13, outline: 'none', resize: 'vertical', lineHeight: 1.6, boxSizing: 'border-box' }}
                   value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} />
-                <p style={{ fontSize: 11, color: '#9ca3af', marginTop: 4 }}>The more detail you give, the faster we can help you!</p>
               </div>
-
               <button type="submit" disabled={state === 'loading'}
-                style={{
-                  width: '100%', background: cfg.color, color: '#fff', border: 'none',
-                  borderRadius: 14, padding: '14px', fontWeight: 900, fontSize: 15,
-                  cursor: 'pointer', opacity: state === 'loading' ? 0.7 : 1,
-                }}>
+                style={{ width: '100%', background: cfg.color, color: '#fff', border: 'none', borderRadius: 14, padding: '14px', fontWeight: 900, fontSize: 15, cursor: 'pointer', opacity: state === 'loading' ? 0.7 : 1 }}>
                 {state === 'loading' ? 'Sending…' : `📩 Send Inquiry — We'll Reach Out ASAP`}
               </button>
-
               <div style={{ display: 'flex', justifyContent: 'center', gap: 20, marginTop: 14 }}>
                 {['🔒 Privacy protected', '⚡ 24h response', '🚫 No spam'].map(t => (
                   <span key={t} style={{ fontSize: 11, color: '#9ca3af' }}>{t}</span>
@@ -222,21 +273,19 @@ function InquiryModal({ service, onClose }) {
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', fn);
     return () => window.removeEventListener('scroll', fn);
   }, []);
-
   const links = [
     { href: '#services', label: 'Services' },
+    { href: '#pets', label: 'Cats & Dogs' },
     { href: '#how', label: 'How It Works' },
     { href: '#getapp', label: 'Get App' },
     { href: '#join', label: 'Join' },
     { href: '#contact', label: 'Contact' },
   ];
-
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-sm border-b border-gray-100' : 'bg-transparent'}`}>
       <div className="container h-18 flex items-center justify-between py-4">
@@ -246,28 +295,21 @@ function Navbar() {
             PET<span className={scrolled ? 'text-orange-500' : 'text-orange-400'}>club</span>
           </span>
         </a>
-
-        <div className="hidden md:flex items-center gap-7">
+        <div className="hidden md:flex items-center gap-6">
           {links.map(l => (
-            <a key={l.href} href={l.href}
-              className={`text-sm font-semibold transition-colors hover:text-orange-500 ${scrolled ? 'text-gray-600' : 'text-white/90'}`}>
-              {l.label}
-            </a>
+            <a key={l.href} href={l.href} className={`text-sm font-semibold transition-colors hover:text-orange-500 ${scrolled ? 'text-gray-600' : 'text-white/90'}`}>{l.label}</a>
           ))}
         </div>
-
         <div className="hidden md:flex items-center gap-3">
           <a href={`${APP_URL}?signin=1`} target="_blank" rel="noreferrer"
             className="bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all shadow-brand hover:shadow-lg">
             Sign In →
           </a>
         </div>
-
         <button onClick={() => setOpen(!open)} className={`md:hidden p-2 rounded-xl transition-colors ${scrolled ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
           {open ? '✕' : '☰'}
         </button>
       </div>
-
       {open && (
         <div className="md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-1 shadow-xl">
           {links.map(l => (
@@ -277,173 +319,238 @@ function Navbar() {
             </a>
           ))}
           <a href={`${APP_URL}?signin=1`} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}
-            className="block bg-orange-500 text-white font-bold text-center py-3 rounded-xl mt-3">
-            Sign In →
-          </a>
+            className="block bg-orange-500 text-white font-bold text-center py-3 rounded-xl mt-3">Sign In →</a>
         </div>
       )}
     </nav>
   );
 }
 
-/* ══════════ PHONE MOCKUP — Live Tracking UI ══════════ */
+/* ══════════ PHONE MOCKUP ══════════ */
 function PhoneMockup() {
   return (
     <div className="relative flex justify-center items-center lg:justify-end">
-      {/* Ambient glow */}
-      <div className="absolute w-80 h-80 bg-orange-500/25 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute w-48 h-48 bg-violet-500/15 rounded-full blur-2xl pointer-events-none translate-x-20 -translate-y-10" />
-
-      {/* Phone frame */}
-      <div className="relative w-[268px] h-[560px] bg-[#0f0e17] rounded-[2.8rem] border-[5px] border-white/10 shadow-[0_32px_80px_rgba(0,0,0,0.6)] overflow-hidden"
-        style={{ animation: 'float 4s ease-in-out infinite' }}>
-
-        {/* Status bar */}
+      <div className="absolute w-80 h-80 rounded-full blur-3xl pointer-events-none" style={{ background: 'rgba(249,115,22,0.28)' }} />
+      <div className="absolute w-48 h-48 rounded-full blur-2xl pointer-events-none translate-x-20 -translate-y-10" style={{ background: 'rgba(124,58,237,0.15)' }} />
+      <div className="relative rounded-[2.8rem] overflow-hidden border-[5px]"
+        style={{
+          width: 268, height: 560,
+          background: '#0f0e17',
+          borderColor: 'rgba(255,255,255,0.10)',
+          boxShadow: '0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(249,115,22,0.15)',
+          animation: 'float 4s ease-in-out infinite',
+        }}>
         <div className="flex items-center justify-between px-5 pt-3 pb-1">
           <span className="text-white/50 text-[10px] font-semibold">9:41</span>
-          <div className="w-16 h-4 bg-black rounded-full" /> {/* notch */}
+          <div className="w-16 h-4 bg-black rounded-full" />
           <div className="flex gap-1 items-center">
-            <div className="w-3 h-2 bg-white/40 rounded-sm" />
-            <div className="w-1 h-1 bg-white/40 rounded-full" />
+            <div className="w-3 h-2 rounded-sm" style={{ background: 'rgba(255,255,255,0.4)' }} />
+            <div className="w-1 h-1 rounded-full" style={{ background: 'rgba(255,255,255,0.4)' }} />
           </div>
         </div>
-
-        {/* App header */}
-        <div className="px-4 py-2 flex items-center gap-2 border-b border-white/5">
-          <div className="w-7 h-7 bg-orange-500 rounded-lg flex items-center justify-center text-white text-xs font-black">🐾</div>
+        <div className="px-4 py-2 flex items-center gap-2" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-black" style={{ background: ORANGE }}>🐾</div>
           <div className="flex-1">
             <div className="text-white text-xs font-bold">✂️ Sai Krishna • En Route</div>
-            <div className="text-white/40 text-[10px]">Grooming • On the way</div>
+            <div className="text-[10px]" style={{ color: 'rgba(255,255,255,0.4)' }}>Grooming • On the way</div>
           </div>
-          <div className="flex items-center gap-1 bg-white/8 rounded-full px-2 py-0.5">
+          <div className="flex items-center gap-1 rounded-full px-2 py-0.5" style={{ background: 'rgba(255,255,255,0.08)' }}>
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" style={{ boxShadow: '0 0 4px #4ade80', animation: 'pulse 2s infinite' }} />
             <span className="text-white text-[9px] font-bold">LIVE</span>
           </div>
         </div>
-
-        {/* Map area — stylised SVG map */}
         <div className="relative" style={{ height: 280 }}>
           <svg width="100%" height="100%" viewBox="0 0 258 280" xmlns="http://www.w3.org/2000/svg">
-            {/* Map bg */}
             <rect width="258" height="280" fill="#1a1825"/>
-            {/* Grid lines */}
             {[40,80,120,160,200,240].map(y => <line key={y} x1="0" y1={y} x2="258" y2={y} stroke="white" strokeOpacity="0.04" strokeWidth="1"/>)}
             {[40,80,120,160,200].map(x => <line key={x} x1={x} y1="0" x2={x} y2="280" stroke="white" strokeOpacity="0.04" strokeWidth="1"/>)}
-            {/* Roads */}
             <path d="M0,140 Q80,130 130,120 Q180,110 258,100" stroke="white" strokeOpacity="0.12" strokeWidth="10" fill="none" strokeLinecap="round"/>
             <path d="M0,140 Q80,130 130,120 Q180,110 258,100" stroke="white" strokeOpacity="0.06" strokeWidth="16" fill="none" strokeLinecap="round"/>
             <path d="M80,0 Q90,80 100,140 Q110,200 115,280" stroke="white" strokeOpacity="0.08" strokeWidth="8" fill="none" strokeLinecap="round"/>
-            <path d="M170,0 Q165,60 160,120 Q155,180 150,280" stroke="white" strokeOpacity="0.06" strokeWidth="6" fill="none" strokeLinecap="round"/>
-            {/* Route line — orange, animated */}
             <path d="M70,210 Q90,175 110,155 Q125,140 130,120" stroke="#f97316" strokeWidth="3.5" fill="none" strokeLinecap="round" strokeDasharray="6 3" opacity="0.9"/>
             <path d="M70,210 Q90,175 110,155 Q125,140 130,120" stroke="white" strokeWidth="7" fill="none" strokeLinecap="round" opacity="0.15"/>
-            {/* Customer marker — orange home pin */}
             <circle cx="70" cy="210" r="18" fill="#f97316" opacity="0.15"/>
             <circle cx="70" cy="210" r="11" fill="#f97316" stroke="white" strokeWidth="2.5"/>
             <text x="70" y="214" textAnchor="middle" fontSize="10" fill="white">🏠</text>
-            {/* Professional marker — animated */}
             <circle cx="130" cy="120" r="22" fill="#7c3aed" opacity="0.18"/>
             <circle cx="130" cy="120" r="13" fill="#7c3aed" stroke="white" strokeWidth="2.5"/>
             <text x="130" y="124" textAnchor="middle" fontSize="11" fill="white">✂️</text>
-            {/* Map attribution suppressed */}
           </svg>
-
-          {/* Waiting pulse on pro marker */}
           <div className="absolute pointer-events-none" style={{ top: 84, left: 108, width: 44, height: 44 }}>
             <div className="w-full h-full rounded-full border-2 border-violet-400 opacity-40" style={{ animation: 'ping 1.8s ease-out infinite' }} />
           </div>
         </div>
-
-        {/* ETA pill */}
-        <div className="mx-3 mt-2 bg-white/6 border border-white/8 rounded-2xl p-3 flex items-center gap-3">
+        <div className="mx-3 mt-2 rounded-2xl p-3 flex items-center gap-3" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
           <div className="text-center">
-            <div className="text-white/40 text-[8px] font-bold uppercase tracking-widest">ETA</div>
-            <div className="text-white text-2xl font-black leading-none">8<span className="text-sm font-medium text-white/50"> min</span></div>
+            <div className="font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.4)', fontSize: 8 }}>ETA</div>
+            <div className="text-white text-2xl font-black leading-none">8<span className="text-sm font-medium" style={{ color: 'rgba(255,255,255,0.5)' }}> min</span></div>
           </div>
-          <div className="w-px h-8 bg-white/10" />
+          <div className="w-px h-8" style={{ background: 'rgba(255,255,255,0.1)' }} />
           <div className="text-center">
-            <div className="text-white/40 text-[8px] font-bold uppercase tracking-widest">Status</div>
+            <div className="font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.4)', fontSize: 8 }}>Status</div>
             <div className="text-violet-400 text-xs font-bold">En Route 🚗</div>
           </div>
-          <div className="w-px h-8 bg-white/10" />
+          <div className="w-px h-8" style={{ background: 'rgba(255,255,255,0.1)' }} />
           <div className="text-center flex-1">
-            <div className="text-white/40 text-[8px] font-bold uppercase tracking-widest">Service</div>
+            <div className="font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.4)', fontSize: 8 }}>Service</div>
             <div className="text-white text-xs font-bold">Full Groom</div>
           </div>
         </div>
-
-        {/* Bottom action */}
-        <div className="mx-3 mt-2 bg-orange-500 rounded-xl py-2.5 text-center">
+        <div className="mx-3 mt-2 rounded-xl py-2.5 text-center" style={{ background: ORANGE }}>
           <span className="text-white text-xs font-black tracking-wide">Call Sai →</span>
         </div>
       </div>
-
-      {/* Floating badge — radius matching */}
+      {/* Floating badge */}
       <div className="absolute -left-4 top-16 bg-white rounded-2xl shadow-xl px-3 py-2 flex items-center gap-2 text-xs font-bold text-gray-800 border border-gray-100"
         style={{ animation: 'float 3s ease-in-out infinite', animationDelay: '0.5s' }}>
         <span className="text-lg">📍</span>
         <div><div className="text-gray-900 font-extrabold text-xs">70km Match</div><div className="text-gray-400 font-normal text-[10px]">Nearest verified pro</div></div>
       </div>
-
-      {/* Floating badge — verified */}
       <div className="absolute -right-2 bottom-28 bg-emerald-500 rounded-2xl shadow-xl px-3 py-2 flex items-center gap-2 text-xs font-bold text-white"
         style={{ animation: 'float 5s ease-in-out infinite', animationDelay: '1s' }}>
         <span className="text-lg">✅</span>
-        <div><div className="font-extrabold text-xs">ID Verified</div><div className="font-normal text-[10px] text-emerald-100">48h compliance</div></div>
+        <div><div className="font-extrabold text-xs">ID Verified</div><div className="font-normal text-emerald-100 text-[10px]">48h compliance</div></div>
       </div>
     </div>
   );
 }
 
-/* ══════════ TRUST & SECURITY BANNER ══════════ */
+/* ══════════ HERO ══════════ */
+function Hero() {
+  return (
+    <section className="relative min-h-screen flex items-center overflow-hidden"
+      style={{ background: `linear-gradient(150deg, ${WARM_DARK} 0%, #3b0d00 28%, #7c2d12 55%, #c2410c 78%, #f97316 100%)` }}>
+
+      {/* Glow orbs */}
+      <div className="absolute pointer-events-none" style={{ top: -100, right: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(249,115,22,0.14) 0%, transparent 70%)' }} />
+      <div className="absolute pointer-events-none" style={{ bottom: -100, left: -100, width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(245,158,11,0.10) 0%, transparent 70%)' }} />
+
+      {/* Decorative paw prints */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <img src="/icon.svg" alt="" aria-hidden="true" className="absolute opacity-[0.06]" style={{ width: 220, bottom: -30, right: -30 }} />
+        <img src="/icon.svg" alt="" aria-hidden="true" className="absolute opacity-[0.04]" style={{ width: 140, top: 60, left: -20 }} />
+      </div>
+
+      <div className="container relative z-10 pt-24 pb-16">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+
+          {/* Left */}
+          <div>
+            <div className="inline-flex items-center gap-2 text-orange-200 text-xs font-bold px-4 py-2 rounded-full mb-8 backdrop-blur-sm"
+              style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.20)' }}>
+              <img src="https://flagcdn.com/20x15/in.png" alt="India" className="inline-block rounded-sm" />
+              India&apos;s #1 Pet Care Platform
+              <span className="opacity-40">·</span>
+              <img src="https://flagcdn.com/20x15/us.png" alt="USA" className="inline-block rounded-sm" />
+              Now in USA
+            </div>
+
+            <h1 className="text-5xl sm:text-6xl font-black text-white leading-[1.05] mb-5">
+              Premium Care for<br />
+              <span className="text-gradient-white">Dogs &amp; Cats.</span>
+            </h1>
+
+            <p className="text-lg mb-4 leading-relaxed max-w-lg" style={{ color: 'rgba(255,255,255,0.75)' }}>
+              Verified groomers, vets, trainers, walkers &amp; boarders — GPS-tracked, background-checked, loved by 50,000+ pet parents across India &amp; USA.
+            </p>
+
+            {/* Pet type pills */}
+            <div className="flex flex-wrap gap-2 mb-8">
+              {['🐕 Dogs', '🐱 Cats', '✂️ Grooming', '🏥 Vet', '🎓 Training', '🦮 Walking', '🏠 Boarding'].map(p => (
+                <span key={p} className="text-xs font-bold px-3 py-1.5 rounded-full"
+                  style={{ background: 'rgba(255,255,255,0.13)', border: '1px solid rgba(255,255,255,0.18)', color: 'rgba(255,255,255,0.85)' }}>
+                  {p}
+                </span>
+              ))}
+            </div>
+
+            {/* Two journey cards */}
+            <div className="grid sm:grid-cols-2 gap-4 mb-10">
+              <a href="#join" className="group relative rounded-2xl p-5 transition-all hover:shadow-xl active:scale-[0.98] text-left"
+                style={{ background: '#fff', boxShadow: '0 8px 32px rgba(0,0,0,0.15)' }}>
+                <div className="text-2xl mb-2">🐾</div>
+                <div className="font-extrabold text-base mb-0.5" style={{ color: WARM_DARK }}>I&apos;m a Pet Owner</div>
+                <div className="text-xs leading-snug mb-3" style={{ color: '#92400e' }}>Book grooming, training, vet, walking &amp; boarding</div>
+                <div className="flex items-center gap-1 text-xs font-bold" style={{ color: ORANGE2 }}>
+                  Book a Service <span className="group-hover:translate-x-1 transition-transform inline-block">→</span>
+                </div>
+              </a>
+              <a href="#join" className="group relative rounded-2xl p-5 transition-all hover:shadow-xl active:scale-[0.98] text-left"
+                style={{ background: 'rgba(255,255,255,0.13)', border: '1px solid rgba(255,255,255,0.22)' }}>
+                <div className="text-2xl mb-2">💼</div>
+                <div className="font-extrabold text-white text-base mb-0.5">I&apos;m a Professional</div>
+                <div className="text-xs leading-snug mb-3" style={{ color: 'rgba(255,255,255,0.65)' }}>Join as groomer, trainer, vet, walker or boarder</div>
+                <div className="flex items-center gap-1 text-xs font-bold text-orange-300">
+                  Join as Pro <span className="group-hover:translate-x-1 transition-transform inline-block">→</span>
+                </div>
+              </a>
+            </div>
+
+            {/* Stats */}
+            <div className="flex flex-wrap gap-x-8 gap-y-4 pt-8" style={{ borderTop: '1px solid rgba(255,255,255,0.12)' }}>
+              {[
+                { v: '50K+', l: 'Happy Pets' },
+                { v: '1.2K+', l: 'Verified Pros' },
+                { v: '100+', l: 'Cities' },
+                { v: '4.9★', l: 'App Rating' },
+              ].map(s => (
+                <div key={s.l}>
+                  <div className="text-2xl font-black text-white">{s.v}</div>
+                  <div className="text-xs font-medium" style={{ color: 'rgba(255,255,255,0.50)' }}>{s.l}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right — Phone + floating pet cards */}
+          <div className="hidden lg:block relative">
+            <PhoneMockup />
+            {/* Floating cat card */}
+            <div className="absolute -top-6 left-0 rounded-2xl px-4 py-3 flex items-center gap-3 shadow-xl"
+              style={{ background: '#fff', border: '1px solid #fed7aa', animation: 'float 4.5s ease-in-out infinite', animationDelay: '2s', zIndex: 20 }}>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `linear-gradient(135deg, #7c2d12, #c2410c)` }}>
+                <CatFace size={28} color="white" />
+              </div>
+              <div>
+                <div className="font-extrabold text-xs" style={{ color: WARM_DARK }}>Cat Grooming</div>
+                <div className="text-[10px]" style={{ color: '#92400e' }}>Now available ✓</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none" style={{ background: `linear-gradient(to top, ${WARM_DARK}, transparent)` }} />
+    </section>
+  );
+}
+
+/* ══════════ TRUST BANNER ══════════ */
 function TrustBanner() {
   const pillars = [
-    {
-      icon: '📍',
-      title: '70km Radius Matching',
-      desc: 'Our algorithm matches your pet with the nearest verified professional within 70km — fast, local, reliable.',
-      color: 'from-orange-500/10 to-orange-500/5',
-      border: 'border-orange-500/20',
-      iconBg: 'bg-orange-500/10',
-      iconColor: 'text-orange-400',
-    },
-    {
-      icon: '🛡️',
-      title: '48-Hour Compliance Check',
-      desc: 'Every groomer, trainer & vet is manually reviewed — ID proof, certifications & references — before going live.',
-      color: 'from-violet-500/10 to-violet-500/5',
-      border: 'border-violet-500/20',
-      iconBg: 'bg-violet-500/10',
-      iconColor: 'text-violet-400',
-    },
-    {
-      icon: '🔐',
-      title: 'Secure Onboarding',
-      desc: 'OTP-verified accounts, encrypted profiles, zero-password login — every pet parent and professional stays protected.',
-      color: 'from-emerald-500/10 to-emerald-500/5',
-      border: 'border-emerald-500/20',
-      iconBg: 'bg-emerald-500/10',
-      iconColor: 'text-emerald-400',
-    },
+    { icon: '📍', title: '70km Radius Matching', desc: 'Our algorithm matches your pet with the nearest verified professional within 70km — fast, local, reliable.', fromColor: 'rgba(249,115,22,0.12)', border: 'rgba(249,115,22,0.25)', iconBg: 'rgba(249,115,22,0.12)', iconColor: ORANGE },
+    { icon: '🛡️', title: '48-Hour Compliance Check', desc: 'Every groomer, trainer & vet is manually reviewed — ID proof, certifications & references — before going live.', fromColor: 'rgba(139,92,246,0.12)', border: 'rgba(139,92,246,0.25)', iconBg: 'rgba(139,92,246,0.12)', iconColor: '#8b5cf6' },
+    { icon: '🔐', title: 'Secure Onboarding', desc: 'OTP-verified accounts, encrypted profiles, zero-password login — every pet parent and professional stays protected.', fromColor: 'rgba(52,211,153,0.12)', border: 'rgba(52,211,153,0.25)', iconBg: 'rgba(52,211,153,0.12)', iconColor: '#34d399' },
   ];
-
   return (
-    <section className="bg-gray-950 border-y border-white/5 py-14">
+    <section style={{ background: WARM_DARK2, borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '56px 0' }}>
       <div className="container">
         <div className="text-center mb-10">
-          <span className="inline-flex items-center gap-2 text-orange-400 text-xs font-bold tracking-widest uppercase bg-orange-500/10 border border-orange-500/20 px-4 py-1.5 rounded-full">
+          <span className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full"
+            style={{ color: ORANGE, background: 'rgba(249,115,22,0.12)', border: '1px solid rgba(249,115,22,0.25)' }}>
             🔒 Trust &amp; Safety — Built Into Every Booking
           </span>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {pillars.map(p => (
-            <div key={p.title} className={`bg-gradient-to-br ${p.color} border ${p.border} rounded-3xl p-6 flex gap-4 items-start`}>
-              <div className={`w-12 h-12 ${p.iconBg} rounded-2xl flex items-center justify-center text-2xl shrink-0`}>
+            <div key={p.title} className="rounded-3xl p-6 flex gap-4 items-start"
+              style={{ background: p.fromColor, border: `1px solid ${p.border}` }}>
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0" style={{ background: p.iconBg }}>
                 {p.icon}
               </div>
               <div>
-                <h3 className={`font-extrabold text-white text-base mb-1.5`}>{p.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{p.desc}</p>
+                <h3 className="font-extrabold text-white text-base mb-1.5">{p.title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)' }}>{p.desc}</p>
               </div>
             </div>
           ))}
@@ -453,93 +560,125 @@ function TrustBanner() {
   );
 }
 
-/* ══════════ HERO ══════════ */
-function Hero() {
+/* ══════════ PETS WE SERVE ══════════ */
+function PetsWeServe() {
+  const dogServices = ['Grooming', 'Training', 'Vet Care', 'Dog Walking', 'Pet Boarding'];
+  const catServices = ['Grooming', 'Vet Care', 'Pet Boarding', 'Pet Food'];
+
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-gray-950">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-[#1a0a00]" />
-      <div className="absolute inset-0 opacity-20">
-        <img src={IMG.hero} alt="" className="w-full h-full object-cover object-center" aria-hidden="true" />
-        <div className="absolute inset-0 bg-gray-950/70" />
-      </div>
-      {/* Decorative blobs */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-orange-500/8 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-violet-500/6 rounded-full blur-3xl pointer-events-none" />
+    <section id="pets" style={{ background: WARM_CREAM, padding: '80px 0' }}>
+      <div className="container">
+        <div className="text-center mb-14">
+          <span className="text-sm font-bold tracking-widest uppercase" style={{ color: ORANGE2 }}>For Every Pet</span>
+          <h2 className="text-4xl md:text-5xl font-black mt-3 mb-4" style={{ color: WARM_DARK }}>
+            We Love Dogs &amp; Cats Equally
+          </h2>
+          <p className="text-lg max-w-xl mx-auto" style={{ color: '#92400e' }}>
+            Whether you have a fluffy Persian cat or a boisterous Labrador — or both — we&apos;ve got every service covered.
+          </p>
+        </div>
 
-      <div className="container relative z-10 pt-24 pb-16">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid md:grid-cols-2 gap-8">
 
-          {/* ── Left: headline + dual CTAs ── */}
-          <div>
-            <div className="inline-flex items-center gap-2 bg-orange-500/15 border border-orange-400/25 text-orange-300 text-xs font-bold px-4 py-2 rounded-full mb-8 backdrop-blur-sm">
-              <img src="https://flagcdn.com/20x15/in.png" alt="India" className="inline-block rounded-sm" />
-              India&apos;s #1 Pet Care Platform
-              <span className="opacity-40">·</span>
-              <img src="https://flagcdn.com/20x15/us.png" alt="USA" className="inline-block rounded-sm" />
-              Now in USA
+          {/* Dogs */}
+          <div className="rounded-3xl overflow-hidden shadow-xl" style={{ boxShadow: '0 20px 60px rgba(249,115,22,0.18)' }}>
+            {/* Header */}
+            <div className="relative flex items-center justify-between p-8 overflow-hidden"
+              style={{ background: `linear-gradient(135deg, #7c2d12 0%, ${ORANGE} 100%)` }}>
+              <div style={{ position: 'absolute', right: -20, top: -20, opacity: 0.15 }}>
+                <DogFace size={160} color="white" />
+              </div>
+              <div className="relative z-10">
+                <div className="text-5xl mb-2">🐕</div>
+                <h3 className="text-3xl font-black text-white mb-1">For Your Dog</h3>
+                <p className="text-orange-100 text-sm">All breeds, all sizes, all ages</p>
+              </div>
+              <div className="relative z-10 text-right hidden sm:block">
+                <DogFace size={100} color="white" opacity={0.9} />
+              </div>
             </div>
-
-            <h1 className="text-5xl sm:text-6xl font-black text-white leading-[1.05] mb-5">
-              Premium Pet Care,<br />
-              <span className="text-gradient-white">At Your Door.</span>
-            </h1>
-
-            <p className="text-lg text-white/70 mb-10 leading-relaxed max-w-lg">
-              Verified groomers, trainers, vets, walkers &amp; boarders — GPS-tracked, background-checked, loved by 50,000+ pet parents.
-            </p>
-
-            {/* ── TWO CLEAR JOURNEYS ── */}
-            <div className="grid sm:grid-cols-2 gap-4 mb-12">
-              {/* Pet Owner path */}
-              <a href="#join"
-                onClick={() => { setTimeout(() => document.querySelector('[data-role="owner"]')?.click(), 100); }}
-                className="group relative bg-orange-500 hover:bg-orange-400 rounded-2xl p-5 transition-all shadow-brand hover:shadow-xl active:scale-[0.98] text-left">
-                <div className="text-2xl mb-2">🐾</div>
-                <div className="font-extrabold text-white text-base mb-0.5">I&apos;m a Pet Owner</div>
-                <div className="text-orange-100/80 text-xs leading-snug mb-3">Book grooming, training, vet, walking &amp; boarding</div>
-                <div className="flex items-center gap-1 text-white text-xs font-bold">
-                  Book a Service <span className="group-hover:translate-x-1 transition-transform inline-block">→</span>
-                </div>
+            {/* Services list */}
+            <div style={{ background: '#fff7ed', padding: '28px 32px' }}>
+              <div className="grid grid-cols-2 gap-3 mb-6">
+                {dogServices.map(s => (
+                  <div key={s} className="flex items-center gap-2.5 rounded-2xl px-4 py-3"
+                    style={{ background: '#fff', border: '1px solid #fed7aa' }}>
+                    <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black text-white shrink-0"
+                      style={{ background: ORANGE2 }}>✓</span>
+                    <span className="text-sm font-semibold" style={{ color: '#7c2d12' }}>{s}</span>
+                  </div>
+                ))}
+              </div>
+              <a href={APP_URL} target="_blank" rel="noreferrer"
+                className="w-full flex items-center justify-center gap-2 rounded-2xl py-3.5 font-black text-sm transition-all hover:opacity-90"
+                style={{ background: `linear-gradient(135deg, ${ORANGE2}, ${ORANGE})`, color: '#fff', boxShadow: '0 8px 24px rgba(249,115,22,0.30)' }}>
+                Book for Your Dog →
               </a>
-
-              {/* Service Provider path */}
-              <a href="#join"
-                className="group relative bg-white/8 hover:bg-white/12 border border-white/15 rounded-2xl p-5 transition-all hover:shadow-xl active:scale-[0.98] text-left">
-                <div className="text-2xl mb-2">💼</div>
-                <div className="font-extrabold text-white text-base mb-0.5">I&apos;m a Professional</div>
-                <div className="text-white/50 text-xs leading-snug mb-3">Join as groomer, trainer, vet, walker or boarder</div>
-                <div className="flex items-center gap-1 text-orange-400 text-xs font-bold">
-                  Join as Pro <span className="group-hover:translate-x-1 transition-transform inline-block">→</span>
-                </div>
-              </a>
-            </div>
-
-            {/* Stats */}
-            <div className="flex flex-wrap gap-x-8 gap-y-4 border-t border-white/8 pt-8">
-              {[
-                { v: '50K+', l: 'Happy Pets' },
-                { v: '1.2K+', l: 'Verified Pros' },
-                { v: '100+', l: 'Cities' },
-                { v: '4.9★', l: 'App Rating' },
-              ].map(s => (
-                <div key={s.l}>
-                  <div className="text-2xl font-black text-white">{s.v}</div>
-                  <div className="text-xs text-white/50 font-medium">{s.l}</div>
-                </div>
-              ))}
             </div>
           </div>
 
-          {/* ── Right: Live Tracking Phone Mockup ── */}
-          <div className="hidden lg:flex justify-center">
-            <PhoneMockup />
+          {/* Cats */}
+          <div className="rounded-3xl overflow-hidden shadow-xl" style={{ boxShadow: '0 20px 60px rgba(139,92,246,0.18)' }}>
+            {/* Header */}
+            <div className="relative flex items-center justify-between p-8 overflow-hidden"
+              style={{ background: 'linear-gradient(135deg, #4c1d95 0%, #8b5cf6 100%)' }}>
+              <div style={{ position: 'absolute', right: -20, top: -20, opacity: 0.15 }}>
+                <CatFace size={160} color="white" />
+              </div>
+              <div className="relative z-10">
+                <div className="text-5xl mb-2">🐱</div>
+                <h3 className="text-3xl font-black text-white mb-1">For Your Cat</h3>
+                <p className="text-purple-100 text-sm">Persian, Siamese, tabby &amp; more</p>
+              </div>
+              <div className="relative z-10 text-right hidden sm:block">
+                <CatFace size={100} color="white" opacity={0.9} />
+              </div>
+            </div>
+            {/* Services list */}
+            <div style={{ background: '#f5f3ff', padding: '28px 32px' }}>
+              <div className="grid grid-cols-2 gap-3 mb-6">
+                {catServices.map(s => (
+                  <div key={s} className="flex items-center gap-2.5 rounded-2xl px-4 py-3"
+                    style={{ background: '#fff', border: '1px solid #ddd6fe' }}>
+                    <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black text-white shrink-0"
+                      style={{ background: '#7c3aed' }}>✓</span>
+                    <span className="text-sm font-semibold" style={{ color: '#4c1d95' }}>{s}</span>
+                  </div>
+                ))}
+                {/* Coming soon for cats */}
+                {['Training', 'Walking'].map(s => (
+                  <div key={s} className="flex items-center gap-2.5 rounded-2xl px-4 py-3"
+                    style={{ background: 'rgba(255,255,255,0.5)', border: '1px dashed #c4b5fd' }}>
+                    <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black shrink-0"
+                      style={{ background: '#ede9fe', color: '#7c3aed' }}>→</span>
+                    <span className="text-xs font-medium" style={{ color: '#7c3aed' }}>{s} <span style={{ opacity: 0.6 }}>(soon)</span></span>
+                  </div>
+                ))}
+              </div>
+              <a href={APP_URL} target="_blank" rel="noreferrer"
+                className="w-full flex items-center justify-center gap-2 rounded-2xl py-3.5 font-black text-sm transition-all hover:opacity-90"
+                style={{ background: 'linear-gradient(135deg, #5b21b6, #8b5cf6)', color: '#fff', boxShadow: '0 8px 24px rgba(139,92,246,0.30)' }}>
+                Book for Your Cat →
+              </a>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-gray-950 to-transparent" />
+        {/* Combined household badge */}
+        <div className="mt-8 rounded-3xl p-6 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left"
+          style={{ background: `linear-gradient(135deg, rgba(249,115,22,0.08), rgba(139,92,246,0.08))`, border: `1px solid rgba(249,115,22,0.20)` }}>
+          <div className="text-4xl flex gap-1">🐕🐱</div>
+          <div className="flex-1">
+            <div className="font-extrabold text-lg mb-1" style={{ color: WARM_DARK }}>Multi-pet household?</div>
+            <div className="text-sm" style={{ color: '#92400e' }}>One app, one account — manage all your pets' profiles, health records, and bookings in a single place.</div>
+          </div>
+          <a href={APP_URL} target="_blank" rel="noreferrer"
+            className="whitespace-nowrap rounded-2xl px-6 py-3 font-bold text-sm transition-all hover:opacity-90"
+            style={{ background: ORANGE, color: '#fff', boxShadow: '0 6px 20px rgba(249,115,22,0.28)' }}>
+            Add All Pets →
+          </a>
+        </div>
+      </div>
     </section>
   );
 }
@@ -548,53 +687,50 @@ function Hero() {
 function Services() {
   const [inquiryService, setInquiryService] = useState(null);
 
-  const colorMap = {
-    orange: 'bg-orange-50 text-orange-600 border-orange-100',
-    purple: 'bg-purple-50 text-purple-600 border-purple-100',
-    rose:   'bg-rose-50 text-rose-600 border-rose-100',
-    green:  'bg-green-50 text-green-600 border-green-100',
-  };
-  const tagColorMap = {
-    orange: 'bg-orange-100 text-orange-700',
-    purple: 'bg-purple-100 text-purple-700',
-    rose:   'bg-rose-100 text-rose-700',
-    green:  'bg-green-100 text-green-700',
-  };
-
   return (
     <section id="services" className="section-pad bg-white">
       <div className="container">
         <div className="text-center mb-16">
-          <span className="text-orange-500 text-sm font-bold tracking-widest uppercase">Our Services</span>
+          <span className="text-sm font-bold tracking-widest uppercase" style={{ color: ORANGE }}>Our Services</span>
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 mt-3 mb-4">Everything Your Pet Needs</h2>
           <p className="text-gray-500 text-lg max-w-xl mx-auto">Verified professionals, transparent pricing, live tracking — all in one app.</p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {SERVICES.map(s => {
-            const inner = (
+            const cardInner = (
               <>
-                <div className="relative h-48 overflow-hidden">
-                  <img src={s.img} alt={s.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                  <span className={`absolute top-3 left-3 text-xs font-bold px-2.5 py-1 rounded-full ${tagColorMap[s.color]}`}>{s.tag}</span>
+                {/* CSS gradient header — no broken external image */}
+                <div className="relative flex items-center justify-center overflow-hidden" style={{ height: 192, background: `linear-gradient(135deg, ${s.gradFrom}, ${s.gradTo})` }}>
+                  {/* Big icon */}
+                  <span style={{ fontSize: 72, filter: 'drop-shadow(0 4px 16px rgba(0,0,0,0.25))', lineHeight: 1 }}>{s.icon}</span>
+                  {/* Tag */}
+                  <span className="absolute top-3 left-3 text-xs font-bold px-2.5 py-1 rounded-full"
+                    style={{ background: s.tagBg, color: s.tagColor }}>{s.tag}</span>
+                  {/* Cat friendly badge */}
+                  {s.catFriendly && (
+                    <div className="absolute bottom-3 right-3 flex items-center gap-1 rounded-full px-2.5 py-1"
+                      style={{ background: 'rgba(255,255,255,0.20)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.30)' }}>
+                      <CatFace size={14} color="white" />
+                      <span className="text-white text-[10px] font-bold">Cats too!</span>
+                    </div>
+                  )}
                   {!s.bookable && (
                     <span className="absolute top-3 right-3 text-xs font-bold px-2.5 py-1 rounded-full bg-white/90 text-gray-700">✉ Inquiry</span>
                   )}
-                  <div className="absolute bottom-3 left-3 text-3xl">{s.icon}</div>
                 </div>
                 <div className="p-5">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-extrabold text-gray-900 text-lg">{s.title}</h3>
-                    <span className="text-sm font-bold text-orange-500">{s.price}</span>
+                    <span className="text-sm font-bold" style={{ color: ORANGE }}>{s.price}</span>
                   </div>
                   <p className="text-gray-500 text-sm leading-relaxed mb-4">{s.desc}</p>
                   {s.bookable ? (
-                    <div className="flex items-center text-orange-500 font-bold text-sm group-hover:gap-2 gap-1 transition-all">
+                    <div className="flex items-center font-bold text-sm gap-1 group-hover:gap-2 transition-all" style={{ color: ORANGE }}>
                       Book Now <span className="group-hover:translate-x-1 transition-transform">→</span>
                     </div>
                   ) : (
-                    <div className="flex items-center text-green-600 font-bold text-sm group-hover:gap-2 gap-1 transition-all">
+                    <div className="flex items-center text-green-600 font-bold text-sm gap-1 group-hover:gap-2 transition-all">
                       Get in Touch <span className="group-hover:translate-x-1 transition-transform">→</span>
                     </div>
                   )}
@@ -603,18 +739,13 @@ function Services() {
             );
 
             return s.bookable ? (
-              <a key={s.title} href={APP_URL} target="_blank" rel="noreferrer" className="card-service group">
-                {inner}
-              </a>
+              <a key={s.title} href={APP_URL} target="_blank" rel="noreferrer" className="card-service group">{cardInner}</a>
             ) : (
-              <button key={s.title} type="button" onClick={() => setInquiryService(s.title)} className="card-service group text-left">
-                {inner}
-              </button>
+              <button key={s.title} type="button" onClick={() => setInquiryService(s.title)} className="card-service group text-left">{cardInner}</button>
             );
           })}
         </div>
       </div>
-
       {inquiryService && <InquiryModal service={inquiryService} onClose={() => setInquiryService(null)} />}
     </section>
   );
@@ -623,26 +754,30 @@ function Services() {
 /* ══════════ HOW IT WORKS ══════════ */
 function HowItWorks() {
   return (
-    <section id="how" className="section-pad bg-gray-50">
+    <section id="how" className="section-pad" style={{ background: WARM_CREAM2 }}>
       <div className="container">
         <div className="text-center mb-16">
-          <span className="text-orange-500 text-sm font-bold tracking-widest uppercase">Simple Process</span>
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mt-3 mb-4">Get Started in 3 Easy Steps</h2>
-          <p className="text-gray-500 text-lg">From download to your first booking in under 5 minutes.</p>
+          <span className="text-sm font-bold tracking-widest uppercase" style={{ color: ORANGE2 }}>Simple Process</span>
+          <h2 className="text-4xl md:text-5xl font-black mt-3 mb-4" style={{ color: WARM_DARK }}>Get Started in 3 Easy Steps</h2>
+          <p className="text-lg" style={{ color: '#92400e' }}>From sign-up to your first booking in under 5 minutes.</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 relative">
-          {/* Connector line */}
-          <div className="hidden md:block absolute top-12 left-1/3 right-1/3 h-0.5 bg-gradient-to-r from-orange-200 via-orange-300 to-orange-200 z-0" />
+          <div className="hidden md:block absolute top-12 left-1/3 right-1/3 h-0.5 z-0"
+            style={{ background: 'linear-gradient(to right, #fed7aa, #f97316, #fed7aa)' }} />
 
           {STEPS.map((s, i) => (
             <div key={s.n} className="relative text-center z-10">
-              <div className="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-white shadow-card border border-orange-100 text-4xl mb-6">
+              <div className="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-white border text-4xl mb-6 shadow-xl"
+                style={{ borderColor: '#fed7aa', boxShadow: '0 8px 32px rgba(249,115,22,0.12)' }}>
                 {s.icon}
               </div>
-              <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-orange-500 text-white text-xs font-black w-7 h-7 rounded-full flex items-center justify-center shadow-brand">{i + 1}</div>
-              <h3 className="text-xl font-extrabold text-gray-900 mb-3">{s.title}</h3>
-              <p className="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto">{s.desc}</p>
+              <div className="absolute -top-2 left-1/2 -translate-x-1/2 text-white text-xs font-black w-7 h-7 rounded-full flex items-center justify-center shadow-brand"
+                style={{ background: ORANGE }}>
+                {i + 1}
+              </div>
+              <h3 className="text-xl font-extrabold mb-3" style={{ color: WARM_DARK }}>{s.title}</h3>
+              <p className="text-sm leading-relaxed max-w-xs mx-auto" style={{ color: '#92400e' }}>{s.desc}</p>
             </div>
           ))}
         </div>
@@ -652,15 +787,19 @@ function HowItWorks() {
 }
 
 /* ══════════ REVIEWS ══════════ */
+function Stars({ n }) {
+  return <span className="text-amber-400">{'★'.repeat(n)}{'☆'.repeat(5 - n)}</span>;
+}
+
 function Reviews() {
   return (
     <section className="section-pad bg-white overflow-hidden">
       <div className="container">
         <div className="text-center mb-14">
-          <span className="text-orange-500 text-sm font-bold tracking-widest uppercase">Testimonials</span>
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mt-3 mb-2">Loved Across Two Countries</h2>
+          <span className="text-sm font-bold tracking-widest uppercase" style={{ color: ORANGE }}>Testimonials</span>
+          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mt-3 mb-2">Loved by Dogs &amp; Cat Parents</h2>
           <p className="text-gray-500 text-lg inline-flex items-center gap-1.5">
-            Real stories from real pet parents&nbsp;
+            Real stories from real pet families&nbsp;
             <img src="https://flagcdn.com/20x15/in.png" alt="India" className="inline-block rounded-sm" />
             <img src="https://flagcdn.com/20x15/us.png" alt="USA" className="inline-block rounded-sm" />
           </p>
@@ -672,7 +811,8 @@ function Reviews() {
               <Stars n={r.stars} />
               <p className="text-gray-700 text-sm leading-relaxed mt-3 mb-5 italic">&ldquo;{r.text}&rdquo;</p>
               <div className="flex items-center gap-3 pt-4 border-t border-gray-50">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white font-bold text-sm shrink-0">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0"
+                  style={{ background: 'linear-gradient(135deg, #f97316, #f59e0b)' }}>
                   {r.avatar}
                 </div>
                 <div>
@@ -691,54 +831,51 @@ function Reviews() {
 /* ══════════ GET APP ══════════ */
 function GetApp() {
   return (
-    <section id="getapp" className="section-pad bg-gray-900 overflow-hidden relative">
-      {/* BG decoration */}
-      <div className="absolute -top-24 -right-24 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl" />
-      <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl" />
+    <section id="getapp" className="section-pad overflow-hidden relative" style={{ background: WARM_DARK3 }}>
+      <div className="absolute pointer-events-none" style={{ top: -80, right: -80, width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(249,115,22,0.12) 0%, transparent 70%)' }} />
+      <div className="absolute pointer-events-none" style={{ bottom: -80, left: -80, width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(245,158,11,0.10) 0%, transparent 70%)' }} />
 
       <div className="container relative z-10">
         <div className="grid lg:grid-cols-2 gap-14 items-center">
-          {/* Text */}
           <div>
-            <span className="text-orange-400 text-sm font-bold tracking-widest uppercase">Get the App</span>
+            <span className="text-sm font-bold tracking-widest uppercase" style={{ color: AMBER }}>Get the App</span>
             <h2 className="text-4xl md:text-5xl font-black text-white mt-3 mb-6 leading-tight">
               Your Pet Care Hub.<br />
               <span className="text-gradient">Always in Your Pocket.</span>
             </h2>
-            <p className="text-gray-400 text-lg mb-10 leading-relaxed">
-              Available as a progressive web app — works on any device, any browser. Native iOS & Android apps coming soon.
+            <p className="text-lg mb-10 leading-relaxed" style={{ color: 'rgba(255,255,255,0.60)' }}>
+              Available as a progressive web app — works on any device, any browser. Native iOS &amp; Android apps coming soon.
             </p>
-
             <div className="space-y-4">
               {[
                 { icon: '📱', title: 'Web App', desc: 'Open in any browser — iPhone, Android, or desktop', cta: 'Open Now', href: APP_URL, primary: true },
-                { icon: '🍎', title: 'iOS App', desc: 'Native iPhone app — coming to App Store soon', cta: 'Coming Soon', href: null, primary: false },
-                { icon: '▶️', title: 'Android App', desc: 'Native Android app — coming to Play Store soon', cta: 'Coming Soon', href: null, primary: false },
+                { icon: '🍎', title: 'iOS App', desc: 'Native iPhone app — coming to App Store soon', cta: 'Coming Soon', href: null },
+                { icon: '▶️', title: 'Android App', desc: 'Native Android app — coming to Play Store soon', cta: 'Coming Soon', href: null },
               ].map(item => (
-                <div key={item.title} className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl p-4 hover:bg-white/8 transition-colors">
-                  <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-2xl shrink-0">{item.icon}</div>
+                <div key={item.title} className="flex items-center gap-4 rounded-2xl p-4 transition-colors"
+                  style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}>
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shrink-0" style={{ background: 'rgba(255,255,255,0.10)' }}>{item.icon}</div>
                   <div className="flex-1">
                     <div className="font-bold text-white text-sm">{item.title}</div>
-                    <div className="text-xs text-gray-400">{item.desc}</div>
+                    <div className="text-xs" style={{ color: 'rgba(255,255,255,0.45)' }}>{item.desc}</div>
                   </div>
                   {item.href
-                    ? <a href={item.href} target="_blank" rel="noreferrer" className="bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors shrink-0">{item.cta} →</a>
-                    : <span className="bg-white/10 text-gray-500 text-xs font-semibold px-4 py-2 rounded-xl shrink-0">{item.cta}</span>
+                    ? <a href={item.href} target="_blank" rel="noreferrer" className="text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors shrink-0" style={{ background: ORANGE }}>{item.cta} →</a>
+                    : <span className="text-xs font-semibold px-4 py-2 rounded-xl shrink-0" style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.35)' }}>{item.cta}</span>
                   }
                 </div>
               ))}
             </div>
           </div>
-
-          {/* QR Code */}
           <div className="flex flex-col items-center">
             <div className="bg-white p-5 rounded-3xl shadow-2xl mb-5 inline-block">
-              <img src={QR_URL} alt="QR Code to open PETclub App" width={200} height={200} className="rounded-xl block" />
+              <img src={QR_URL} alt="QR Code" width={200} height={200} className="rounded-xl block" />
             </div>
-            <p className="text-gray-400 text-sm text-center mb-2">📷 Scan with your phone camera</p>
-            <p className="text-gray-500 text-xs text-center">Opens instantly — no download required</p>
+            <p className="text-sm text-center mb-2" style={{ color: 'rgba(255,255,255,0.55)' }}>📷 Scan with your phone camera</p>
+            <p className="text-xs text-center" style={{ color: 'rgba(255,255,255,0.35)' }}>Opens instantly — no download required</p>
             <a href={APP_URL} target="_blank" rel="noreferrer"
-              className="mt-6 inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3.5 rounded-2xl transition-all shadow-brand hover:shadow-lg">
+              className="mt-6 inline-flex items-center gap-2 text-white font-bold px-8 py-3.5 rounded-2xl transition-all shadow-brand hover:shadow-lg"
+              style={{ background: ORANGE }}>
               🔗 Open PETclub App
             </a>
           </div>
@@ -748,152 +885,49 @@ function GetApp() {
   );
 }
 
-/* ══════════ JOIN / SIGNUP — Groomit-inspired step flow ══════════ */
+/* ══════════ JOIN SECTION ══════════ */
 const JOIN_ROLES = [
-  {
-    id: 'owner',
-    icon: '🐾',
-    title: 'Pet Owner',
-    subtitle: 'I want to book services',
-    perks: ['Book grooming, training, vet, walking & boarding', 'Live GPS tracking of your pro', 'Digital health records for your pet'],
-    color: '#f97316',
-    bg: 'bg-orange-50',
-    border: 'border-orange-200',
-    ring: 'ring-orange-400',
-    tag: 'Most Popular',
-    tagColor: 'bg-orange-100 text-orange-700',
-  },
-  {
-    id: 'groomer',
-    icon: '✂️',
-    title: 'Groomer',
-    subtitle: 'I offer grooming services',
-    perks: ['Get discovered by pet owners', 'Manage bookings & availability', 'Grow 5-star reviews'],
-    color: '#7c3aed',
-    bg: 'bg-violet-50',
-    border: 'border-violet-200',
-    ring: 'ring-violet-400',
-    tag: 'High Earning',
-    tagColor: 'bg-violet-100 text-violet-700',
-  },
-  {
-    id: 'trainer',
-    icon: '🎓',
-    title: 'Trainer',
-    subtitle: 'I provide dog training',
-    perks: ['Set your own schedule & rates', 'Certified trainer badge', 'Track client progress'],
-    color: '#2563eb',
-    bg: 'bg-blue-50',
-    border: 'border-blue-200',
-    ring: 'ring-blue-400',
-    tag: 'In Demand',
-    tagColor: 'bg-blue-100 text-blue-700',
-  },
-  {
-    id: 'vet',
-    icon: '🏥',
-    title: 'Veterinarian',
-    subtitle: 'I provide vet care',
-    perks: ['In-clinic & home visit bookings', 'Digital prescription records', 'Verified vet badge'],
-    color: '#059669',
-    bg: 'bg-emerald-50',
-    border: 'border-emerald-200',
-    ring: 'ring-emerald-400',
-    tag: 'Trusted',
-    tagColor: 'bg-emerald-100 text-emerald-700',
-  },
-  {
-    id: 'walker',
-    icon: '🦮',
-    title: 'Dog Walker',
-    subtitle: 'I walk dogs',
-    perks: ['GPS-tracked walks sent to owners', 'Flexible daily schedule', 'Verified walker badge'],
-    color: '#16a34a',
-    bg: 'bg-green-50',
-    border: 'border-green-200',
-    ring: 'ring-green-400',
-    tag: 'New',
-    tagColor: 'bg-green-100 text-green-700',
-  },
-  {
-    id: 'boarder',
-    icon: '🏠',
-    title: 'Pet Boarder',
-    subtitle: 'I host pets at home',
-    perks: ['Cage-free home environment', 'Daily photo & video updates', 'Verified boarder badge'],
-    color: '#d97706',
-    bg: 'bg-amber-50',
-    border: 'border-amber-200',
-    ring: 'ring-amber-400',
-    tag: 'New',
-    tagColor: 'bg-amber-100 text-amber-700',
-  },
+  { id: 'owner', icon: '🐾', title: 'Pet Owner', subtitle: 'I want to book services', perks: ['Book grooming, training, vet, walking & boarding', 'Live GPS tracking of your pro', 'Digital health records for all your pets'], color: ORANGE, bg: 'bg-orange-50', border: 'border-orange-200', tag: 'Most Popular', tagColor: 'bg-orange-100 text-orange-700' },
+  { id: 'groomer', icon: '✂️', title: 'Groomer', subtitle: 'I offer grooming services', perks: ['Get discovered by pet owners', 'Manage bookings & availability', 'Grow 5-star reviews'], color: '#7c3aed', bg: 'bg-violet-50', border: 'border-violet-200', tag: 'High Earning', tagColor: 'bg-violet-100 text-violet-700' },
+  { id: 'trainer', icon: '🎓', title: 'Trainer', subtitle: 'I provide dog training', perks: ['Set your own schedule & rates', 'Certified trainer badge', 'Track client progress'], color: '#2563eb', bg: 'bg-blue-50', border: 'border-blue-200', tag: 'In Demand', tagColor: 'bg-blue-100 text-blue-700' },
+  { id: 'vet', icon: '🏥', title: 'Veterinarian', subtitle: 'I provide vet care', perks: ['In-clinic & home visit bookings', 'Digital prescription records', 'Verified vet badge'], color: '#059669', bg: 'bg-emerald-50', border: 'border-emerald-200', tag: 'Trusted', tagColor: 'bg-emerald-100 text-emerald-700' },
+  { id: 'walker', icon: '🦮', title: 'Dog Walker', subtitle: 'I walk dogs', perks: ['GPS-tracked walks sent to owners', 'Flexible daily schedule', 'Verified walker badge'], color: '#16a34a', bg: 'bg-green-50', border: 'border-green-200', tag: 'New', tagColor: 'bg-green-100 text-green-700' },
+  { id: 'boarder', icon: '🏠', title: 'Pet Boarder', subtitle: 'I host pets at home', perks: ['Cage-free home environment', 'Daily photo & video updates', 'Verified boarder badge'], color: '#d97706', bg: 'bg-amber-50', border: 'border-amber-200', tag: 'New', tagColor: 'bg-amber-100 text-amber-700' },
 ];
 
 const LEFT_PANELS = {
-  owner: {
-    headline: 'Your pet deserves the best.',
-    sub: 'Join 50,000+ pet parents who book verified groomers, trainers, vets, walkers & boarders — with live GPS tracking.',
-    img: 'https://images.unsplash.com/photo-1607696442638-93393692197a?w=900&auto=format&fit=crop&q=85', // dog running in field — free Unsplash License, verified 2025-05-27
-    stats: [{ v: '50K+', l: 'Happy Pets' }, { v: '4.9★', l: 'Rating' }, { v: '100+', l: 'Cities' }],
-  },
-  groomer: {
-    headline: 'Grow your grooming business.',
-    sub: 'Join our verified groomer network and get discovered by thousands of pet owners in your city.',
-    img: 'https://images.unsplash.com/photo-1611173622933-91942d394b04?w=900&auto=format&fit=crop&q=85', // Pomeranian at grooming spa — free Unsplash License, verified 2025-05-27
-    stats: [{ v: '1.2K+', l: 'Active Pros' }, { v: '₹25K+', l: 'Avg Monthly' }, { v: '24h', l: 'Verification' }],
-  },
-  trainer: {
-    headline: 'Turn your passion into income.',
-    sub: 'Connect with pet owners who need expert training. Set your rates, manage your schedule, grow your brand.',
-    img: 'https://images.unsplash.com/photo-1551779891-b83901e1f8b3?w=900&auto=format&fit=crop&q=85', // woman training dog in forest — free Unsplash License, verified 2025-05-27
-    stats: [{ v: '₹699+', l: 'Per Session' }, { v: 'Flex', l: 'Schedule' }, { v: '24h', l: 'Approval' }],
-  },
-  vet: {
-    headline: 'Reach more patients digitally.',
-    sub: 'Offer in-clinic and home visit care to verified pet owners. Digital records, seamless booking.',
-    img: 'https://images.unsplash.com/photo-1630438994394-3deff7a591bf?w=900&auto=format&fit=crop&q=85', // dog at vet clinic — free Unsplash License, verified 2025-05-27
-    stats: [{ v: 'Verified', l: 'Badge' }, { v: 'Digital', l: 'Rx Records' }, { v: '24/7', l: 'Bookings' }],
-  },
-  walker: {
-    headline: 'Earn doing what you love.',
-    sub: 'Join our GPS-verified walker network. Flexible hours, instant bookings, and a trusted badge that builds your client base.',
-    img: 'https://images.unsplash.com/photo-1618946019619-9d7b7d86b48f?w=900&auto=format&fit=crop&q=85', // woman walking labrador on forest path — free Unsplash License, verified 2025-05-27
-    stats: [{ v: '₹299+', l: 'Per Walk' }, { v: 'GPS', l: 'Tracked' }, { v: '24h', l: 'Approval' }],
-  },
-  boarder: {
-    headline: 'Turn your home into a pet haven.',
-    sub: 'Host pets in your cage-free home and earn. Daily photos, GPS check-ins, and a verified boarder badge builds instant trust.',
-    img: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=900&auto=format&fit=crop&q=85',
-    stats: [{ v: '₹499+', l: 'Per Night' }, { v: 'Home', l: 'Boarding' }, { v: '24h', l: 'Approval' }],
-  },
+  owner:   { headline: 'Your pet deserves the best.', sub: 'Join 50,000+ pet parents who book verified groomers, trainers, vets, walkers & boarders — with live GPS tracking.', img: 'https://images.unsplash.com/photo-1607696442638-93393692197a?w=900&auto=format&fit=crop&q=85', stats: [{ v: '50K+', l: 'Happy Pets' }, { v: '4.9★', l: 'Rating' }, { v: '100+', l: 'Cities' }] },
+  groomer: { headline: 'Grow your grooming business.', sub: 'Join our verified groomer network and get discovered by thousands of pet owners — for dogs and cats.', img: 'https://images.unsplash.com/photo-1611173622933-91942d394b04?w=900&auto=format&fit=crop&q=85', stats: [{ v: '1.2K+', l: 'Active Pros' }, { v: '₹25K+', l: 'Avg Monthly' }, { v: '24h', l: 'Verification' }] },
+  trainer: { headline: 'Turn your passion into income.', sub: 'Connect with pet owners who need expert training. Set your rates, manage your schedule.', img: 'https://images.unsplash.com/photo-1551779891-b83901e1f8b3?w=900&auto=format&fit=crop&q=85', stats: [{ v: '₹699+', l: 'Per Session' }, { v: 'Flex', l: 'Schedule' }, { v: '24h', l: 'Approval' }] },
+  vet:     { headline: 'Reach more patients digitally.', sub: 'Offer in-clinic and home visit care to verified pet owners. Digital records, seamless booking.', img: 'https://images.unsplash.com/photo-1630438994394-3deff7a591bf?w=900&auto=format&fit=crop&q=85', stats: [{ v: 'Verified', l: 'Badge' }, { v: 'Digital', l: 'Rx Records' }, { v: '24/7', l: 'Bookings' }] },
+  walker:  { headline: 'Earn doing what you love.', sub: 'Join our GPS-verified walker network. Flexible hours, instant bookings, and a trusted badge.', img: 'https://images.unsplash.com/photo-1618946019619-9d7b7d86b48f?w=900&auto=format&fit=crop&q=85', stats: [{ v: '₹299+', l: 'Per Walk' }, { v: 'GPS', l: 'Tracked' }, { v: '24h', l: 'Approval' }] },
+  boarder: { headline: 'Turn your home into a pet haven.', sub: 'Host dogs and cats in your cage-free home and earn. Daily photos, GPS check-ins, verified boarder badge.', img: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=900&auto=format&fit=crop&q=85', stats: [{ v: '₹499+', l: 'Per Night' }, { v: 'Home', l: 'Boarding' }, { v: '24h', l: 'Approval' }] },
 };
 
 function JoinSection() {
-  const [step, setStep]       = useState(1);   // 1=choose role, 2=enter details, 3=done
+  const [step, setStep]       = useState(1);
   const [role, setRole]       = useState(null);
   const [cc,   setCC]         = useState('91');
   const [form, setForm]       = useState({ name: '', phone: '', email: '', city: '' });
   const [loading, setLoading] = useState(false);
   const [error,   setError]   = useState('');
 
-  const selectedRole  = JOIN_ROLES.find(r => r.id === role);
-  const country       = COUNTRIES.find(c => c.code === cc);
-  const panel         = LEFT_PANELS[role] || LEFT_PANELS.owner;
+  const selectedRole = JOIN_ROLES.find(r => r.id === role);
+  const country      = COUNTRIES.find(c => c.code === cc);
+  const panel        = LEFT_PANELS[role] || LEFT_PANELS.owner;
 
   const pickRole = (id) => { setRole(id); setStep(2); setError(''); };
 
   const submit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!form.name.trim())  return setError('Please enter your name');
+    if (!form.name.trim()) return setError('Please enter your name');
     if (!form.phone || form.phone.length < 6) return setError('Enter a valid phone number');
     if (!form.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) return setError('Enter a valid email');
     setLoading(true);
     try {
       await fetch(`${API}/contact/send-link`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: form.name.trim(), phone: `+${cc}${form.phone}`, email: form.email.trim(), role, city: form.city.trim() }),
       });
       setStep(3);
@@ -903,13 +937,12 @@ function JoinSection() {
 
   return (
     <section id="join" className="bg-white">
-      {/* ── Step progress bar ── */}
+      {/* Step progress */}
       <div className="border-b border-gray-100">
         <div className="container flex items-center gap-0 py-0">
           {['Choose Your Role', 'Your Details', 'All Set!'].map((label, i) => {
             const n = i + 1;
-            const done    = step > n;
-            const current = step === n;
+            const done = step > n; const current = step === n;
             return (
               <div key={label} className="flex items-center flex-1">
                 <div className={`flex items-center gap-2.5 py-4 text-sm font-semibold transition-colors ${current ? 'text-orange-500' : done ? 'text-emerald-600' : 'text-gray-400'}`}>
@@ -925,134 +958,95 @@ function JoinSection() {
         </div>
       </div>
 
-      {/* ── STEP 1: Role picker ── */}
+      {/* Step 1 */}
       {step === 1 && (
         <div className="section-pad">
           <div className="container">
             <div className="text-center mb-12">
-              <span className="text-orange-500 text-sm font-bold tracking-widest uppercase">Get Started Free</span>
+              <span className="text-sm font-bold tracking-widest uppercase" style={{ color: ORANGE }}>Get Started Free</span>
               <h2 className="text-4xl md:text-5xl font-black text-gray-900 mt-3 mb-3">Who are you joining as?</h2>
               <p className="text-gray-500 text-lg">Pick your role — you can always add more later.</p>
             </div>
-
-            {/* ── Path split labels ── */}
             <div className="max-w-5xl mx-auto mb-6 grid sm:grid-cols-2 gap-4">
               <div className="flex items-center gap-3 bg-orange-50 border border-orange-100 rounded-2xl px-5 py-3">
                 <span className="text-2xl">🐾</span>
-                <div><div className="font-extrabold text-gray-900 text-sm">For Pet Owners</div><div className="text-xs text-gray-500">Book services for your pet</div></div>
+                <div><div className="font-extrabold text-gray-900 text-sm">For Pet Owners</div><div className="text-xs text-gray-500">Book services for your dog or cat</div></div>
               </div>
               <div className="flex items-center gap-3 bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3">
                 <span className="text-2xl">💼</span>
                 <div><div className="font-extrabold text-gray-900 text-sm">For Service Providers</div><div className="text-xs text-gray-500">Earn by offering grooming, training, vet care, walking or boarding</div></div>
               </div>
             </div>
-
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
               {JOIN_ROLES.map(r => (
                 <button key={r.id} type="button" data-role={r.id} onClick={() => pickRole(r.id)}
                   className={`group relative text-left rounded-3xl border-2 p-6 transition-all duration-200 hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] ${r.bg} ${r.border}`}>
-                  {/* Tag */}
                   <span className={`absolute top-4 right-4 text-[10px] font-bold px-2 py-0.5 rounded-full ${r.tagColor}`}>{r.tag}</span>
-
-                  {/* Icon */}
-                  <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-3xl mb-5 group-hover:scale-110 transition-transform">
-                    {r.icon}
-                  </div>
-
+                  <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-3xl mb-5 group-hover:scale-110 transition-transform">{r.icon}</div>
                   <div className="font-extrabold text-gray-900 text-lg mb-0.5">{r.title}</div>
                   <div className="text-sm text-gray-500 mb-5">{r.subtitle}</div>
-
                   <ul className="space-y-2">
                     {r.perks.map(p => (
                       <li key={p} className="flex items-start gap-2 text-xs text-gray-600">
-                        <span style={{ color: r.color }} className="font-black mt-0.5 shrink-0">✓</span>
-                        {p}
+                        <span className="font-black mt-0.5 shrink-0" style={{ color: r.color }}>✓</span>{p}
                       </li>
                     ))}
                   </ul>
-
-                  {/* CTA arrow */}
                   <div className="flex items-center gap-1.5 mt-6 text-sm font-bold transition-all" style={{ color: r.color }}>
                     Get started <span className="group-hover:translate-x-1 transition-transform inline-block">→</span>
                   </div>
                 </button>
               ))}
             </div>
-
             <p className="text-center text-sm text-gray-400 mt-8">
               Already have an account?{' '}
-              <a href={`${APP_URL}?signin=1`} target="_blank" rel="noreferrer" className="text-orange-500 font-bold hover:underline">Sign in →</a>
+              <a href={`${APP_URL}?signin=1`} target="_blank" rel="noreferrer" className="font-bold hover:underline" style={{ color: ORANGE }}>Sign in →</a>
             </p>
           </div>
         </div>
       )}
 
-      {/* ── STEP 2: Details form (split-screen) ── */}
+      {/* Step 2 */}
       {step === 2 && selectedRole && (
         <div className="min-h-[600px] grid lg:grid-cols-2">
-
-          {/* Left — value panel */}
           <div className="relative overflow-hidden bg-gray-900 flex flex-col justify-end p-10 min-h-[280px] lg:min-h-0">
             <img src={panel.img} alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-40" />
             <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-900/60 to-transparent" />
-
             <div className="relative z-10">
-              {/* Role badge */}
               <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold text-white mb-6"
                 style={{ background: selectedRole.color + '33', border: `1px solid ${selectedRole.color}66` }}>
                 <span>{selectedRole.icon}</span> {selectedRole.title}
               </div>
-
               <h2 className="text-3xl md:text-4xl font-black text-white leading-tight mb-4">{panel.headline}</h2>
               <p className="text-gray-300 text-base leading-relaxed mb-8 max-w-sm">{panel.sub}</p>
-
-              {/* Stats row */}
               <div className="flex gap-6">
                 {panel.stats.map(s => (
-                  <div key={s.l}>
-                    <div className="text-xl font-black text-white">{s.v}</div>
-                    <div className="text-xs text-gray-400 font-medium">{s.l}</div>
-                  </div>
+                  <div key={s.l}><div className="text-xl font-black text-white">{s.v}</div><div className="text-xs text-gray-400 font-medium">{s.l}</div></div>
                 ))}
               </div>
-
-              {/* Trust line */}
               <div className="flex items-center gap-2 mt-8 pt-6 border-t border-white/10">
                 <span className="text-amber-400">★★★★★</span>
                 <span className="text-gray-400 text-xs">Rated 4.9 by 45,000+ users</span>
               </div>
             </div>
           </div>
-
-          {/* Right — form */}
           <div className="flex flex-col justify-center p-8 lg:p-14 bg-white">
-            {/* Back + heading */}
             <button onClick={() => { setStep(1); setRole(null); setError(''); }}
               className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-700 mb-8 transition-colors group w-fit">
               <span className="group-hover:-translate-x-0.5 transition-transform inline-block">←</span> Back
             </button>
-
             <div className="mb-8">
               <h3 className="text-2xl font-black text-gray-900 mb-1">Create your account</h3>
               <p className="text-gray-500 text-sm">Takes under 60 seconds. No password needed.</p>
             </div>
-
-            {error && (
-              <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-2xl mb-5">
-                <span>⚠</span> {error}
-              </div>
-            )}
-
+            {error && <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-2xl mb-5"><span>⚠</span> {error}</div>}
             <form onSubmit={submit} className="space-y-5">
-              {/* Name */}
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Full Name</label>
-                <input type="text" placeholder={role === 'owner' ? 'Arjun Mehta' : role === 'vet' ? 'Dr. Priya Sharma' : role === 'trainer' ? 'Ravi Kumar' : 'Sai Krishna'}
+                <input type="text" placeholder={role === 'vet' ? 'Dr. Priya Sharma' : 'Arjun Mehta'}
                   className="w-full border-2 border-gray-100 rounded-2xl px-4 py-3.5 text-sm font-medium focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-50 transition-all placeholder-gray-300"
                   value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
               </div>
-
-              {/* Phone with country */}
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Mobile Number</label>
                 <div className="flex border-2 border-gray-100 rounded-2xl overflow-hidden focus-within:border-orange-400 focus-within:ring-4 focus-within:ring-orange-50 transition-all">
@@ -1068,16 +1062,12 @@ function JoinSection() {
                     value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value.replace(/\D/g, '').slice(0, 15) }))} />
                 </div>
               </div>
-
-              {/* Email */}
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Email Address</label>
                 <input type="email" placeholder="you@example.com"
                   className="w-full border-2 border-gray-100 rounded-2xl px-4 py-3.5 text-sm font-medium focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-50 transition-all placeholder-gray-300"
                   value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
               </div>
-
-              {/* City — shown for all roles */}
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
                   Your City {role !== 'owner' && <span className="text-gray-400 normal-case font-normal">— where you operate</span>}
@@ -1086,48 +1076,12 @@ function JoinSection() {
                   className="w-full border-2 border-gray-100 rounded-2xl px-4 py-3.5 text-sm font-medium focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-50 transition-all placeholder-gray-300"
                   value={form.city} onChange={e => setForm(f => ({ ...f, city: e.target.value }))} />
               </div>
-
-              {/* Role-specific info badge */}
-              {role === 'groomer' && (
-                <div className="flex items-start gap-3 bg-violet-50 border border-violet-100 rounded-2xl px-4 py-3 text-xs text-violet-800">
-                  <span className="text-base shrink-0">✂️</span>
-                  <span>After joining, upload your grooming portfolio & ID for 24h verification. You'll get a <strong>Verified Groomer</strong> badge.</span>
-                </div>
-              )}
-              {role === 'trainer' && (
-                <div className="flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-2xl px-4 py-3 text-xs text-blue-800">
-                  <span className="text-base shrink-0">🎓</span>
-                  <span>Upload your training certification in the app. Certified trainers earn a <strong>Certified Trainer</strong> badge within 24h.</span>
-                </div>
-              )}
-              {role === 'vet' && (
-                <div className="flex items-start gap-3 bg-emerald-50 border border-emerald-100 rounded-2xl px-4 py-3 text-xs text-emerald-800">
-                  <span className="text-base shrink-0">🏥</span>
-                  <span>Upload your veterinary license & registration in the app. Verified vets get a <strong>Verified Vet</strong> badge within 24h.</span>
-                </div>
-              )}
-              {role === 'walker' && (
-                <div className="flex items-start gap-3 bg-green-50 border border-green-100 rounded-2xl px-4 py-3 text-xs text-green-800">
-                  <span className="text-base shrink-0">🦮</span>
-                  <span>Upload your ID & a short bio in the app. GPS tracking is auto-enabled for every walk. You'll get a <strong>Verified Walker</strong> badge within 24h.</span>
-                </div>
-              )}
-              {role === 'boarder' && (
-                <div className="flex items-start gap-3 bg-amber-50 border border-amber-100 rounded-2xl px-4 py-3 text-xs text-amber-800">
-                  <span className="text-base shrink-0">🏠</span>
-                  <span>Upload your ID & home photos in the app. Our team reviews your space to ensure a safe, cage-free environment. <strong>Verified Boarder</strong> badge in 24–48h.</span>
-                </div>
-              )}
-
-              {/* Submit */}
               <button type="submit" disabled={loading}
                 className="w-full font-black py-4 rounded-2xl text-white text-sm transition-all disabled:opacity-60 shadow-brand hover:opacity-90 active:scale-[0.98]"
                 style={{ background: `linear-gradient(135deg, ${selectedRole.color}, ${selectedRole.color}dd)` }}>
                 {loading ? 'Creating account…' : `Continue as ${selectedRole.title} →`}
               </button>
             </form>
-
-            {/* Trust badges */}
             <div className="flex items-center justify-center gap-5 mt-7 pt-6 border-t border-gray-50">
               {['🔒 No password', '⚡ 60 sec setup', '🚫 No spam ever'].map(t => (
                 <span key={t} className="text-xs text-gray-400 font-medium">{t}</span>
@@ -1137,32 +1091,26 @@ function JoinSection() {
         </div>
       )}
 
-      {/* ── STEP 3: Success ── */}
+      {/* Step 3 */}
       {step === 3 && (
         <div className="section-pad">
           <div className="container">
             <div className="max-w-lg mx-auto text-center">
-              {/* Animated checkmark */}
-              <div className="w-24 h-24 rounded-full bg-emerald-50 border-2 border-emerald-200 flex items-center justify-center text-5xl mx-auto mb-8">
-                🎉
-              </div>
+              <div className="w-24 h-24 rounded-full bg-emerald-50 border-2 border-emerald-200 flex items-center justify-center text-5xl mx-auto mb-8">🎉</div>
               <h2 className="text-4xl font-black text-gray-900 mb-3">You&apos;re all set!</h2>
-              <p className="text-gray-500 text-lg mb-3">
-                We&apos;ve sent the app link to <strong>{form.email}</strong>
-              </p>
+              <p className="text-gray-500 text-lg mb-3">We&apos;ve sent the app link to <strong>{form.email}</strong></p>
               <p className="text-gray-400 text-sm mb-10">
                 {selectedRole?.id === 'owner'
-                  ? 'Open the app, add your pet, and book your first service in under 2 minutes.'
+                  ? 'Open the app, add your pet(s), and book your first service in under 2 minutes.'
                   : 'Open the app to complete your professional profile. Verification takes 24–48 hours.'}
               </p>
-
               <a href={APP_URL} target="_blank" rel="noreferrer"
-                className="inline-flex items-center gap-3 bg-orange-500 hover:bg-orange-600 text-white font-black px-8 py-4 rounded-2xl text-base transition-all shadow-brand hover:shadow-lg active:scale-[0.98]">
+                className="inline-flex items-center gap-3 text-white font-black px-8 py-4 rounded-2xl text-base transition-all shadow-brand hover:shadow-lg active:scale-[0.98]"
+                style={{ background: ORANGE }}>
                 {selectedRole?.icon} Open PETclub App →
               </a>
-
               <p className="text-xs text-gray-400 mt-5">
-                Or scan the QR code in the <a href="#getapp" className="text-orange-500 font-semibold hover:underline">Get App section</a>
+                Or scan the QR code in the <a href="#getapp" className="font-semibold hover:underline" style={{ color: ORANGE }}>Get App section</a>
               </p>
             </div>
           </div>
@@ -1185,8 +1133,7 @@ function Contact() {
     setState('loading');
     try {
       const res = await fetch(`${API}/contact/send-link`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: form.name, phone: form.phone ? `+91${form.phone.replace(/\D/g,'')}` : '+910000000000', email: form.email, message: form.message }),
       });
       if (!res.ok) throw new Error('Failed');
@@ -1199,39 +1146,32 @@ function Contact() {
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-14 items-start">
           <div>
-            <span className="text-orange-500 text-sm font-bold tracking-widest uppercase">Contact Us</span>
+            <span className="text-sm font-bold tracking-widest uppercase" style={{ color: ORANGE }}>Contact Us</span>
             <h2 className="text-4xl font-black text-gray-900 mt-3 mb-6">Let&apos;s Talk 🐾</h2>
             <p className="text-gray-500 text-lg mb-10">Questions, partnerships, or just want to say hi — we&apos;d love to hear from you.</p>
             <div className="space-y-6">
               {[
-                {
-                  icon: '📧', title: 'Email',
-                  content: <a href={`mailto:${SUPPORT_EMAIL}`} className="text-gray-500 text-sm hover:text-orange-500 transition-colors">{SUPPORT_EMAIL}</a>,
-                },
-                {
-                  icon: '📱', title: 'WhatsApp',
-                  content: (
-                    <div className="space-y-1">
-                      <a href={`https://wa.me/${WHATSAPP_IN}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-green-600 transition-colors">
-                        <img src="https://flagcdn.com/20x15/in.png" alt="IN" className="rounded-sm" /> <span>+{WHATSAPP_IN.replace(/^91/, '91 ')}</span>
-                      </a>
-                      <a href={`https://wa.me/${WHATSAPP_US}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-green-600 transition-colors">
-                        <img src="https://flagcdn.com/20x15/us.png" alt="US" className="rounded-sm" /> <span>+{WHATSAPP_US.replace(/^1/, '1 ')}</span>
-                      </a>
-                    </div>
-                  ),
-                },
+                { icon: '📧', title: 'Email', content: <a href={`mailto:${SUPPORT_EMAIL}`} className="text-gray-500 text-sm hover:text-orange-500 transition-colors">{SUPPORT_EMAIL}</a> },
+                { icon: '📱', title: 'WhatsApp', content: (
+                  <div className="space-y-1">
+                    <a href={`https://wa.me/${WHATSAPP_IN}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-green-600 transition-colors">
+                      <img src="https://flagcdn.com/20x15/in.png" alt="IN" className="rounded-sm" /> <span>+{WHATSAPP_IN.replace(/^91/, '91 ')}</span>
+                    </a>
+                    <a href={`https://wa.me/${WHATSAPP_US}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-green-600 transition-colors">
+                      <img src="https://flagcdn.com/20x15/us.png" alt="US" className="rounded-sm" /> <span>+{WHATSAPP_US.replace(/^1/, '1 ')}</span>
+                    </a>
+                  </div>
+                )},
                 { icon: '📍', title: 'HQ', content: <span className="text-gray-500 text-sm">{HQ_ADDRESS}</span> },
                 { icon: '⏰', title: 'Support Hours', content: <span className="text-gray-500 text-sm">Mon–Sat, 9 AM – 7 PM IST</span> },
               ].map(item => (
                 <div key={item.title} className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-orange-50 border border-orange-100 rounded-2xl flex items-center justify-center text-xl shrink-0">{item.icon}</div>
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl shrink-0" style={{ background: WARM_CREAM, border: `1px solid #fed7aa` }}>{item.icon}</div>
                   <div><div className="font-bold text-gray-900 text-sm mb-0.5">{item.title}</div>{item.content}</div>
                 </div>
               ))}
             </div>
           </div>
-
           <div className="bg-gray-50 rounded-3xl p-8 border border-gray-100">
             {state === 'done' ? (
               <div className="text-center py-8">
@@ -1246,24 +1186,20 @@ function Contact() {
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-gray-500 mb-1.5">Name *</label>
-                    <input type="text" placeholder="Your name" required className="input-clean"
-                      value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+                    <input type="text" placeholder="Your name" required className="input-clean" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-gray-500 mb-1.5">Phone</label>
-                    <input type="tel" placeholder="10-digit number" className="input-clean"
-                      value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value.replace(/\D/g,'').slice(0,15) }))} />
+                    <input type="tel" placeholder="10-digit number" className="input-clean" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value.replace(/\D/g,'').slice(0,15) }))} />
                   </div>
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-500 mb-1.5">Email *</label>
-                  <input type="email" placeholder="you@example.com" required className="input-clean"
-                    value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
+                  <input type="email" placeholder="you@example.com" required className="input-clean" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-500 mb-1.5">Message</label>
-                  <textarea rows={4} placeholder="How can we help?" className="input-clean resize-none"
-                    value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} />
+                  <textarea rows={4} placeholder="How can we help?" className="input-clean resize-none" value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} />
                 </div>
                 <button type="submit" disabled={state === 'loading'} className="btn-primary w-full disabled:opacity-60">
                   {state === 'loading' ? 'Sending…' : '📩 Send Message'}
@@ -1284,20 +1220,23 @@ function Footer() {
   const INQUIRY_SERVICES  = ['Pet Food'];
 
   return (
-    <footer className="bg-gray-950 text-gray-400 pt-16 pb-8">
+    <footer style={{ background: WARM_DARK, color: 'rgba(255,255,255,0.50)' }} className="pt-16 pb-8">
       <div className="container">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           <div>
             <div className="flex items-center gap-2 mb-4">
               <img src="/icon.svg" alt="PETclub" className="w-8 h-8 rounded-lg" />
-              <span className="font-extrabold text-white text-lg">PET<span className="text-orange-400">club</span></span>
+              <span className="font-extrabold text-white text-lg">PET<span style={{ color: ORANGE }}>club</span></span>
             </div>
-            <p className="text-sm leading-relaxed mb-4">India&apos;s #1 platform for pet grooming, training, vet care & food delivery. Now serving the USA too.</p>
+            <p className="text-sm leading-relaxed mb-2">Premium pet care for dogs &amp; cats — grooming, training, vet, walking &amp; boarding across India and USA.</p>
+            <div className="flex items-center gap-1 mb-4 text-xs" style={{ color: AMBER }}>
+              <span>🐕 Dogs</span><span style={{ opacity: 0.4 }}>·</span><span>🐱 Cats</span><span style={{ opacity: 0.4 }}>·</span><span>All Breeds</span>
+            </div>
             <div className="flex gap-3">
-              <span className="inline-flex items-center gap-1.5 text-xs bg-white/5 border border-white/10 px-3 py-1 rounded-full">
+              <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}>
                 <img src="https://flagcdn.com/20x15/in.png" alt="IN" className="rounded-sm" /> India
               </span>
-              <span className="inline-flex items-center gap-1.5 text-xs bg-white/5 border border-white/10 px-3 py-1 rounded-full">
+              <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}>
                 <img src="https://flagcdn.com/20x15/us.png" alt="US" className="rounded-sm" /> USA
               </span>
             </div>
@@ -1305,12 +1244,11 @@ function Footer() {
           <div>
             <h4 className="font-bold text-white mb-4 text-sm uppercase tracking-wide">Services</h4>
             {BOOKABLE_SERVICES.map(s => (
-              <a key={s} href={APP_URL} target="_blank" rel="noreferrer" className="block text-sm hover:text-orange-400 transition-colors py-1">{s}</a>
+              <a key={s} href={APP_URL} target="_blank" rel="noreferrer" className="block text-sm py-1 transition-colors hover:text-orange-400">{s}</a>
             ))}
             {INQUIRY_SERVICES.map(s => (
-              <button key={s} type="button" onClick={() => setInquiryService(s)}
-                className="block text-sm hover:text-orange-400 transition-colors py-1 text-left w-full">
-                {s} <span className="text-xs text-gray-600 ml-1">✉</span>
+              <button key={s} type="button" onClick={() => setInquiryService(s)} className="block text-sm py-1 transition-colors hover:text-orange-400 text-left w-full">
+                {s} <span className="text-xs opacity-50 ml-1">✉</span>
               </button>
             ))}
             {inquiryService && <InquiryModal service={inquiryService} onClose={() => setInquiryService(null)} />}
@@ -1318,13 +1256,13 @@ function Footer() {
           <div>
             <h4 className="font-bold text-white mb-4 text-sm uppercase tracking-wide">Company</h4>
             {[
-              { label: 'About Us',  href: '/about.html'    },
-              { label: 'Careers',   href: '/careers.html'  },
-              { label: 'Blog',      href: '/blog.html'     },
-              { label: 'Press',     href: '/press.html'    },
+              { label: 'About Us',  href: '/about.html' },
+              { label: 'Careers',   href: '/careers.html' },
+              { label: 'Blog',      href: '/blog.html' },
+              { label: 'Press',     href: '/press.html' },
               { label: 'Partners',  href: '/partners.html' },
             ].map(({ label, href }) => (
-              <a key={label} href={href} className="block text-sm py-1 hover:text-orange-400 transition-colors">{label}</a>
+              <a key={label} href={href} className="block text-sm py-1 transition-colors hover:text-orange-400">{label}</a>
             ))}
           </div>
           <div>
@@ -1333,10 +1271,10 @@ function Footer() {
               <img src={QR_URL} alt="QR" width={100} height={100} className="rounded-lg block" />
             </div>
             <p className="text-xs">Scan to open the web app instantly</p>
-            <a href={APP_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 mt-3 text-orange-400 text-sm font-bold hover:text-orange-300 transition-colors">Open App →</a>
+            <a href={APP_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 mt-3 text-sm font-bold transition-colors hover:text-orange-300" style={{ color: ORANGE }}>Open App →</a>
           </div>
         </div>
-        <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
           <span>© {new Date().getFullYear()} PETclub India. Made with 🐾 for pets everywhere.</span>
           <div className="flex gap-5">
             <a href="/privacy.html" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Privacy</a>
@@ -1349,12 +1287,14 @@ function Footer() {
   );
 }
 
+/* ══════════ APP ══════════ */
 export default function App() {
   return (
     <>
       <Navbar />
       <Hero />
       <TrustBanner />
+      <PetsWeServe />
       <Services />
       <HowItWorks />
       <Reviews />
