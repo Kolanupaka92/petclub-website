@@ -1071,21 +1071,21 @@ function GetApp() {
 
 /* ══════════ JOIN SECTION ══════════ */
 const JOIN_ROLES = [
-  { id: 'owner', icon: '🐾', title: 'Pet Owner', subtitle: 'I want to book services', perks: ['Book grooming, training, vet, walking & boarding', 'Live GPS tracking of your pro', 'Digital health records for all your pets'], color: ORANGE, bg: 'bg-orange-50', border: 'border-orange-200', tag: 'Most Popular', tagColor: 'bg-orange-100 text-orange-700' },
-  { id: 'groomer', icon: '✂️', title: 'Groomer', subtitle: 'I offer grooming services', perks: ['Get discovered by pet owners', 'Manage bookings & availability', 'Grow 5-star reviews'], color: '#7c3aed', bg: 'bg-violet-50', border: 'border-violet-200', tag: 'High Earning', tagColor: 'bg-violet-100 text-violet-700' },
-  { id: 'trainer', icon: '🎓', title: 'Trainer', subtitle: 'I provide dog training', perks: ['Set your own schedule & rates', 'Certified trainer badge', 'Track client progress'], color: '#2563eb', bg: 'bg-blue-50', border: 'border-blue-200', tag: 'In Demand', tagColor: 'bg-blue-100 text-blue-700' },
-  { id: 'vet', icon: '🏥', title: 'Veterinarian', subtitle: 'I provide vet care', perks: ['In-clinic & home visit bookings', 'Digital prescription records', 'Verified vet badge'], color: '#059669', bg: 'bg-emerald-50', border: 'border-emerald-200', tag: 'Trusted', tagColor: 'bg-emerald-100 text-emerald-700' },
-  { id: 'walker', icon: '🦮', title: 'Dog Walker', subtitle: 'I walk dogs', perks: ['GPS-tracked walks sent to owners', 'Flexible daily schedule', 'Verified walker badge'], color: '#16a34a', bg: 'bg-green-50', border: 'border-green-200', tag: 'New', tagColor: 'bg-green-100 text-green-700' },
-  { id: 'boarder', icon: '🏠', title: 'Pet Boarder', subtitle: 'I host pets at home', perks: ['Cage-free home environment', 'Daily photo & video updates', 'Verified boarder badge'], color: '#d97706', bg: 'bg-amber-50', border: 'border-amber-200', tag: 'New', tagColor: 'bg-amber-100 text-amber-700' },
+  { id: 'owner', icon: '🐾', title: 'Pet Owner', subtitle: 'I want to book services for my pet', perks: ['Book grooming, training, vet, walking & boarding', 'Live GPS tracking during every visit', 'Digital health records for all your pets', 'Earn loyalty rewards on every booking'], color: ORANGE, bg: 'bg-orange-50', border: 'border-orange-200', tag: 'Most Popular', tagColor: 'bg-orange-100 text-orange-700' },
+  { id: 'groomer', icon: '✂️', title: 'Groomer', subtitle: 'I groom dogs & cats', perks: ['Get booked by nearby pet owners instantly', 'Calendar, earnings & reviews in one dashboard', 'Weekly payouts directly to your bank', 'Verified groomer badge — builds instant trust'], color: '#7c3aed', bg: 'bg-violet-50', border: 'border-violet-200', tag: 'High Earning', tagColor: 'bg-violet-100 text-violet-700' },
+  { id: 'trainer', icon: '🎓', title: 'Trainer', subtitle: 'I train dogs & pets', perks: ['Set your own rates & availability', 'Certified trainer badge on your profile', 'Client session notes & progress tracking', 'Weekly payouts directly to your bank'], color: '#2563eb', bg: 'bg-blue-50', border: 'border-blue-200', tag: 'Growing Fast', tagColor: 'bg-blue-100 text-blue-700' },
+  { id: 'vet', icon: '🏥', title: 'Veterinarian', subtitle: 'I provide veterinary care', perks: ['Accept in-clinic & home visit bookings', 'Issue digital prescriptions & maintain records', 'Verified vet badge — patients trust you more', 'Weekly payouts directly to your bank'], color: '#059669', bg: 'bg-emerald-50', border: 'border-emerald-200', tag: 'Trusted', tagColor: 'bg-emerald-100 text-emerald-700' },
+  { id: 'walker', icon: '🦮', title: 'Dog Walker', subtitle: 'I walk dogs professionally', perks: ['Owners see live GPS tracking during every walk', 'Flexible hours — morning, evening, or weekend', 'Earn ₹200–₹600 per walk based on duration', 'Verified walker badge on your profile'], color: '#16a34a', bg: 'bg-green-50', border: 'border-green-200', tag: 'In Demand', tagColor: 'bg-green-100 text-green-700' },
+  { id: 'boarder', icon: '🏠', title: 'Pet Boarder', subtitle: 'I host pets in my home', perks: ['Cage-free home boarding — pets stay comfortable', 'Send daily photo & video updates to owners', 'Earn ₹350–₹800 per night per pet', 'Verified boarder badge — builds owner confidence'], color: '#d97706', bg: 'bg-amber-50', border: 'border-amber-200', tag: 'Growing Fast', tagColor: 'bg-amber-100 text-amber-700' },
 ];
 
 const LEFT_PANELS = {
   owner:   { headline: 'Your pet deserves the best.', sub: 'Join 50,000+ pet parents who book verified groomers, trainers, vets, walkers & boarders — with live GPS tracking.', img: 'https://images.unsplash.com/photo-1607696442638-93393692197a?w=900&auto=format&fit=crop&q=85', stats: [{ v: '50K+', l: 'Happy Pets' }, { v: '4.9★', l: 'Rating' }, { v: '100+', l: 'Cities' }] },
   groomer: { headline: 'Grow your grooming business.', sub: 'Join our verified groomer network and get discovered by thousands of pet owners — for dogs and cats.', img: 'https://images.unsplash.com/photo-1611173622933-91942d394b04?w=900&auto=format&fit=crop&q=85', stats: [{ v: '1.2K+', l: 'Active Pros' }, { v: '₹25K+', l: 'Avg Monthly' }, { v: '24h', l: 'Verification' }] },
-  trainer: { headline: 'Turn your passion into income.', sub: 'Connect with pet owners who need expert training. Set your rates, manage your schedule.', img: 'https://images.unsplash.com/photo-1551779891-b83901e1f8b3?w=900&auto=format&fit=crop&q=85', stats: [{ v: '₹699+', l: 'Per Session' }, { v: 'Flex', l: 'Schedule' }, { v: '24h', l: 'Approval' }] },
-  vet:     { headline: 'Reach more patients digitally.', sub: 'Offer in-clinic and home visit care to verified pet owners. Digital records, seamless booking.', img: 'https://images.unsplash.com/photo-1630438994394-3deff7a591bf?w=900&auto=format&fit=crop&q=85', stats: [{ v: 'Verified', l: 'Badge' }, { v: 'Digital', l: 'Rx Records' }, { v: '24/7', l: 'Bookings' }] },
-  walker:  { headline: 'Earn doing what you love.', sub: 'Join our GPS-verified walker network. Flexible hours, instant bookings, and a trusted badge.', img: 'https://images.unsplash.com/photo-1618946019619-9d7b7d86b48f?w=900&auto=format&fit=crop&q=85', stats: [{ v: '₹299+', l: 'Per Walk' }, { v: 'GPS', l: 'Tracked' }, { v: '24h', l: 'Approval' }] },
-  boarder: { headline: 'Turn your home into a pet haven.', sub: 'Host dogs and cats in your cage-free home and earn. Daily photos, GPS check-ins, verified boarder badge.', img: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=900&auto=format&fit=crop&q=85', stats: [{ v: '₹499+', l: 'Per Night' }, { v: 'Home', l: 'Boarding' }, { v: '24h', l: 'Approval' }] },
+  trainer: { headline: 'Turn your passion into income.', sub: 'Connect with pet owners who need expert training. Set your rates, manage your schedule.', img: 'https://images.unsplash.com/photo-1551779891-b83901e1f8b3?w=900&auto=format&fit=crop&q=85', stats: [{ v: '₹699+', l: 'Per Session' }, { v: '500+', l: 'Active Clients' }, { v: '24h', l: 'Approval' }] },
+  vet:     { headline: 'Reach more patients digitally.', sub: 'Offer in-clinic and home visit care to verified pet owners. Digital records, seamless booking.', img: 'https://images.unsplash.com/photo-1630438994394-3deff7a591bf?w=900&auto=format&fit=crop&q=85', stats: [{ v: '2K+', l: 'Pets Treated' }, { v: '4.9★', l: 'Avg Rating' }, { v: '48h', l: 'Onboarding' }] },
+  walker:  { headline: 'Earn doing what you love.', sub: 'Join our GPS-verified walker network. Flexible hours, instant bookings, and a trusted badge.', img: 'https://images.unsplash.com/photo-1618946019619-9d7b7d86b48f?w=900&auto=format&fit=crop&q=85', stats: [{ v: '₹200+', l: 'Per Walk' }, { v: 'GPS', l: 'Every Walk' }, { v: '24h', l: 'Approval' }] },
+  boarder: { headline: 'Turn your home into a pet haven.', sub: 'Host dogs and cats in your cage-free home and earn. Daily photos, GPS check-ins, verified boarder badge.', img: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=900&auto=format&fit=crop&q=85', stats: [{ v: '₹350+', l: 'Per Night' }, { v: '95%', l: 'Repeat Owners' }, { v: '24h', l: 'Approval' }] },
 };
 
 function JoinSection() {
@@ -1161,7 +1161,7 @@ function JoinSection() {
                 <div><div className="font-extrabold text-gray-900 text-sm">For Service Providers</div><div className="text-xs text-gray-500">Earn by offering grooming, training, vet care, walking or boarding</div></div>
               </div>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
               {JOIN_ROLES.map(r => (
                 <button key={r.id} type="button" data-role={r.id} onClick={() => pickRole(r.id)}
                   className={`group relative text-left rounded-3xl border-2 p-6 transition-all duration-200 hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] ${r.bg} ${r.border}`}>
@@ -1227,7 +1227,7 @@ function JoinSection() {
             <form onSubmit={submit} className="space-y-5">
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Full Name</label>
-                <input type="text" placeholder={role === 'vet' ? 'Dr. Priya Sharma' : 'Arjun Mehta'}
+                <input type="text" placeholder={role === 'vet' ? 'Dr. Priya Sharma' : role === 'groomer' ? 'Pooja Nair' : role === 'trainer' ? 'Ravi Kumar' : role === 'walker' ? 'Suresh Babu' : role === 'boarder' ? 'Meena Reddy' : 'Arjun Mehta'}
                   className="w-full border-2 border-gray-100 rounded-2xl px-4 py-3.5 text-sm font-medium focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-50 transition-all placeholder-gray-300"
                   value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
               </div>
