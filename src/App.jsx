@@ -1313,7 +1313,9 @@ function Footer() {
           <div>
             <h4 className="font-bold text-white mb-4 text-sm uppercase tracking-wide">Company</h4>
             {['About Us', 'Careers', 'Blog', 'Press', 'Partners'].map(s => (
-              <span key={s} className="block text-sm py-1 cursor-default">{s}</span>
+              s === 'About Us'
+                ? <a key={s} href="/about.html" className="block text-sm py-1 hover:text-orange-400 transition-colors">{s}</a>
+                : <span key={s} className="block text-sm py-1 cursor-default">{s}</span>
             ))}
           </div>
           <div>
