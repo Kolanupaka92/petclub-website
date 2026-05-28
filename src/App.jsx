@@ -834,31 +834,31 @@ const LEFT_PANELS = {
   owner: {
     headline: 'Your pet deserves the best.',
     sub: 'Join 50,000+ pet parents who book verified groomers, trainers, vets, walkers & boarders — with live GPS tracking.',
-    img: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=900&auto=format&fit=crop&q=85',
+    img: 'https://images.unsplash.com/photo-1607696442638-93393692197a?w=900&auto=format&fit=crop&q=85', // dog running in field — free Unsplash License, verified 2025-05-27
     stats: [{ v: '50K+', l: 'Happy Pets' }, { v: '4.9★', l: 'Rating' }, { v: '100+', l: 'Cities' }],
   },
   groomer: {
     headline: 'Grow your grooming business.',
     sub: 'Join our verified groomer network and get discovered by thousands of pet owners in your city.',
-    img: 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=900&auto=format&fit=crop&q=85',
+    img: 'https://images.unsplash.com/photo-1611173622933-91942d394b04?w=900&auto=format&fit=crop&q=85', // Pomeranian at grooming spa — free Unsplash License, verified 2025-05-27
     stats: [{ v: '1.2K+', l: 'Active Pros' }, { v: '₹25K+', l: 'Avg Monthly' }, { v: '24h', l: 'Verification' }],
   },
   trainer: {
     headline: 'Turn your passion into income.',
     sub: 'Connect with pet owners who need expert training. Set your rates, manage your schedule, grow your brand.',
-    img: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=900&auto=format&fit=crop&q=85',
+    img: 'https://images.unsplash.com/photo-1551779891-b83901e1f8b3?w=900&auto=format&fit=crop&q=85', // woman training dog in forest — free Unsplash License, verified 2025-05-27
     stats: [{ v: '₹699+', l: 'Per Session' }, { v: 'Flex', l: 'Schedule' }, { v: '24h', l: 'Approval' }],
   },
   vet: {
     headline: 'Reach more patients digitally.',
     sub: 'Offer in-clinic and home visit care to verified pet owners. Digital records, seamless booking.',
-    img: 'https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?w=900&auto=format&fit=crop&q=85',
+    img: 'https://images.unsplash.com/photo-1630438994394-3deff7a591bf?w=900&auto=format&fit=crop&q=85', // dog at vet clinic — free Unsplash License, verified 2025-05-27
     stats: [{ v: 'Verified', l: 'Badge' }, { v: 'Digital', l: 'Rx Records' }, { v: '24/7', l: 'Bookings' }],
   },
   walker: {
     headline: 'Earn doing what you love.',
     sub: 'Join our GPS-verified walker network. Flexible hours, instant bookings, and a trusted badge that builds your client base.',
-    img: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=900&auto=format&fit=crop&q=85',
+    img: 'https://images.unsplash.com/photo-1618946019619-9d7b7d86b48f?w=900&auto=format&fit=crop&q=85', // woman walking labrador on forest path — free Unsplash License, verified 2025-05-27
     stats: [{ v: '₹299+', l: 'Per Walk' }, { v: 'GPS', l: 'Tracked' }, { v: '24h', l: 'Approval' }],
   },
   boarder: {
@@ -1280,8 +1280,8 @@ function Contact() {
 /* ══════════ FOOTER ══════════ */
 function Footer() {
   const [inquiryService, setInquiryService] = useState(null);
-  const BOOKABLE_SERVICES = ['Grooming', 'Training', 'Vet Care'];
-  const INQUIRY_SERVICES  = ['Pet Food', 'Pet Boarding'];
+  const BOOKABLE_SERVICES = ['Grooming', 'Training', 'Vet Care', 'Dog Walking', 'Pet Boarding'];
+  const INQUIRY_SERVICES  = ['Pet Food'];
 
   return (
     <footer className="bg-gray-950 text-gray-400 pt-16 pb-8">

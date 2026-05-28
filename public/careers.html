@@ -35,8 +35,9 @@
       height: 60px;
     }
     .nav-logo { display: flex; align-items: center; gap: .5rem; text-decoration: none; }
-    .nav-logo-icon { width: 32px; height: 32px; background: var(--orange); border-radius: 8px; display: grid; place-items: center; font-size: 18px; }
+    .nav-logo img { width: 32px; height: 32px; border-radius: 8px; }
     .nav-logo-text { font-weight: 800; font-size: 1.1rem; color: #fff; }
+    .nav-logo-text em { color: var(--orange); font-style: normal; }
     .nav-links { display: flex; align-items: center; gap: 1.5rem; }
     .nav-links a { color: var(--muted); text-decoration: none; font-size: .9rem; transition: color .2s; }
     .nav-links a:hover { color: var(--orange); }
@@ -225,8 +226,8 @@
 <!-- NAV -->
 <nav>
   <a href="/" class="nav-logo">
-    <div class="nav-logo-icon">🐾</div>
-    <span class="nav-logo-text">PETclub</span>
+    <img src="/icon.svg" alt="PETclub" />
+    <span class="nav-logo-text">PET<em>club</em></span>
   </a>
   <div class="nav-links">
     <a href="/about.html">About</a>
