@@ -3,166 +3,737 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Privacy Policy — PETclub India</title>
-  <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+  <meta name="robots" content="index, follow" />
+  <title>Privacy Policy — PETclub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b; background: #f8fafc; line-height: 1.7; }
-    .nav  { background: #fff; border-bottom: 1px solid #e2e8f0; padding: 16px 24px; display: flex; align-items: center; gap: 10px; }
-    .nav a { text-decoration: none; display: flex; align-items: center; gap: 10px; }
-    .logo { width: 36px; height: 36px; border-radius: 10px; }
-    .brand { font-weight: 800; font-size: 18px; color: #1a1a2e; }
-    .brand span { color: #f97316; }
-    .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
-    .chip { display: inline-block; background: #fff7ed; color: #ea580c; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid #fed7aa; margin-bottom: 16px; }
-    h1 { font-size: 32px; font-weight: 800; color: #0f172a; margin-bottom: 8px; }
-    .meta { color: #64748b; font-size: 14px; margin-bottom: 40px; }
-    h2 { font-size: 18px; font-weight: 700; color: #0f172a; margin: 36px 0 12px; padding-top: 4px; border-top: 1px solid #e2e8f0; }
-    h2:first-of-type { border-top: none; }
-    p  { color: #475569; font-size: 15px; margin-bottom: 14px; }
-    ul { padding-left: 20px; margin-bottom: 14px; }
-    li { color: #475569; font-size: 15px; margin-bottom: 6px; }
-    .highlight { background: #fff7ed; border-left: 3px solid #f97316; padding: 14px 18px; border-radius: 0 10px 10px 0; margin: 20px 0; }
-    .highlight p { margin: 0; color: #92400e; font-weight: 500; }
-    .footer { text-align: center; margin-top: 60px; padding-top: 24px; border-top: 1px solid #e2e8f0; color: #94a3b8; font-size: 13px; }
-    a { color: #f97316; }
+
+    :root {
+      --orange:      #f97316;
+      --orange2:     #ea580c;
+      --amber:       #f59e0b;
+      --warm-dark:   #0c0500;
+      --warm-cream:  #fff8f0;
+      --surface:     #ffffff;
+      --text:        #1c0a00;
+      --muted:       #78350f;
+      --border:      #fde8c8;
+      --radius:      14px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--warm-cream);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--warm-dark);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    header .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #fff;
+    }
+    header .logo-icon {
+      width: 34px; height: 34px;
+      border-radius: 9px;
+    }
+    header .logo-text {
+      font-weight: 900;
+      font-size: 20px;
+      letter-spacing: -0.4px;
+      color: #fff;
+    }
+    header .logo-text span { color: var(--orange); }
+    header nav {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    header nav a {
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    header nav a:hover { color: #fff; }
+    header nav a.active { color: var(--orange); }
+
+    /* ── Hero banner ── */
+    .hero-banner {
+      background: linear-gradient(150deg, #0c0500 0%, #3b0d00 28%, #7c2d12 55%, #c2410c 78%, #f97316 100%);
+      padding: 56px 24px 48px;
+      text-align: center;
+    }
+    .hero-banner .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 99px;
+      padding: 5px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.80);
+      margin-bottom: 20px;
+      backdrop-filter: blur(8px);
+    }
+    .hero-banner h1 {
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.6px;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+    .hero-banner .meta {
+      color: rgba(255,255,255,0.60);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    /* ── Layout ── */
+    .page { max-width: 800px; margin: 0 auto; padding: 48px 24px 96px; }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 12px rgba(249,115,22,0.06);
+    }
+
+    /* ── Section heading ── */
+    h2 {
+      font-size: 19px;
+      font-weight: 800;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text);
+    }
+    h2 .num {
+      width: 32px; height: 32px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--orange), var(--amber));
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 20px 0 10px;
+      color: var(--orange2);
+    }
+
+    p { margin-bottom: 14px; }
+    p:last-child { margin-bottom: 0; }
+
+    ul, ol { padding-left: 22px; margin-bottom: 14px; }
+    li { margin-bottom: 8px; }
+
+    strong { font-weight: 700; }
+    a { color: var(--orange2); font-weight: 500; }
+    a:hover { color: var(--orange); }
+
+    /* ── Callout boxes ── */
+    .callout {
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      margin: 16px 0;
+      font-size: 14.5px;
+    }
+    .callout-orange {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid var(--orange);
+      color: #7c2d12;
+    }
+    .callout-orange .callout-title { font-weight: 800; color: var(--orange2); margin-bottom: 8px; font-size: 14px; }
+    .callout-blue {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      color: #0c4a6e;
+    }
+    .callout-green {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #22c55e;
+      color: #14532d;
+    }
+
+    /* ── Table ── */
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+    th { background: #fff7ed; font-weight: 700; padding: 10px 14px; text-align: left; border: 1px solid var(--border); color: var(--orange2); }
+    td { padding: 10px 14px; border: 1px solid var(--border); vertical-align: top; }
+    tr:nth-child(even) td { background: #fffaf5; }
+
+    /* ── TOC ── */
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 28px;
+      box-shadow: 0 2px 12px rgba(249,115,22,0.06);
+    }
+    .toc h3 {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--orange);
+      margin-bottom: 16px;
+      margin-top: 0;
+    }
+    .toc ol {
+      list-style: none;
+      padding: 0;
+      columns: 2;
+      column-gap: 24px;
+      margin: 0;
+    }
+    .toc li { margin-bottom: 8px; break-inside: avoid; }
+    .toc a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toc a:hover { color: var(--orange); }
+    .toc .toc-num {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--orange);
+      min-width: 20px;
+    }
+
+    /* ── Rights grid ── */
+    .rights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+      margin: 16px 0;
+    }
+    .right-card {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .right-card .right-icon { font-size: 20px; margin-bottom: 6px; }
+    .right-card .right-title { font-size: 13px; font-weight: 800; color: var(--orange2); margin-bottom: 4px; }
+    .right-card .right-desc { font-size: 13px; color: #7c2d12; }
+
+    /* ── Contact box ── */
+    .contact {
+      background: linear-gradient(150deg, #0c0500 0%, #3b0d00 30%, #7c2d12 60%, #f97316 100%);
+      border-radius: var(--radius);
+      padding: 32px;
+      color: #fff;
+      text-align: center;
+      margin-top: 32px;
+    }
+    .contact h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; margin-top: 0; color: #fff; }
+    .contact p { color: rgba(255,255,255,0.75); margin-bottom: 6px; font-size: 15px; }
+    .contact a { color: #ffd18c; font-weight: 700; text-decoration: none; }
+    .contact a:hover { color: #fff; }
+    .contact .contact-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      padding: 0 24px 40px;
+      font-weight: 500;
+    }
+    footer a { color: var(--orange2); }
+
+    /* ── Cookies anchor ── */
+    #cookies { scroll-margin-top: 80px; }
+
+    @media (max-width: 600px) {
+      .card { padding: 20px; }
+      .page { padding-top: 32px; }
+      .toc ol { columns: 1; }
+      header nav { display: none; }
+      .rights-grid { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
-  <nav class="nav">
-    <a href="https://mypetclub.app">
-      <img src="/icon.svg" alt="PETclub" class="logo" />
-      <span class="brand">PET<span>club</span></span>
+
+  <header>
+    <a href="/" class="logo">
+      <img src="/icon.svg" alt="PETclub" class="logo-icon" />
+      <div class="logo-text">PET<span>club</span></div>
     </a>
-    <span style="margin-left:auto;font-size:13px;color:#64748b">← <a href="https://mypetclub.app">Back to Home</a></span>
-  </nav>
+    <nav>
+      <a href="/terms.html">Terms</a>
+      <a href="/privacy.html" class="active">Privacy</a>
+      <a href="/">Home</a>
+    </nav>
+  </header>
 
-  <div class="wrap">
-    <div class="chip">Legal</div>
+  <div class="hero-banner">
+    <div class="badge">🔒 Privacy</div>
     <h1>Privacy Policy</h1>
-    <p class="meta">Last updated: May 19, 2026 &nbsp;·&nbsp; Effective: May 19, 2026</p>
-
-    <div class="highlight">
-      <p>PETclub India is committed to protecting your privacy. We collect only what we need to deliver pet care services, and we never sell your personal data.</p>
-    </div>
-
-    <h2>1. Who We Are</h2>
-    <p>PETclub India ("PETclub", "we", "us") operates the pet care platform at <a href="https://mypetclub.app">mypetclub.app</a> and <a href="https://app.mypetclub.app">app.mypetclub.app</a>. Our registered office is at Sahara, LB Nagar, Hyderabad – 500074, Telangana, India.</p>
-
-    <h2>2. Information We Collect</h2>
-    <p><strong>Account & Identity</strong></p>
-    <ul>
-      <li>Mobile phone number (required for OTP authentication)</li>
-      <li>Email address (required for India users; optional for others)</li>
-      <li>Full name</li>
-      <li>Government-issued ID details (professionals only — Aadhar, PAN, Passport, DL)</li>
-    </ul>
-    <p><strong>Pet Information</strong></p>
-    <ul>
-      <li>Pet name, species, breed, age, gender</li>
-      <li>Health records, vaccination history, vet notes you enter</li>
-    </ul>
-    <p><strong>Booking & Service Data</strong></p>
-    <ul>
-      <li>Service type, date, time, location</li>
-      <li>Service notes and special instructions</li>
-      <li>Ratings and reviews you submit</li>
-    </ul>
-    <p><strong>Technical Data</strong></p>
-    <ul>
-      <li>FCM device token (for push notifications — stored encrypted, used only to send you notifications)</li>
-      <li>IP address and request metadata (for security and rate limiting)</li>
-      <li>Browser/device type (standard web logs)</li>
-    </ul>
-    <p><strong>Payment Data</strong></p>
-    <ul>
-      <li>Payment status and Razorpay order/payment IDs</li>
-      <li>We do <strong>not</strong> store card numbers, CVVs, or bank account details — all payment processing is handled by Razorpay</li>
-    </ul>
-
-    <h2>3. How We Use Your Information</h2>
-    <ul>
-      <li>Authenticate your identity via OTP and issue secure session tokens</li>
-      <li>Match you with verified service professionals</li>
-      <li>Send booking confirmations, status updates, and service reminders</li>
-      <li>Send push notifications (only with your explicit permission)</li>
-      <li>Process payments securely via Razorpay</li>
-      <li>Review and verify professional applications (ID verification)</li>
-      <li>Provide customer support</li>
-      <li>Detect and prevent fraud or abuse</li>
-      <li>Improve our platform through aggregate, anonymised analytics</li>
-    </ul>
-
-    <h2>4. Third-Party Services</h2>
-    <p>We use the following trusted third-party services, each with their own privacy policies:</p>
-    <ul>
-      <li><strong>Twilio</strong> — SMS OTP delivery (twilio.com/legal/privacy)</li>
-      <li><strong>Resend</strong> — Transactional email delivery (resend.com/privacy)</li>
-      <li><strong>Supabase</strong> — Database hosting on AWS (supabase.com/privacy) — servers in the USA</li>
-      <li><strong>Firebase / Google</strong> — Push notifications via FCM (policies.google.com/privacy)</li>
-      <li><strong>Razorpay</strong> — Payment processing (razorpay.com/privacy)</li>
-      <li><strong>Vercel</strong> — Frontend hosting (vercel.com/legal/privacy-policy)</li>
-      <li><strong>Railway</strong> — Backend hosting (railway.app/legal/privacy)</li>
-    </ul>
-
-    <h2>5. Data Sharing</h2>
-    <p>We share your information <strong>only</strong> in these circumstances:</p>
-    <ul>
-      <li><strong>With professionals:</strong> Your first name, pet details, and service address are shared with the assigned service professional to fulfil your booking.</li>
-      <li><strong>With our service providers:</strong> Third-party tools listed in Section 4 — only what each service needs to function.</li>
-      <li><strong>Legal compliance:</strong> If required by Indian law or court order.</li>
-    </ul>
-    <p>We <strong>never</strong> sell, rent, or trade your personal data to advertisers or data brokers.</p>
-
-    <h2>6. Data Retention</h2>
-    <ul>
-      <li>Account data is retained for as long as your account is active</li>
-      <li>Booking records are retained for 3 years for legal/tax compliance</li>
-      <li>OTP codes expire within 10 minutes and are never stored after use</li>
-      <li>FCM tokens are deleted when you log out or revoke notification permission</li>
-      <li>You may request deletion of your account at any time (see Section 8)</li>
-    </ul>
-
-    <h2>7. Security</h2>
-    <ul>
-      <li>All data is transmitted over HTTPS/TLS</li>
-      <li>Passwords are not used — authentication is OTP-only</li>
-      <li>JWT tokens expire automatically and are stored only in browser localStorage</li>
-      <li>Government ID documents are visible only to PETclub admins and are not shared</li>
-      <li>Database access is restricted to our backend service via Supabase service keys</li>
-    </ul>
-
-    <h2>8. Your Rights</h2>
-    <p>Under applicable Indian data protection law, you have the right to:</p>
-    <ul>
-      <li><strong>Access</strong> — Request a copy of your personal data</li>
-      <li><strong>Correction</strong> — Update inaccurate information via the app</li>
-      <li><strong>Deletion</strong> — Request deletion of your account and associated data</li>
-      <li><strong>Portability</strong> — Request your data in a machine-readable format</li>
-      <li><strong>Notification opt-out</strong> — Revoke push notification permission in your device settings anytime</li>
-    </ul>
-    <p>To exercise any of these rights, email us at <a href="mailto:support@mypetclub.app">support@mypetclub.app</a>.</p>
-
-    <h2>9. Children's Privacy</h2>
-    <p>PETclub is not directed at children under 13. We do not knowingly collect personal data from children. If you believe a child has provided us data, please contact us immediately.</p>
-
-    <h2>10. Changes to This Policy</h2>
-    <p>We may update this policy as our services evolve. We'll notify registered users of material changes via email or in-app notification at least 14 days before they take effect.</p>
-
-    <h2>11. Contact Us</h2>
-    <p>For privacy concerns, data requests, or questions:</p>
-    <ul>
-      <li>Email: <a href="mailto:support@mypetclub.app">support@mypetclub.app</a></li>
-      <li>Website: <a href="https://mypetclub.app">mypetclub.app</a></li>
-      <li>Address: Sahara, LB Nagar, Hyderabad – 500074, Telangana, India</li>
-    </ul>
-
-    <div class="footer">
-      <p>© 2026 PETclub India. All rights reserved. &nbsp;·&nbsp;
-        <a href="/terms.html">Terms of Service</a> &nbsp;·&nbsp;
-        <a href="https://mypetclub.app">Home</a>
-      </p>
-    </div>
+    <p class="meta">Effective: 1 May 2025 &nbsp;·&nbsp; Last updated: May 2026 &nbsp;·&nbsp; PETclub</p>
   </div>
+
+  <main class="page">
+
+    <div class="callout callout-green" style="margin-bottom: 24px;">
+      <strong>Your privacy matters.</strong> PETclub only collects data we actually need to provide our services. We do not sell your personal data to third parties, and we do not use it for advertising profiling.
+    </div>
+
+    <!-- TOC -->
+    <div class="toc">
+      <h3>Contents</h3>
+      <ol>
+        <li><a href="#p1"><span class="toc-num">01</span> Who We Are</a></li>
+        <li><a href="#p2"><span class="toc-num">02</span> Data We Collect</a></li>
+        <li><a href="#p3"><span class="toc-num">03</span> How We Use Your Data</a></li>
+        <li><a href="#p4"><span class="toc-num">04</span> Legal Basis (India &amp; US)</a></li>
+        <li><a href="#p5"><span class="toc-num">05</span> Third-Party Services</a></li>
+        <li><a href="#p6"><span class="toc-num">06</span> Data Retention</a></li>
+        <li><a href="#p7"><span class="toc-num">07</span> Your Rights</a></li>
+        <li><a href="#p8"><span class="toc-num">08</span> Children's Privacy</a></li>
+        <li><a href="#cookies"><span class="toc-num">09</span> Cookies &amp; Tracking</a></li>
+        <li><a href="#p10"><span class="toc-num">10</span> Data Security</a></li>
+        <li><a href="#p11"><span class="toc-num">11</span> International Transfers</a></li>
+        <li><a href="#p12"><span class="toc-num">12</span> Changes to this Policy</a></li>
+      </ol>
+    </div>
+
+    <!-- 1 -->
+    <div class="card" id="p1">
+      <h2><span class="num">1</span> Who We Are</h2>
+      <p><strong>PETclub</strong> operates the pet services marketplace at <strong>mypetclub.app</strong> and <strong>app.mypetclub.app</strong>. For the purposes of data protection law, PETclub is the data controller (India) / business (US) for personal data collected through the App.</p>
+      <p>We serve customers in <strong>India</strong> and the <strong>United States</strong>. Our App connects pet owners with independent grooming, training, and veterinary professionals for dogs, cats, and other domestic pets.</p>
+      <p>Contact our privacy team: <a href="mailto:privacy@mypetclub.app">privacy@mypetclub.app</a></p>
+    </div>
+
+    <!-- 2 -->
+    <div class="card" id="p2">
+      <h2><span class="num">2</span> Data We Collect</h2>
+
+      <h3>2.1 Data you provide directly</h3>
+      <table>
+        <thead>
+          <tr><th>Category</th><th>Examples</th><th>Why collected</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Account info</strong></td>
+            <td>Name, email address, phone number</td>
+            <td>Account creation, authentication, communications</td>
+          </tr>
+          <tr>
+            <td><strong>Location</strong></td>
+            <td>City, pincode/zip, service address</td>
+            <td>Matching you with nearby Professionals</td>
+          </tr>
+          <tr>
+            <td><strong>Pet information</strong></td>
+            <td>Pet name, species (dog, cat, other), breed, age, weight, health notes, vaccination records</td>
+            <td>Service personalisation and safety</td>
+          </tr>
+          <tr>
+            <td><strong>Booking data</strong></td>
+            <td>Service type, date/time, special instructions</td>
+            <td>Fulfilling and managing bookings</td>
+          </tr>
+          <tr>
+            <td><strong>Reviews &amp; messages</strong></td>
+            <td>Star ratings, written reviews, in-app chat</td>
+            <td>Quality assurance and platform safety</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>2.2 Data collected automatically</h3>
+      <table>
+        <thead>
+          <tr><th>Category</th><th>Examples</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Device &amp; browser</strong></td>
+            <td>Device type, OS version, browser type, screen resolution</td>
+          </tr>
+          <tr>
+            <td><strong>Usage data</strong></td>
+            <td>Pages visited, features used, tap/click events, session duration</td>
+          </tr>
+          <tr>
+            <td><strong>Log data</strong></td>
+            <td>IP address, timestamps, error logs</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>2.3 Data we do NOT collect</h3>
+      <div class="callout callout-orange">
+        <div class="callout-title">🛡️ We never store these on our servers</div>
+        <ul style="margin:0; padding-left: 20px;">
+          <li>Full payment card numbers or CVV codes</li>
+          <li>Government-issued ID documents (Aadhaar, PAN, Passport, Driver's License) uploaded during Professional verification — these are sent directly to our admin team for manual review and are never stored in the database</li>
+          <li>Social Security Numbers or US tax IDs</li>
+          <li>Biometric data</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="card" id="p3">
+      <h2><span class="num">3</span> How We Use Your Data</h2>
+      <table>
+        <thead>
+          <tr><th>Purpose</th><th>Data used</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Provide and manage pet services bookings</td>
+            <td>Account info, pet info, location, booking data</td>
+          </tr>
+          <tr>
+            <td>Process payments and issue refunds</td>
+            <td>Account info; payment handled by Razorpay / US processor</td>
+          </tr>
+          <tr>
+            <td>Verify Professional credentials</td>
+            <td>Professional-only: ID documents (admin review only, not stored in DB)</td>
+          </tr>
+          <tr>
+            <td>Send booking confirmations, reminders, and receipts</td>
+            <td>Email, phone number</td>
+          </tr>
+          <tr>
+            <td>Platform safety and fraud prevention</td>
+            <td>Usage data, device info, log data</td>
+          </tr>
+          <tr>
+            <td>Improve the App and fix bugs</td>
+            <td>Anonymised usage analytics</td>
+          </tr>
+          <tr>
+            <td>Loyalty Programme administration</td>
+            <td>Account info, booking history</td>
+          </tr>
+          <tr>
+            <td>Respond to support requests</td>
+            <td>Account info, relevant booking data</td>
+          </tr>
+          <tr>
+            <td>Comply with legal obligations</td>
+            <td>As required by applicable law</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>We do <strong>not</strong> use your data to serve third-party advertising or build advertising profiles.</p>
+    </div>
+
+    <!-- 4 -->
+    <div class="card" id="p4">
+      <h2><span class="num">4</span> Legal Basis for Processing</h2>
+
+      <h3>4.1 India — DPDP Act 2023</h3>
+      <p>Under India's <strong>Digital Personal Data Protection Act 2023</strong>, we process your personal data on the following grounds:</p>
+      <ul>
+        <li><strong>Consent</strong> — you provide consent when you create an account and accept these Terms. You may withdraw consent at any time (see Section 7).</li>
+        <li><strong>Legitimate uses</strong> — processing necessary for providing requested services, processing payments, and complying with legal obligations.</li>
+        <li><strong>Legal obligation</strong> — where required by Indian law, court order, or government authority.</li>
+      </ul>
+
+      <h3>4.2 United States</h3>
+      <p>For US residents, we comply with applicable state privacy laws including the <strong>California Consumer Privacy Act (CCPA)</strong> and similar statutes. We do not sell personal information as defined under the CCPA. US residents have the rights described in Section 7.</p>
+      <p>We process your data based on: (a) performance of a contract (providing the services you request); (b) legitimate interests (platform security, analytics); and (c) legal obligation.</p>
+    </div>
+
+    <!-- 5 -->
+    <div class="card" id="p5">
+      <h2><span class="num">5</span> Third-Party Services</h2>
+      <p>PETclub uses the following third-party services that may process your personal data:</p>
+      <table>
+        <thead>
+          <tr><th>Service</th><th>Purpose</th><th>Data shared</th><th>Privacy policy</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Firebase (Google)</strong></td>
+            <td>Authentication (phone OTP, email OTP), real-time database, crash reporting</td>
+            <td>Phone number, email, user ID, device info</td>
+            <td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy</a></td>
+          </tr>
+          <tr>
+            <td><strong>Razorpay</strong></td>
+            <td>Payment processing (India)</td>
+            <td>Name, email, phone, payment details</td>
+            <td><a href="https://razorpay.com/privacy/" target="_blank" rel="noopener">Razorpay Privacy</a></td>
+          </tr>
+          <tr>
+            <td><strong>Twilio</strong></td>
+            <td>SMS OTP (US users &amp; fallback)</td>
+            <td>Phone number</td>
+            <td><a href="https://www.twilio.com/en-us/legal/privacy" target="_blank" rel="noopener">Twilio Privacy</a></td>
+          </tr>
+          <tr>
+            <td><strong>Supabase / PostgreSQL</strong></td>
+            <td>Booking and user data storage</td>
+            <td>Account data, pet data, booking history</td>
+            <td><a href="https://supabase.com/privacy" target="_blank" rel="noopener">Supabase Privacy</a></td>
+          </tr>
+          <tr>
+            <td><strong>Vercel</strong></td>
+            <td>App hosting and CDN</td>
+            <td>IP address, usage logs</td>
+            <td><a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">Vercel Privacy</a></td>
+          </tr>
+        </tbody>
+      </table>
+      <p>We require all third-party processors to handle your data securely and in accordance with applicable law. We do not permit third parties to use your data for their own marketing purposes.</p>
+    </div>
+
+    <!-- 6 -->
+    <div class="card" id="p6">
+      <h2><span class="num">6</span> Data Retention</h2>
+      <table>
+        <thead>
+          <tr><th>Data type</th><th>Retention period</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Active account data (name, email, phone, pet info)</td>
+            <td>For the duration of the account, plus 2 years after closure</td>
+          </tr>
+          <tr>
+            <td>Booking records</td>
+            <td>7 years (financial record-keeping obligations)</td>
+          </tr>
+          <tr>
+            <td>Payment transaction records</td>
+            <td>7 years (as required by Indian accounting standards and US IRS guidelines)</td>
+          </tr>
+          <tr>
+            <td>Reviews and ratings</td>
+            <td>Indefinitely (anonymised on account deletion)</td>
+          </tr>
+          <tr>
+            <td>Support correspondence</td>
+            <td>3 years from last interaction</td>
+          </tr>
+          <tr>
+            <td>Security and fraud logs</td>
+            <td>2 years</td>
+          </tr>
+          <tr>
+            <td>Analytics (anonymised)</td>
+            <td>Indefinitely</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>When data is no longer required, it is securely deleted or irreversibly anonymised. You may request earlier deletion — see Section 7.</p>
+    </div>
+
+    <!-- 7 -->
+    <div class="card" id="p7">
+      <h2><span class="num">7</span> Your Rights</h2>
+
+      <div class="rights-grid">
+        <div class="right-card">
+          <div class="right-icon">👁️</div>
+          <div class="right-title">Access</div>
+          <div class="right-desc">Request a copy of personal data we hold about you</div>
+        </div>
+        <div class="right-card">
+          <div class="right-icon">✏️</div>
+          <div class="right-title">Correction</div>
+          <div class="right-desc">Ask us to correct inaccurate or incomplete data</div>
+        </div>
+        <div class="right-card">
+          <div class="right-icon">🗑️</div>
+          <div class="right-title">Deletion</div>
+          <div class="right-desc">Request erasure of your data (subject to legal retention obligations)</div>
+        </div>
+        <div class="right-card">
+          <div class="right-icon">🚫</div>
+          <div class="right-title">Withdraw Consent</div>
+          <div class="right-desc">Withdraw consent to data processing at any time</div>
+        </div>
+        <div class="right-card">
+          <div class="right-icon">📦</div>
+          <div class="right-title">Portability</div>
+          <div class="right-desc">Receive your data in a machine-readable format</div>
+        </div>
+        <div class="right-card">
+          <div class="right-icon">⛔</div>
+          <div class="right-title">Restrict Processing</div>
+          <div class="right-desc">Ask us to limit how we use your data in certain circumstances</div>
+        </div>
+      </div>
+
+      <h3>How to exercise your rights</h3>
+      <p>Email <a href="mailto:privacy@mypetclub.app">privacy@mypetclub.app</a> with the subject line <strong>"Data Rights Request"</strong>. We will respond within <strong>30 days</strong> (India: per DPDP Act 2023 timelines; US/California: 45 days with possible extension). We may request identity verification before processing your request.</p>
+
+      <h3>India — Grievance Officer</h3>
+      <p>In accordance with the DPDP Act 2023, our designated Grievance Officer can be reached at <a href="mailto:privacy@mypetclub.app">privacy@mypetclub.app</a>. If you are not satisfied with our response, you may escalate to India's Data Protection Board once established.</p>
+
+      <h3>California (CCPA) — Do Not Sell</h3>
+      <p>We do <strong>not sell</strong> your personal information. California residents may still submit a "Do Not Sell or Share My Personal Information" request to <a href="mailto:privacy@mypetclub.app">privacy@mypetclub.app</a> for our records, even though no sale takes place.</p>
+    </div>
+
+    <!-- 8 -->
+    <div class="card" id="p8">
+      <h2><span class="num">8</span> Children's Privacy</h2>
+      <p>PETclub is not directed at children under 13 years of age. We do not knowingly collect personal data from children under 13. If you believe a child under 13 has provided personal data to PETclub, please contact us at <a href="mailto:privacy@mypetclub.app">privacy@mypetclub.app</a> and we will delete such data promptly.</p>
+      <p>Users must be at least 18 years old to create an account (see Terms of Service, Section 2).</p>
+    </div>
+
+    <!-- 9 -->
+    <div class="card" id="cookies">
+      <h2><span class="num">9</span> Cookies &amp; Tracking</h2>
+
+      <h3>What we use</h3>
+      <table>
+        <thead>
+          <tr><th>Cookie / storage type</th><th>Purpose</th><th>Duration</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Authentication token</strong> (localStorage)</td>
+            <td>Keeps you signed in to the App</td>
+            <td>Until sign-out or 30 days</td>
+          </tr>
+          <tr>
+            <td><strong>Session preferences</strong> (localStorage)</td>
+            <td>Remembers your last city, pet selection, and UI preferences</td>
+            <td>12 months</td>
+          </tr>
+          <tr>
+            <td><strong>Firebase Analytics cookies</strong></td>
+            <td>Anonymous usage analytics (page views, feature engagement)</td>
+            <td>Up to 2 years</td>
+          </tr>
+          <tr>
+            <td><strong>Essential cookies</strong></td>
+            <td>Security (CSRF protection), load balancing</td>
+            <td>Session</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-blue">
+        PETclub does <strong>not</strong> use third-party advertising cookies, tracking pixels for ad retargeting, or social media widgets that profile your behaviour for marketing purposes.
+      </div>
+
+      <h3>Managing cookies</h3>
+      <p>You can manage or clear cookies and localStorage data in your browser or device settings. Note that disabling essential cookies may prevent the App from functioning correctly.</p>
+    </div>
+
+    <!-- 10 -->
+    <div class="card" id="p10">
+      <h2><span class="num">10</span> Data Security</h2>
+      <p>PETclub implements industry-standard technical and organisational measures to protect your data, including:</p>
+      <ul>
+        <li><strong>Encryption in transit:</strong> All data transmitted between your device and our servers uses TLS 1.2 or higher</li>
+        <li><strong>Encryption at rest:</strong> Sensitive data fields in our database are encrypted</li>
+        <li><strong>Access controls:</strong> Role-based access ensures team members only access data needed for their function. Admin-only data (e.g., Professional ID verifications) is inaccessible to all non-admin systems and personnel</li>
+        <li><strong>Authentication:</strong> Firebase Phone OTP and Email OTP — no passwords stored</li>
+        <li><strong>Penetration testing:</strong> Periodic third-party security reviews</li>
+        <li><strong>Audit logging:</strong> All access to sensitive data is logged with timestamps</li>
+      </ul>
+      <p>No method of transmission or storage is 100% secure. If you discover a security vulnerability, please report it responsibly to <a href="mailto:security@mypetclub.app">security@mypetclub.app</a>.</p>
+      <div class="callout callout-orange">
+        <div class="callout-title">Security incident notification</div>
+        <p>In the event of a data breach affecting your personal data, we will notify affected users and relevant authorities as required by the DPDP Act 2023 (India) and applicable US state breach notification laws, within the mandated timeframes.</p>
+      </div>
+    </div>
+
+    <!-- 11 -->
+    <div class="card" id="p11">
+      <h2><span class="num">11</span> International Data Transfers</h2>
+      <p>PETclub's primary infrastructure is hosted on servers in India and the United States. By using the App, you acknowledge that your data may be processed in either or both jurisdictions.</p>
+      <p>When transferring personal data from India to the US (e.g., through Firebase or Supabase), PETclub ensures appropriate safeguards are in place consistent with the DPDP Act 2023 and any cross-border transfer regulations notified by the Government of India.</p>
+      <p>For US users whose data may be stored or processed in India, we ensure equivalent data protection standards apply through contractual safeguards with our service providers.</p>
+    </div>
+
+    <!-- 12 -->
+    <div class="card" id="p12">
+      <h2><span class="num">12</span> Changes to this Privacy Policy</h2>
+      <p>We may update this Privacy Policy from time to time. When we make material changes, we will:</p>
+      <ul>
+        <li>Update the "Last updated" date at the top of this page</li>
+        <li>Send an email notification to your registered email address</li>
+        <li>Display an in-app banner for 14 days following the change</li>
+      </ul>
+      <p>Continued use of the App after the effective date of changes constitutes acceptance of the revised Policy.</p>
+      <p>Previous versions of this Policy are available on request at <a href="mailto:privacy@mypetclub.app">privacy@mypetclub.app</a>.</p>
+    </div>
+
+    <!-- Contact -->
+    <div class="contact">
+      <h3>Privacy questions?</h3>
+      <p>Contact our privacy team — we respond within 2 business days</p>
+      <div class="contact-row">
+        <span>✉️</span>
+        <a href="mailto:privacy@mypetclub.app">privacy@mypetclub.app</a>
+      </div>
+      <div class="contact-row">
+        <span>💬</span>
+        <a href="https://wa.me/919347411132">WhatsApp +91 93474 11132</a>
+      </div>
+      <br />
+      <p style="font-size: 13px; color: rgba(255,255,255,0.5);">Mon–Sat 9 am–6 pm IST &nbsp;·&nbsp; For urgent security matters: <a href="mailto:security@mypetclub.app" style="color: rgba(255,255,255,0.6);">security@mypetclub.app</a></p>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>© 2026 PETclub. All rights reserved. &nbsp;·&nbsp; <a href="/privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="/terms.html">Terms of Service</a></p>
+  </footer>
+
 </body>
 </html>
