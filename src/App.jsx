@@ -52,7 +52,7 @@ const SERVICES = [
   },
   {
     icon: '🐕‍🦺', title: 'Training', price: 'from ₹699',
-    desc: 'Obedience, agility & behaviour training by certified professional trainers.',
+    desc: 'Obedience, agility & behaviour training for dogs by certified trainers — tailored to your dog\'s breed and temperament.',
     img: IMG.training, gradFrom: '#4c1d95', gradTo: '#8b5cf6',
     tag: 'High Demand', tagBg: '#f5f3ff', tagColor: '#6d28d9',
     bookable: true, catFriendly: false,
@@ -120,6 +120,22 @@ const INQUIRY_CONFIG = {
     label: 'Tell us your boarding requirements',
   },
 };
+
+/* ══════════ PAW SVG — visible on any background colour ══════════ */
+/* Replaces the 🐾 emoji which renders dark-brown and vanishes on dark hero/sticky backgrounds */
+function PawSVG({ size = 16, color = ORANGE }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden="true" style={{ flexShrink: 0, display: 'inline-block' }}>
+      {/* Four small toe pads */}
+      <ellipse cx="9"   cy="7.5"  rx="3.6" ry="4.2" fill={color} />
+      <ellipse cx="16"  cy="4.8"  rx="3.6" ry="4.2" fill={color} />
+      <ellipse cx="23"  cy="7.5"  rx="3.6" ry="4.2" fill={color} />
+      <ellipse cx="5"   cy="14.5" rx="3.1" ry="3.6" fill={color} />
+      {/* Main central pad */}
+      <path d="M16 12.5C10 12.5 6 17 4.8 20.5C3.6 24 5.2 27 7.8 28.6C10.4 30.2 13.5 30.5 16 30.5C18.5 30.5 21.6 30.2 24.2 28.6C26.8 27 28.4 24 27.2 20.5C26 17 22 12.5 16 12.5Z" fill={color} />
+    </svg>
+  );
+}
 
 /* ══════════ SHARED SVG ILLUSTRATIONS ══════════ */
 function CatFace({ size = 120, color = '#fff', opacity = 1 }) {
@@ -433,7 +449,7 @@ function PhoneMockup() {
       <div className="absolute -right-2 bottom-28 bg-emerald-500 rounded-2xl shadow-xl px-3 py-2 flex items-center gap-2 text-xs font-bold text-white"
         style={{ animation: 'float 5s ease-in-out infinite', animationDelay: '1s' }}>
         <span className="text-lg">✅</span>
-        <div><div className="font-extrabold text-xs">ID Verified</div><div className="font-normal text-emerald-100 text-[10px]">48h compliance</div></div>
+        <div><div className="font-extrabold text-xs">ID Verified</div><div className="font-normal text-emerald-100 text-[10px]">48h review</div></div>
       </div>
     </div>
   );
@@ -478,13 +494,16 @@ function Hero() {
             {/* ── P1: Trust strip ── */}
             <div className="flex flex-wrap gap-x-5 gap-y-2 mb-7">
               {[
-                { icon: '🐾', val: '50,000+', label: 'Pets Served' },
-                { icon: '✅', val: '1,200+',  label: 'Verified Pros' },
-                { icon: '📍', val: '100+',    label: 'Cities' },
-                { icon: '⭐', val: '4.9',     label: 'App Rating' },
+                { icon: null,  isPaw: true,  val: '50,000+', label: 'Pets Served' },
+                { icon: '✅',  isPaw: false, val: '1,200+',  label: 'Verified Pros' },
+                { icon: '📍',  isPaw: false, val: '100+',    label: 'Cities' },
+                { icon: '⭐',  isPaw: false, val: '4.9',     label: 'App Rating' },
               ].map(s => (
                 <div key={s.label} className="flex items-center gap-1.5">
-                  <span className="text-base">{s.icon}</span>
+                  {s.isPaw
+                    ? <PawSVG size={15} color={ORANGE} />
+                    : <span className="text-base">{s.icon}</span>
+                  }
                   <span className="text-white font-black text-sm">{s.val}</span>
                   <span className="text-xs font-medium" style={{ color: 'rgba(255,255,255,0.55)' }}>{s.label}</span>
                 </div>
@@ -880,7 +899,7 @@ function Reviews() {
       <div className="container">
         <div className="text-center mb-14">
           <span className="text-sm font-bold tracking-widest uppercase" style={{ color: ORANGE }}>Testimonials</span>
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mt-3 mb-2">Loved by Dogs &amp; Cat Parents</h2>
+          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mt-3 mb-2">Loved by Dog &amp; Cat Parents</h2>
           <p className="text-gray-500 text-base inline-flex items-center gap-1.5">
             Real stories from real pet families&nbsp;
             <img src="https://flagcdn.com/20x15/in.png" alt="India" className="inline-block rounded-sm" />
@@ -1169,7 +1188,7 @@ function JoinSection() {
               </div>
               <div className="flex items-center gap-2 mt-8 pt-6 border-t border-white/10">
                 <span className="text-amber-400">★★★★★</span>
-                <span className="text-gray-400 text-xs">Rated 4.9 by 45,000+ users</span>
+                <span className="text-gray-400 text-xs">Rated 4.9 by 50,000+ pet parents</span>
               </div>
             </div>
           </div>
@@ -1418,7 +1437,7 @@ function Footer() {
           </div>
         </div>
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-          <span>© {new Date().getFullYear()} PETclub India. Made with 🐾 for pets everywhere.</span>
+          <span className="flex items-center gap-1.5">© {new Date().getFullYear()} PETclub. Made with <PawSVG size={13} color={ORANGE} /> for pets everywhere.</span>
           <div className="flex gap-5">
             <a href="/privacy.html" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Privacy</a>
             <a href="/terms.html" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Terms</a>
@@ -1452,7 +1471,7 @@ function StickyBar() {
         <a href={APP_URL} target="_blank" rel="noreferrer"
           className="flex-1 flex items-center justify-center gap-2 rounded-2xl py-3.5 font-black text-sm text-white transition-all hover:opacity-90"
           style={{ background: `linear-gradient(135deg, ${ORANGE2}, ${ORANGE})`, boxShadow: '0 4px 20px rgba(249,115,22,0.40)' }}>
-          🐾 Book a Service — Free
+          <PawSVG size={15} color="#fff" />Book a Service — Free
         </a>
       </div>
     </div>
