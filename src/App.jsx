@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 const API     = import.meta.env.VITE_API_URL  || 'https://api.mypetclub.app/api';
 const APP_URL = import.meta.env.VITE_APP_URL  || 'https://app.mypetclub.app';
 const SUPPORT_EMAIL = import.meta.env.VITE_SUPPORT_EMAIL || 'support@mypetclub.app';
-const WHATSAPP_IN   = import.meta.env.VITE_WHATSAPP_IN   || '916305301132';
+const WHATSAPP_IN   = import.meta.env.VITE_WHATSAPP_IN   || '919347411132';
 const WHATSAPP_US   = import.meta.env.VITE_WHATSAPP_US   || '16097215754';
 const HQ_ADDRESS    = import.meta.env.VITE_HQ_ADDRESS    || 'Sahara, LB Nagar, Hyderabad – 500074';
 const QR_URL = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(APP_URL)}&color=1a1a2e&bgcolor=ffffff&margin=10`;
