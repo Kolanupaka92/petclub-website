@@ -8,12 +8,17 @@ const WHATSAPP_US   = import.meta.env.VITE_WHATSAPP_US   || '16097215754';
 const HQ_ADDRESS    = import.meta.env.VITE_HQ_ADDRESS    || 'Sahara, LB Nagar, Hyderabad – 500074';
 const QR_URL = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(APP_URL)}&color=1a1a2e&bgcolor=ffffff&margin=10`;
 
+// All images: free Unsplash License — commercial use permitted, no attribution required.
+// Verified free (not Unsplash+) on 2025-05-27.
 const IMG = {
   hero:      'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1800&auto=format&fit=crop&q=85',
-  grooming:  'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=600&auto=format&fit=crop&q=80',
-  training:  'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&auto=format&fit=crop&q=80',
-  vet:       'https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?w=600&auto=format&fit=crop&q=80',
-  food:      'https://images.unsplash.com/photo-1568640347023-a616a30bc3bd?w=600&auto=format&fit=crop&q=80',
+  // Service images — each unique, verified free license
+  grooming:  'https://images.unsplash.com/photo-1611173622933-91942d394b04?w=700&auto=format&fit=crop&q=85', // Pomeranian wrapped in towel at grooming spa — Lucija Ros
+  training:  'https://images.unsplash.com/photo-1551779891-b83901e1f8b3?w=700&auto=format&fit=crop&q=85', // woman training/playing with dog in forest — Murilo Viviani
+  vet:       'https://images.unsplash.com/photo-1630438994394-3deff7a591bf?w=700&auto=format&fit=crop&q=85', // dog at vet clinic — Karsten Winegeart
+  walker:    'https://images.unsplash.com/photo-1618946019619-9d7b7d86b48f?w=700&auto=format&fit=crop&q=85', // woman walking black labrador on forest path — Honest Paws
+  boarding:  'https://images.unsplash.com/photo-1551928692-6954104dee5a?w=700&auto=format&fit=crop&q=85', // dog resting on bed in cozy home — Irina
+  food:      'https://images.unsplash.com/photo-1714068691210-073dc52c6c1d?w=700&auto=format&fit=crop&q=85', // dog eating kibble from bowl
   // Hero floating gallery — mixed dog & cat
   pet1:      'https://images.unsplash.com/photo-1560807707-8cc77767d783?w=400&auto=format&fit=crop&q=80',  // dog
   pet2:      'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&auto=format&fit=crop&q=80', // cat — orange tabby
@@ -24,8 +29,8 @@ const SERVICES = [
   { icon: '✂️', title: 'Grooming', price: 'from ₹499', desc: 'Bath, haircut, nail trim & styling at your doorstep by certified groomers.', img: IMG.grooming, tag: 'Most Popular', color: 'orange', bookable: true },
   { icon: '🐕‍🦺', title: 'Training', price: 'from ₹699', desc: 'Obedience, agility & behaviour training by certified professional trainers.', img: IMG.training, tag: 'High Demand', color: 'purple', bookable: true },
   { icon: '🏥', title: 'Vet Care', price: 'from ₹399', desc: 'In-home vet visits, vaccinations & digital health records for your pet.', img: IMG.vet, tag: 'Trusted', color: 'rose', bookable: true },
-  { icon: '🦮', title: 'Dog Walking', price: 'from ₹299', desc: 'GPS-tracked solo & group walks by verified walkers. Live updates sent to you.', img: IMG.training, tag: 'New', color: 'green', bookable: true },
-  { icon: '🏠', title: 'Pet Boarding', price: 'from ₹499/night', desc: 'Cage-free home stays with verified boarders. Daily photos & updates guaranteed.', img: IMG.grooming, tag: 'New', color: 'amber', bookable: true },
+  { icon: '🦮', title: 'Dog Walking', price: 'from ₹299', desc: 'GPS-tracked solo & group walks by verified walkers. Live updates sent to you.', img: IMG.walker, tag: 'New', color: 'green', bookable: true },
+  { icon: '🏠', title: 'Pet Boarding', price: 'from ₹499/night', desc: 'Cage-free home stays with verified boarders. Daily photos & updates guaranteed.', img: IMG.boarding, tag: 'New', color: 'amber', bookable: true },
   { icon: '🍖', title: 'Pet Food', price: 'Free Delivery', desc: 'Premium nutrition, treats & supplements delivered to your door daily.', img: IMG.food, tag: 'Coming Soon', color: 'teal', bookable: false },
 ];
 
