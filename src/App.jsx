@@ -466,13 +466,29 @@ function Hero() {
 
           {/* Left */}
           <div>
-            <div className="inline-flex items-center gap-2 text-orange-200 text-xs font-bold px-4 py-2 rounded-full mb-8 backdrop-blur-sm"
+            <div className="inline-flex items-center gap-2 text-orange-200 text-xs font-bold px-4 py-2 rounded-full mb-5 backdrop-blur-sm"
               style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.20)' }}>
               <img src="https://flagcdn.com/20x15/in.png" alt="India" className="inline-block rounded-sm" />
               India&apos;s #1 Pet Care Platform
               <span className="opacity-40">·</span>
               <img src="https://flagcdn.com/20x15/us.png" alt="USA" className="inline-block rounded-sm" />
               Now in USA
+            </div>
+
+            {/* ── P1: Trust strip ── */}
+            <div className="flex flex-wrap gap-x-5 gap-y-2 mb-7">
+              {[
+                { icon: '🐾', val: '50,000+', label: 'Pets Served' },
+                { icon: '✅', val: '1,200+',  label: 'Verified Pros' },
+                { icon: '📍', val: '100+',    label: 'Cities' },
+                { icon: '⭐', val: '4.9',     label: 'App Rating' },
+              ].map(s => (
+                <div key={s.label} className="flex items-center gap-1.5">
+                  <span className="text-base">{s.icon}</span>
+                  <span className="text-white font-black text-sm">{s.val}</span>
+                  <span className="text-xs font-medium" style={{ color: 'rgba(255,255,255,0.55)' }}>{s.label}</span>
+                </div>
+              ))}
             </div>
 
             <h1 className="text-5xl sm:text-6xl font-black text-white leading-[1.05] mb-5">
@@ -592,13 +608,14 @@ function TrustBanner() {
 
 /* ══════════ PETS WE SERVE ══════════ */
 function PetsWeServe() {
+  const [tab, setTab] = useState('dog');
   const dogServices = ['Grooming', 'Training', 'Vet Care', 'Dog Walking', 'Pet Boarding'];
   const catServices = ['Grooming', 'Vet Care', 'Pet Boarding', 'Pet Food'];
 
   return (
     <section id="pets" style={{ background: WARM_CREAM, padding: '80px 0' }}>
       <div className="container">
-        <div className="text-center mb-14">
+        <div className="text-center mb-10">
           <span className="text-sm font-bold tracking-widest uppercase" style={{ color: ORANGE2 }}>For Every Pet</span>
           <h2 className="text-4xl md:text-5xl font-black mt-3 mb-4" style={{ color: WARM_DARK }}>
             We Love Dogs &amp; Cats Equally
@@ -608,92 +625,108 @@ function PetsWeServe() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-
-          {/* Dogs */}
-          <div className="rounded-3xl overflow-hidden shadow-xl" style={{ boxShadow: '0 20px 60px rgba(249,115,22,0.22)' }}>
-            {/* Header — real dog photo */}
-            <div className="relative overflow-hidden" style={{ height: 220, background: `linear-gradient(135deg, #7c2d12, ${ORANGE})` }}>
-              <img src={IMG.dogMain} alt="Golden retriever"
-                className="absolute inset-0 w-full h-full object-cover"
-                style={{ opacity: 0.85, objectPosition: '50% 25%' }}
-                onError={e => e.target.style.display = 'none'} />
-              {/* Gradient overlay */}
-              <div className="absolute inset-0"
-                style={{ background: 'linear-gradient(to bottom, rgba(124,45,18,0.3) 0%, rgba(249,115,22,0.55) 100%)' }} />
-              {/* Text */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
-                <div className="text-4xl mb-1">🐕</div>
-                <h3 className="text-3xl font-black text-white mb-0.5">For Your Dog</h3>
-                <p className="text-orange-100 text-sm">All breeds · all sizes · all ages</p>
-              </div>
-            </div>
-            {/* Services list */}
-            <div style={{ background: '#fff7ed', padding: '28px 32px' }}>
-              <div className="grid grid-cols-2 gap-3 mb-6">
-                {dogServices.map(s => (
-                  <div key={s} className="flex items-center gap-2.5 rounded-2xl px-4 py-3"
-                    style={{ background: '#fff', border: '1px solid #fed7aa' }}>
-                    <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black text-white shrink-0"
-                      style={{ background: ORANGE2 }}>✓</span>
-                    <span className="text-sm font-semibold" style={{ color: '#7c2d12' }}>{s}</span>
-                  </div>
-                ))}
-              </div>
-              <a href={APP_URL} target="_blank" rel="noreferrer"
-                className="w-full flex items-center justify-center gap-2 rounded-2xl py-3.5 font-black text-sm transition-all hover:opacity-90"
-                style={{ background: `linear-gradient(135deg, ${ORANGE2}, ${ORANGE})`, color: '#fff', boxShadow: '0 8px 24px rgba(249,115,22,0.30)' }}>
-                Book for Your Dog →
-              </a>
-            </div>
+        {/* ── P2: Tab toggle ── */}
+        <div className="flex justify-center mb-8">
+          <div className="inline-flex rounded-2xl p-1.5 gap-1" style={{ background: '#fff', border: '1px solid #fed7aa', boxShadow: '0 4px 20px rgba(249,115,22,0.10)' }}>
+            {[
+              { id: 'dog', emoji: '🐕', label: 'For Dogs', activeGrad: `linear-gradient(135deg, ${ORANGE2}, ${ORANGE})`, activeShadow: '0 4px 16px rgba(249,115,22,0.30)' },
+              { id: 'cat', emoji: '🐱', label: 'For Cats', activeGrad: 'linear-gradient(135deg, #5b21b6, #8b5cf6)',    activeShadow: '0 4px 16px rgba(139,92,246,0.30)' },
+            ].map(t => (
+              <button key={t.id} onClick={() => setTab(t.id)}
+                className="flex items-center gap-2 px-6 py-3 rounded-xl font-black text-sm transition-all duration-200"
+                style={tab === t.id
+                  ? { background: t.activeGrad, color: '#fff', boxShadow: t.activeShadow }
+                  : { background: 'transparent', color: '#92400e' }
+                }>
+                <span className="text-lg">{t.emoji}</span> {t.label}
+              </button>
+            ))}
           </div>
+        </div>
 
-          {/* Cats */}
-          <div className="rounded-3xl overflow-hidden shadow-xl" style={{ boxShadow: '0 20px 60px rgba(139,92,246,0.22)' }}>
-            {/* Header — real cat photo */}
-            <div className="relative overflow-hidden" style={{ height: 220, background: 'linear-gradient(135deg, #4c1d95, #8b5cf6)' }}>
-              <img src={IMG.catMain} alt="Orange tabby cat"
-                className="absolute inset-0 w-full h-full object-cover"
-                style={{ opacity: 0.85, objectPosition: '50% 30%' }}
-                onError={e => e.target.style.display = 'none'} />
-              {/* Gradient overlay */}
-              <div className="absolute inset-0"
-                style={{ background: 'linear-gradient(to bottom, rgba(76,29,149,0.3) 0%, rgba(109,40,217,0.60) 100%)' }} />
-              {/* Text */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
-                <div className="text-4xl mb-1">🐱</div>
-                <h3 className="text-3xl font-black text-white mb-0.5">For Your Cat</h3>
-                <p className="text-purple-100 text-sm">Persian · Siamese · tabby &amp; more</p>
+        {/* Card — only active tab shown */}
+        <div className="max-w-2xl mx-auto">
+
+          {/* Dogs panel */}
+          {tab === 'dog' && (
+            <div className="rounded-3xl overflow-hidden shadow-xl animate-fade-up" style={{ boxShadow: '0 20px 60px rgba(249,115,22,0.22)' }}>
+              <div className="relative overflow-hidden" style={{ height: 260, background: `linear-gradient(135deg, #7c2d12, ${ORANGE})` }}>
+                <img src={IMG.dogMain} alt="Golden retriever"
+                  className="absolute inset-0 w-full h-full object-cover"
+                  style={{ opacity: 0.85, objectPosition: '50% 25%' }}
+                  onError={e => e.target.style.display = 'none'} />
+                <div className="absolute inset-0"
+                  style={{ background: 'linear-gradient(to bottom, rgba(124,45,18,0.25) 0%, rgba(249,115,22,0.60) 100%)' }} />
+                <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+                  <div className="text-4xl mb-1">🐕</div>
+                  <h3 className="text-3xl font-black text-white mb-0.5">For Your Dog</h3>
+                  <p className="text-orange-100 text-sm font-medium">All breeds · all sizes · all ages</p>
+                </div>
+              </div>
+              <div style={{ background: '#fff7ed', padding: '28px 32px' }}>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+                  {dogServices.map(s => (
+                    <div key={s} className="flex items-center gap-2.5 rounded-2xl px-4 py-3"
+                      style={{ background: '#fff', border: '1px solid #fed7aa' }}>
+                      <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black text-white shrink-0"
+                        style={{ background: ORANGE2 }}>✓</span>
+                      <span className="text-sm font-semibold" style={{ color: '#7c2d12' }}>{s}</span>
+                    </div>
+                  ))}
+                </div>
+                <a href={APP_URL} target="_blank" rel="noreferrer"
+                  className="w-full flex items-center justify-center gap-2 rounded-2xl py-3.5 font-black text-sm transition-all hover:opacity-90"
+                  style={{ background: `linear-gradient(135deg, ${ORANGE2}, ${ORANGE})`, color: '#fff', boxShadow: '0 8px 24px rgba(249,115,22,0.30)' }}>
+                  Book for Your Dog →
+                </a>
               </div>
             </div>
-            {/* Services list */}
-            <div style={{ background: '#f5f3ff', padding: '28px 32px' }}>
-              <div className="grid grid-cols-2 gap-3 mb-6">
-                {catServices.map(s => (
-                  <div key={s} className="flex items-center gap-2.5 rounded-2xl px-4 py-3"
-                    style={{ background: '#fff', border: '1px solid #ddd6fe' }}>
-                    <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black text-white shrink-0"
-                      style={{ background: '#7c3aed' }}>✓</span>
-                    <span className="text-sm font-semibold" style={{ color: '#4c1d95' }}>{s}</span>
-                  </div>
-                ))}
-                {/* Coming soon for cats */}
-                {['Training', 'Walking'].map(s => (
-                  <div key={s} className="flex items-center gap-2.5 rounded-2xl px-4 py-3"
-                    style={{ background: 'rgba(255,255,255,0.5)', border: '1px dashed #c4b5fd' }}>
-                    <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black shrink-0"
-                      style={{ background: '#ede9fe', color: '#7c3aed' }}>→</span>
-                    <span className="text-xs font-medium" style={{ color: '#7c3aed' }}>{s} <span style={{ opacity: 0.6 }}>(soon)</span></span>
-                  </div>
-                ))}
+          )}
+
+          {/* Cats panel */}
+          {tab === 'cat' && (
+            <div className="rounded-3xl overflow-hidden shadow-xl animate-fade-up" style={{ boxShadow: '0 20px 60px rgba(139,92,246,0.22)' }}>
+              <div className="relative overflow-hidden" style={{ height: 260, background: 'linear-gradient(135deg, #4c1d95, #8b5cf6)' }}>
+                <img src={IMG.catMain} alt="Orange tabby cat"
+                  className="absolute inset-0 w-full h-full object-cover"
+                  style={{ opacity: 0.85, objectPosition: '50% 30%' }}
+                  onError={e => e.target.style.display = 'none'} />
+                <div className="absolute inset-0"
+                  style={{ background: 'linear-gradient(to bottom, rgba(76,29,149,0.25) 0%, rgba(109,40,217,0.65) 100%)' }} />
+                <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+                  <div className="text-4xl mb-1">🐱</div>
+                  <h3 className="text-3xl font-black text-white mb-0.5">For Your Cat</h3>
+                  <p className="text-purple-100 text-sm font-medium">Persian · Siamese · tabby &amp; more</p>
+                </div>
               </div>
-              <a href={APP_URL} target="_blank" rel="noreferrer"
-                className="w-full flex items-center justify-center gap-2 rounded-2xl py-3.5 font-black text-sm transition-all hover:opacity-90"
-                style={{ background: 'linear-gradient(135deg, #5b21b6, #8b5cf6)', color: '#fff', boxShadow: '0 8px 24px rgba(139,92,246,0.30)' }}>
-                Book for Your Cat →
-              </a>
+              <div style={{ background: '#f5f3ff', padding: '28px 32px' }}>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+                  {catServices.map(s => (
+                    <div key={s} className="flex items-center gap-2.5 rounded-2xl px-4 py-3"
+                      style={{ background: '#fff', border: '1px solid #ddd6fe' }}>
+                      <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black text-white shrink-0"
+                        style={{ background: '#7c3aed' }}>✓</span>
+                      <span className="text-sm font-semibold" style={{ color: '#4c1d95' }}>{s}</span>
+                    </div>
+                  ))}
+                  {['Training', 'Walking'].map(s => (
+                    <div key={s} className="flex items-center gap-2.5 rounded-2xl px-4 py-3"
+                      style={{ background: 'rgba(255,255,255,0.5)', border: '1px dashed #c4b5fd' }}>
+                      <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black shrink-0"
+                        style={{ background: '#ede9fe', color: '#7c3aed' }}>→</span>
+                      <span className="text-xs font-medium" style={{ color: '#7c3aed' }}>{s} <span style={{ opacity: 0.6 }}>(soon)</span></span>
+                    </div>
+                  ))}
+                </div>
+                <a href={APP_URL} target="_blank" rel="noreferrer"
+                  className="w-full flex items-center justify-center gap-2 rounded-2xl py-3.5 font-black text-sm transition-all hover:opacity-90"
+                  style={{ background: 'linear-gradient(135deg, #5b21b6, #8b5cf6)', color: '#fff', boxShadow: '0 8px 24px rgba(139,92,246,0.30)' }}>
+                  Book for Your Cat →
+                </a>
+              </div>
             </div>
-          </div>
+          )}
+
         </div>
 
         {/* Combined household badge */}
@@ -725,7 +758,7 @@ function Services() {
         <div className="text-center mb-16">
           <span className="text-sm font-bold tracking-widest uppercase" style={{ color: ORANGE }}>Our Services</span>
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 mt-3 mb-4">Everything Your Pet Needs</h2>
-          <p className="text-gray-500 text-lg max-w-xl mx-auto">Verified professionals, transparent pricing, live tracking — all in one app.</p>
+          <p className="text-gray-500 text-base max-w-xl mx-auto">Verified professionals, transparent pricing, live tracking — all in one app.</p>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -767,9 +800,12 @@ function Services() {
                   </div>
                 </div>
                 <div className="p-5">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-extrabold text-gray-900 text-lg">{s.title}</h3>
-                    <span className="text-sm font-bold" style={{ color: ORANGE }}>{s.price}</span>
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <h3 className="font-extrabold text-gray-900 text-lg leading-tight">{s.title}</h3>
+                    <span className="shrink-0 text-xs font-black px-2.5 py-1 rounded-xl whitespace-nowrap"
+                      style={{ background: 'rgba(249,115,22,0.10)', color: ORANGE2, border: '1px solid rgba(249,115,22,0.22)' }}>
+                      {s.price}
+                    </span>
                   </div>
                   <p className="text-gray-500 text-sm leading-relaxed mb-4">{s.desc}</p>
                   {s.bookable ? (
@@ -806,7 +842,7 @@ function HowItWorks() {
         <div className="text-center mb-16">
           <span className="text-sm font-bold tracking-widest uppercase" style={{ color: ORANGE2 }}>Simple Process</span>
           <h2 className="text-4xl md:text-5xl font-black mt-3 mb-4" style={{ color: WARM_DARK }}>Get Started in 3 Easy Steps</h2>
-          <p className="text-lg" style={{ color: '#92400e' }}>From sign-up to your first booking in under 5 minutes.</p>
+          <p className="text-base" style={{ color: '#92400e' }}>From sign-up to your first booking in under 5 minutes.</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 relative">
@@ -845,7 +881,7 @@ function Reviews() {
         <div className="text-center mb-14">
           <span className="text-sm font-bold tracking-widest uppercase" style={{ color: ORANGE }}>Testimonials</span>
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 mt-3 mb-2">Loved by Dogs &amp; Cat Parents</h2>
-          <p className="text-gray-500 text-lg inline-flex items-center gap-1.5">
+          <p className="text-gray-500 text-base inline-flex items-center gap-1.5">
             Real stories from real pet families&nbsp;
             <img src="https://flagcdn.com/20x15/in.png" alt="India" className="inline-block rounded-sm" />
             <img src="https://flagcdn.com/20x15/us.png" alt="USA" className="inline-block rounded-sm" />
@@ -1394,6 +1430,96 @@ function Footer() {
   );
 }
 
+/* ══════════ P1: STICKY MOBILE BOOK BAR ══════════ */
+function StickyBar() {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const fn = () => setVisible(window.scrollY > 320);
+    window.addEventListener('scroll', fn, { passive: true });
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+  return (
+    <div className={`md:hidden fixed bottom-0 left-0 right-0 z-50 transition-all duration-300 ${visible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}
+      style={{ background: WARM_DARK, borderTop: '1px solid rgba(255,255,255,0.10)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      <div className="flex items-center gap-3 px-4 py-3">
+        {/* WhatsApp */}
+        <a href={`https://wa.me/${WHATSAPP_IN}`} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
+          className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl shrink-0 transition-all hover:scale-105"
+          style={{ background: '#25d366' }}>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+        {/* Book Now CTA */}
+        <a href={APP_URL} target="_blank" rel="noreferrer"
+          className="flex-1 flex items-center justify-center gap-2 rounded-2xl py-3.5 font-black text-sm text-white transition-all hover:opacity-90"
+          style={{ background: `linear-gradient(135deg, ${ORANGE2}, ${ORANGE})`, boxShadow: '0 4px 20px rgba(249,115,22,0.40)' }}>
+          🐾 Book a Service — Free
+        </a>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════ P3: WHATSAPP DESKTOP FLOAT ══════════ */
+function WhatsAppFloat() {
+  const [show, setShow] = useState(false);
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const fn = () => setShow(window.scrollY > 400);
+    window.addEventListener('scroll', fn, { passive: true });
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+  return (
+    <div className={`hidden md:block fixed bottom-8 right-6 z-50 transition-all duration-300 ${show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
+      {open && (
+        <div className="mb-3 w-72 rounded-3xl overflow-hidden shadow-2xl"
+          style={{ background: '#fff', border: '1px solid #e5e7eb', boxShadow: '0 20px 60px rgba(0,0,0,0.18)' }}>
+          <div className="px-5 py-4 flex items-center gap-3" style={{ background: '#25d366' }}>
+            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white text-xl">🐾</div>
+            <div>
+              <div className="text-white font-extrabold text-sm">PETclub Support</div>
+              <div className="text-green-100 text-xs flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-200 inline-block" />
+                Typically replies in minutes
+              </div>
+            </div>
+            <button onClick={() => setOpen(false)} className="ml-auto text-white/70 hover:text-white text-lg leading-none">✕</button>
+          </div>
+          <div className="px-5 py-4 space-y-2">
+            <div className="bg-gray-50 rounded-2xl rounded-tl-sm px-4 py-3 text-sm text-gray-700 leading-relaxed">
+              Hi! 👋 How can we help your pet today?
+            </div>
+            <div className="flex gap-2 flex-wrap pt-1">
+              {['Book a service', 'Join as Pro', 'Track my booking'].map(q => (
+                <a key={q} href={`https://wa.me/${WHATSAPP_IN}?text=${encodeURIComponent(q)}`} target="_blank" rel="noopener noreferrer"
+                  className="text-xs font-semibold px-3 py-1.5 rounded-full border transition-all hover:bg-green-50"
+                  style={{ borderColor: '#25d366', color: '#15803d' }}>
+                  {q}
+                </a>
+              ))}
+            </div>
+          </div>
+          <div className="px-5 pb-4">
+            <a href={`https://wa.me/${WHATSAPP_IN}`} target="_blank" rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2 rounded-2xl py-3 font-black text-sm text-white transition-all hover:opacity-90"
+              style={{ background: '#25d366' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Chat on WhatsApp
+            </a>
+          </div>
+        </div>
+      )}
+      <button onClick={() => setOpen(o => !o)} aria-label="Chat on WhatsApp"
+        className="w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all hover:scale-110 active:scale-95 ml-auto"
+        style={{ background: '#25d366', boxShadow: '0 8px 32px rgba(37,211,102,0.45)' }}>
+        {open
+          ? <span className="text-white text-xl font-bold">✕</span>
+          : <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        }
+      </button>
+    </div>
+  );
+}
+
 /* ══════════ APP ══════════ */
 export default function App() {
   return (
@@ -1409,6 +1535,10 @@ export default function App() {
       <JoinSection />
       <Contact />
       <Footer />
+      {/* P1: sticky mobile CTA */}
+      <StickyBar />
+      {/* P3: WhatsApp desktop float */}
+      <WhatsAppFloat />
     </>
   );
 }
