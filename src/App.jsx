@@ -18,46 +18,70 @@ const ORANGE  = '#f97316';
 const ORANGE2 = '#ea580c';
 const AMBER   = '#f59e0b';
 
+/*
+ * All photos self-hosted in /public/images/ — downloaded from Unsplash & Pexels.
+ * Licenses:
+ *   Unsplash Free License: https://unsplash.com/license
+ *     — free for commercial use, no attribution required, cannot be resold as stock.
+ *   Pexels Free License: https://www.pexels.com/license/
+ *     — free for commercial use, no attribution required.
+ * Images are served from our own Vercel CDN — zero hotlinking risk.
+ */
+const IMG = {
+  hero:        '/images/hero.jpg',         // Unsplash: dog running in golden field
+  catMain:     '/images/cat-main.jpg',     // Unsplash: orange tabby cat portrait
+  catCuddle:   '/images/cat-cuddle.jpg',   // Unsplash: cuddly tabby cat
+  dogMain:     '/images/dog-main.jpg',     // Unsplash: happy golden dog portrait
+  grooming:    '/images/cat-groom.jpg',    // Pexels:   cat being groomed
+  training:    '/images/svc-training.jpg', // Unsplash: dog training session
+  vet:         '/images/cat-vet.jpg',      // Pexels:   cat at veterinarian
+  walking:     '/images/svc-walking.jpg',  // Unsplash: woman walking labrador
+  boarding:    '/images/cat-boarding.jpg', // Pexels:   cat resting at home stay
+  dogGrooming: '/images/svc-grooming.jpg', // Unsplash: Pomeranian at grooming spa
+  dogVet:      '/images/svc-vet.jpg',      // Unsplash: dog at vet clinic
+  dogBoarding: '/images/svc-boarding.jpg', // Unsplash: dog on cozy bed
+};
+
 const SERVICES = [
   {
     icon: '✂️', title: 'Grooming', price: 'from ₹499',
     desc: 'Bath, haircut, nail trim & full styling for dogs AND cats — at your doorstep by certified groomers.',
-    gradFrom: '#9a3412', gradTo: '#f97316',
+    img: IMG.grooming, gradFrom: '#9a3412', gradTo: '#f97316',
     tag: 'Most Popular', tagBg: '#fff7ed', tagColor: '#c2410c',
     bookable: true, catFriendly: true,
   },
   {
     icon: '🐕‍🦺', title: 'Training', price: 'from ₹699',
     desc: 'Obedience, agility & behaviour training by certified professional trainers.',
-    gradFrom: '#4c1d95', gradTo: '#8b5cf6',
+    img: IMG.training, gradFrom: '#4c1d95', gradTo: '#8b5cf6',
     tag: 'High Demand', tagBg: '#f5f3ff', tagColor: '#6d28d9',
     bookable: true, catFriendly: false,
   },
   {
     icon: '🏥', title: 'Vet Care', price: 'from ₹399',
     desc: 'In-home vet visits, vaccinations & digital health records for cats and dogs alike.',
-    gradFrom: '#065f46', gradTo: '#34d399',
+    img: IMG.vet, gradFrom: '#065f46', gradTo: '#34d399',
     tag: 'Trusted', tagBg: '#ecfdf5', tagColor: '#047857',
     bookable: true, catFriendly: true,
   },
   {
     icon: '🦮', title: 'Dog Walking', price: 'from ₹299',
     desc: 'GPS-tracked solo & group walks by verified walkers. Live updates sent to you.',
-    gradFrom: '#14532d', gradTo: '#4ade80',
+    img: IMG.walking, gradFrom: '#14532d', gradTo: '#4ade80',
     tag: 'New', tagBg: '#f0fdf4', tagColor: '#15803d',
     bookable: true, catFriendly: false,
   },
   {
     icon: '🏠', title: 'Pet Boarding', price: 'from ₹499/night',
     desc: 'Cage-free home stays for dogs & cats with verified boarders. Daily photos guaranteed.',
-    gradFrom: '#78350f', gradTo: '#f59e0b',
+    img: IMG.boarding, gradFrom: '#78350f', gradTo: '#f59e0b',
     tag: 'New', tagBg: '#fffbeb', tagColor: '#b45309',
     bookable: true, catFriendly: true,
   },
   {
     icon: '🍖', title: 'Pet Food', price: 'Free Delivery',
     desc: 'Premium nutrition, treats & supplements for cats and dogs delivered to your door.',
-    gradFrom: '#0e7490', gradTo: '#22d3ee',
+    img: null, gradFrom: '#0e7490', gradTo: '#22d3ee',
     tag: 'Coming Soon', tagBg: '#ecfeff', tagColor: '#0e7490',
     bookable: false, catFriendly: true,
   },
@@ -421,14 +445,20 @@ function Hero() {
     <section className="relative min-h-screen flex items-center overflow-hidden"
       style={{ background: `linear-gradient(150deg, ${WARM_DARK} 0%, #3b0d00 28%, #7c2d12 55%, #c2410c 78%, #f97316 100%)` }}>
 
-      {/* Glow orbs */}
-      <div className="absolute pointer-events-none" style={{ top: -100, right: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(249,115,22,0.14) 0%, transparent 70%)' }} />
-      <div className="absolute pointer-events-none" style={{ bottom: -100, left: -100, width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(245,158,11,0.10) 0%, transparent 70%)' }} />
+      {/* Hero background photo — subtle, gives life without fighting the gradient */}
+      <div className="absolute inset-0 pointer-events-none">
+        <img src={IMG.hero} alt="" aria-hidden="true"
+          className="w-full h-full object-cover object-center"
+          style={{ opacity: 0.18, mixBlendMode: 'luminosity' }} />
+      </div>
 
-      {/* Decorative paw prints */}
+      {/* Glow orbs */}
+      <div className="absolute pointer-events-none" style={{ top: -100, right: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(249,115,22,0.18) 0%, transparent 70%)' }} />
+      <div className="absolute pointer-events-none" style={{ bottom: -100, left: -100, width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(245,158,11,0.12) 0%, transparent 70%)' }} />
+
+      {/* Paw brand mark */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <img src="/icon.svg" alt="" aria-hidden="true" className="absolute opacity-[0.06]" style={{ width: 220, bottom: -30, right: -30 }} />
-        <img src="/icon.svg" alt="" aria-hidden="true" className="absolute opacity-[0.04]" style={{ width: 140, top: 60, left: -20 }} />
+        <img src="/icon.svg" alt="" aria-hidden="true" className="absolute opacity-[0.05]" style={{ width: 240, bottom: -30, right: -30 }} />
       </div>
 
       <div className="container relative z-10 pt-24 pb-16">
@@ -581,20 +611,21 @@ function PetsWeServe() {
         <div className="grid md:grid-cols-2 gap-8">
 
           {/* Dogs */}
-          <div className="rounded-3xl overflow-hidden shadow-xl" style={{ boxShadow: '0 20px 60px rgba(249,115,22,0.18)' }}>
-            {/* Header */}
-            <div className="relative flex items-center justify-between p-8 overflow-hidden"
-              style={{ background: `linear-gradient(135deg, #7c2d12 0%, ${ORANGE} 100%)` }}>
-              <div style={{ position: 'absolute', right: -20, top: -20, opacity: 0.15 }}>
-                <DogFace size={160} color="white" />
-              </div>
-              <div className="relative z-10">
-                <div className="text-5xl mb-2">🐕</div>
-                <h3 className="text-3xl font-black text-white mb-1">For Your Dog</h3>
-                <p className="text-orange-100 text-sm">All breeds, all sizes, all ages</p>
-              </div>
-              <div className="relative z-10 text-right hidden sm:block">
-                <DogFace size={100} color="white" opacity={0.9} />
+          <div className="rounded-3xl overflow-hidden shadow-xl" style={{ boxShadow: '0 20px 60px rgba(249,115,22,0.22)' }}>
+            {/* Header — real dog photo */}
+            <div className="relative overflow-hidden" style={{ height: 220, background: `linear-gradient(135deg, #7c2d12, ${ORANGE})` }}>
+              <img src={IMG.dogMain} alt="Golden retriever"
+                className="absolute inset-0 w-full h-full object-cover object-center"
+                style={{ opacity: 0.75 }}
+                onError={e => e.target.style.display = 'none'} />
+              {/* Gradient overlay */}
+              <div className="absolute inset-0"
+                style={{ background: 'linear-gradient(to bottom, rgba(124,45,18,0.3) 0%, rgba(249,115,22,0.55) 100%)' }} />
+              {/* Text */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+                <div className="text-4xl mb-1">🐕</div>
+                <h3 className="text-3xl font-black text-white mb-0.5">For Your Dog</h3>
+                <p className="text-orange-100 text-sm">All breeds · all sizes · all ages</p>
               </div>
             </div>
             {/* Services list */}
@@ -618,20 +649,21 @@ function PetsWeServe() {
           </div>
 
           {/* Cats */}
-          <div className="rounded-3xl overflow-hidden shadow-xl" style={{ boxShadow: '0 20px 60px rgba(139,92,246,0.18)' }}>
-            {/* Header */}
-            <div className="relative flex items-center justify-between p-8 overflow-hidden"
-              style={{ background: 'linear-gradient(135deg, #4c1d95 0%, #8b5cf6 100%)' }}>
-              <div style={{ position: 'absolute', right: -20, top: -20, opacity: 0.15 }}>
-                <CatFace size={160} color="white" />
-              </div>
-              <div className="relative z-10">
-                <div className="text-5xl mb-2">🐱</div>
-                <h3 className="text-3xl font-black text-white mb-1">For Your Cat</h3>
-                <p className="text-purple-100 text-sm">Persian, Siamese, tabby &amp; more</p>
-              </div>
-              <div className="relative z-10 text-right hidden sm:block">
-                <CatFace size={100} color="white" opacity={0.9} />
+          <div className="rounded-3xl overflow-hidden shadow-xl" style={{ boxShadow: '0 20px 60px rgba(139,92,246,0.22)' }}>
+            {/* Header — real cat photo */}
+            <div className="relative overflow-hidden" style={{ height: 220, background: 'linear-gradient(135deg, #4c1d95, #8b5cf6)' }}>
+              <img src={IMG.catMain} alt="Orange tabby cat"
+                className="absolute inset-0 w-full h-full object-cover object-center"
+                style={{ opacity: 0.75 }}
+                onError={e => e.target.style.display = 'none'} />
+              {/* Gradient overlay */}
+              <div className="absolute inset-0"
+                style={{ background: 'linear-gradient(to bottom, rgba(76,29,149,0.3) 0%, rgba(109,40,217,0.60) 100%)' }} />
+              {/* Text */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+                <div className="text-4xl mb-1">🐱</div>
+                <h3 className="text-3xl font-black text-white mb-0.5">For Your Cat</h3>
+                <p className="text-purple-100 text-sm">Persian · Siamese · tabby &amp; more</p>
               </div>
             </div>
             {/* Services list */}
@@ -700,24 +732,39 @@ function Services() {
           {SERVICES.map(s => {
             const cardInner = (
               <>
-                {/* CSS gradient header — no broken external image */}
-                <div className="relative flex items-center justify-center overflow-hidden" style={{ height: 192, background: `linear-gradient(135deg, ${s.gradFrom}, ${s.gradTo})` }}>
-                  {/* Big icon */}
-                  <span style={{ fontSize: 72, filter: 'drop-shadow(0 4px 16px rgba(0,0,0,0.25))', lineHeight: 1 }}>{s.icon}</span>
-                  {/* Tag */}
-                  <span className="absolute top-3 left-3 text-xs font-bold px-2.5 py-1 rounded-full"
-                    style={{ background: s.tagBg, color: s.tagColor }}>{s.tag}</span>
-                  {/* Cat friendly badge */}
-                  {s.catFriendly && (
-                    <div className="absolute bottom-3 right-3 flex items-center gap-1 rounded-full px-2.5 py-1"
-                      style={{ background: 'rgba(255,255,255,0.20)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.30)' }}>
-                      <CatFace size={14} color="white" />
-                      <span className="text-white text-[10px] font-bold">Cats too!</span>
-                    </div>
+                {/* Photo header with gradient overlay + CSS gradient fallback */}
+                <div className="relative overflow-hidden group-hover:scale-[1.01] transition-transform duration-500"
+                  style={{ height: 210, background: `linear-gradient(135deg, ${s.gradFrom}, ${s.gradTo})` }}>
+                  {s.img && (
+                    <img
+                      src={s.img}
+                      alt={s.title}
+                      className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                      onError={e => { e.target.style.display = 'none'; }}
+                    />
                   )}
+                  {/* Dual gradient overlay: top branding tint + bottom readability */}
+                  <div className="absolute inset-0" style={{
+                    background: `linear-gradient(to bottom, ${s.gradFrom}55 0%, transparent 40%, rgba(0,0,0,0.55) 100%)`
+                  }} />
+                  {/* Tag */}
+                  <span className="absolute top-3 left-3 text-xs font-bold px-2.5 py-1 rounded-full shadow-sm"
+                    style={{ background: s.tagBg, color: s.tagColor }}>{s.tag}</span>
+                  {/* Bookable / inquiry badge */}
                   {!s.bookable && (
                     <span className="absolute top-3 right-3 text-xs font-bold px-2.5 py-1 rounded-full bg-white/90 text-gray-700">✉ Inquiry</span>
                   )}
+                  {/* Bottom row: icon + cat badge */}
+                  <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
+                    <span className="text-3xl drop-shadow-lg">{s.icon}</span>
+                    {s.catFriendly && (
+                      <div className="flex items-center gap-1 rounded-full px-2.5 py-1"
+                        style={{ background: 'rgba(0,0,0,0.40)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.25)' }}>
+                        <CatFace size={13} color="white" />
+                        <span className="text-white text-[10px] font-bold">Cats too!</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="p-5">
                   <div className="flex items-center justify-between mb-2">
