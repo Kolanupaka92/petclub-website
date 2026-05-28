@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Press — PETclub</title>
+  <meta name="description" content="PETclub press resources, media kit, coverage, and PR contact. India's fastest-growing pet care platform." />
+  <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #f97316;
+      --orange-light: #fb923c;
+      --orange-dim: rgba(249,115,22,.12);
+      --bg: #0a0f1a;
+      --bg2: #0f1623;
+      --bg3: #141d2e;
+      --border: rgba(255,255,255,.07);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+    nav { position: sticky; top: 0; z-index: 50; background: rgba(10,15,26,.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-logo { display: flex; align-items: center; gap: .5rem; text-decoration: none; }
+    .nav-logo-icon { width: 32px; height: 32px; background: var(--orange); border-radius: 8px; display: grid; place-items: center; font-size: 18px; }
+    .nav-logo-text { font-weight: 800; font-size: 1.1rem; color: #fff; }
+    .nav-links { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: .9rem; transition: color .2s; }
+    .nav-links a:hover { color: var(--orange); }
+    .btn-nav { background: var(--orange); color: #fff; border: none; border-radius: 8px; padding: .45rem 1rem; font-size: .85rem; font-weight: 700; cursor: pointer; text-decoration: none; transition: background .2s; }
+    .btn-nav:hover { background: var(--orange-light); }
+
+    .hero { padding: 5rem 1.5rem 4rem; text-align: center; background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(249,115,22,.10) 0%, transparent 70%); }
+    .hero-badge { display: inline-block; background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(249,115,22,.3); border-radius: 99px; padding: .3rem .9rem; font-size: .8rem; font-weight: 600; margin-bottom: 1.5rem; }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; color: #fff; line-height: 1.15; margin-bottom: 1rem; }
+    .hero h1 span { color: var(--orange); }
+    .hero p { max-width: 520px; margin: 0 auto 2rem; color: var(--muted); font-size: 1.05rem; }
+    .btn-pr { display: inline-block; background: var(--orange); color: #fff; border-radius: 10px; padding: .7rem 1.75rem; font-weight: 700; font-size: .95rem; text-decoration: none; transition: background .2s; }
+    .btn-pr:hover { background: var(--orange-light); }
+
+    section { max-width: 960px; margin: 0 auto; padding: 4rem 1.5rem; }
+    .section-tag { font-size: .8rem; font-weight: 700; color: var(--orange); letter-spacing: .1em; text-transform: uppercase; margin-bottom: .75rem; }
+    .section-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; color: #fff; margin-bottom: 1rem; }
+    .section-sub { color: var(--muted); max-width: 560px; margin-bottom: 2.5rem; }
+
+    /* STATS */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
+    .stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; text-align: center; }
+    .stat-card .num { font-size: 2rem; font-weight: 900; color: var(--orange); }
+    .stat-card .lbl { font-size: .8rem; color: var(--muted); margin-top: .35rem; }
+
+    /* BOILERPLATE */
+    .boiler { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; }
+    .boiler p { color: var(--muted); line-height: 1.8; }
+    .boiler strong { color: var(--text); }
+
+    /* COVERAGE */
+    .coverage-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+    .coverage-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 16px;
+      padding: 1.5rem; transition: border-color .2s;
+    }
+    .coverage-card:hover { border-color: var(--orange); }
+    .pub-name { font-size: .75rem; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .6rem; }
+    .coverage-card h4 { font-size: .95rem; font-weight: 700; color: #fff; margin-bottom: .4rem; line-height: 1.35; }
+    .coverage-card p { font-size: .825rem; color: var(--muted); }
+    .coverage-date { font-size: .75rem; color: var(--muted); margin-top: .75rem; }
+
+    /* KIT */
+    .kit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+    .kit-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+      padding: 1.5rem; text-align: center; transition: border-color .2s;
+    }
+    .kit-card:hover { border-color: var(--orange); }
+    .kit-icon { font-size: 2rem; margin-bottom: .75rem; }
+    .kit-card h4 { font-size: .9rem; font-weight: 700; color: #fff; margin-bottom: .35rem; }
+    .kit-card p { font-size: .8rem; color: var(--muted); margin-bottom: 1rem; }
+    .btn-kit {
+      display: inline-block; background: var(--orange-dim); color: var(--orange);
+      border: 1px solid rgba(249,115,22,.3); border-radius: 8px;
+      padding: .4rem .9rem; font-size: .8rem; font-weight: 700; text-decoration: none;
+      transition: background .2s, color .2s;
+    }
+    .btn-kit:hover { background: var(--orange); color: #fff; }
+
+    /* CONTACT */
+    .contact-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    @media (max-width: 600px) { .contact-box { grid-template-columns: 1fr; } }
+    .contact-left h3 { font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: .5rem; }
+    .contact-left p { color: var(--muted); font-size: .9rem; margin-bottom: 1.25rem; }
+    .contact-row { display: flex; align-items: center; gap: .75rem; margin-bottom: .75rem; }
+    .contact-icon { width: 36px; height: 36px; background: var(--orange-dim); border-radius: 8px; display: grid; place-items: center; font-size: 1rem; flex-shrink: 0; }
+    .contact-row span { font-size: .875rem; color: var(--muted); }
+    .contact-row a { color: var(--orange); text-decoration: none; font-weight: 600; }
+    .contact-row a:hover { text-decoration: underline; }
+    .response-note { background: var(--bg3); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+    .response-note h4 { font-size: .875rem; font-weight: 700; color: #fff; margin-bottom: .4rem; }
+    .response-note p { font-size: .825rem; color: var(--muted); }
+
+    .divider { border: none; border-top: 1px solid var(--border); }
+    footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: center; }
+    footer p { color: var(--muted); font-size: .85rem; }
+    footer a { color: var(--orange); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-icon">🐾</div>
+    <span class="nav-logo-text">PETclub</span>
+  </a>
+  <div class="nav-links">
+    <a href="/about.html">About</a>
+    <a href="/blog.html">Blog</a>
+    <a href="https://app.mypetclub.app" target="_blank" rel="noreferrer" class="btn-nav">Open App</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Press &amp; Media</div>
+  <h1>PETclub in the<br /><span>news</span></h1>
+  <p>Resources, facts, and contacts for journalists and media professionals covering pet care, startups, and India's creator economy.</p>
+  <a href="mailto:press@mypetclub.app" class="btn-pr">Contact Press Team</a>
+</div>
+
+<hr class="divider" />
+
+<!-- STATS -->
+<section>
+  <div class="section-tag">By the numbers</div>
+  <h2 class="section-title">PETclub at a glance</h2>
+  <p class="section-sub">Key metrics for your story — updated monthly.</p>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="num">50K+</div><div class="lbl">Pets served</div></div>
+    <div class="stat-card"><div class="num">1,200+</div><div class="lbl">Verified professionals</div></div>
+    <div class="stat-card"><div class="num">100+</div><div class="lbl">Cities active</div></div>
+    <div class="stat-card"><div class="num">4.9★</div><div class="lbl">Average app rating</div></div>
+    <div class="stat-card"><div class="num">2024</div><div class="lbl">Founded</div></div>
+    <div class="stat-card"><div class="num">HYD</div><div class="lbl">Headquartered</div></div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- BOILERPLATE -->
+<section>
+  <div class="section-tag">About PETclub</div>
+  <h2 class="section-title">Approved boilerplate</h2>
+  <p class="section-sub">Please use this approved description when writing about us.</p>
+  <div class="boiler">
+    <p>
+      <strong>PETclub</strong> is India's fastest-growing verified pet care platform, connecting pet owners with trusted groomers, trainers, veterinarians, walkers, and boarders through a single mobile-first app. Founded in 2024 and headquartered in Hyderabad, PETclub is building the infrastructure for professional pet care in India — combining real-time booking, digital health records, GPS-tracked walks, and verified professional profiles. The platform serves over 50,000 pets across 100+ cities, with a network of more than 1,200 background-checked professionals. PETclub is founded by Sai Kolanupaka and led by CEO Eshwar Kolanupaka.
+    </p>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- COVERAGE -->
+<section>
+  <div class="section-tag">Media Coverage</div>
+  <h2 class="section-title">Recent press</h2>
+  <p class="section-sub">A selection of recent stories about PETclub.</p>
+  <div class="coverage-grid">
+
+    <div class="coverage-card">
+      <div class="pub-name">YourStory</div>
+      <h4>How PETclub is formalising India's ₹20,000 Cr pet care market</h4>
+      <p>A deep dive into how PETclub verifies professionals and builds trust with pet owners across Tier-1 and Tier-2 cities.</p>
+      <div class="coverage-date">May 2025</div>
+    </div>
+
+    <div class="coverage-card">
+      <div class="pub-name">The Hindu BusinessLine</div>
+      <h4>Hyderabad startup PETclub aims to become the 'Urban Company for pets'</h4>
+      <p>Covering the launch of Dog Walking and Pet Boarding, and the company's rapid geographic expansion.</p>
+      <div class="coverage-date">April 2025</div>
+    </div>
+
+    <div class="coverage-card">
+      <div class="pub-name">Inc42</div>
+      <h4>PETclub raises pre-seed funding to scale verified pet professionals across India</h4>
+      <p>Exclusive look at the business model, unit economics, and the founders' vision for a pan-India platform.</p>
+      <div class="coverage-date">March 2025</div>
+    </div>
+
+    <div class="coverage-card">
+      <div class="pub-name">Deccan Chronicle</div>
+      <h4>Hyderabad pet owners turn to PETclub for trust and transparency</h4>
+      <p>How local pet owners in Hyderabad are using PETclub to find verified groomers and vets for the first time.</p>
+      <div class="coverage-date">February 2025</div>
+    </div>
+
+    <div class="coverage-card">
+      <div class="pub-name">Entrackr</div>
+      <h4>PETclub's RBAC-first approach to marketplace trust</h4>
+      <p>Technical deep-dive into how PETclub uses role-based access control and audit trails to protect users and professionals.</p>
+      <div class="coverage-date">January 2025</div>
+    </div>
+
+    <div class="coverage-card">
+      <div class="pub-name">Moneycontrol</div>
+      <h4>India's pet economy is booming — and PETclub wants to lead it</h4>
+      <p>Analysis of the $4B India pet care market and how PETclub is positioned to capture the professional services segment.</p>
+      <div class="coverage-date">December 2024</div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- MEDIA KIT -->
+<section>
+  <div class="section-tag">Media Kit</div>
+  <h2 class="section-title">Assets for your story</h2>
+  <p class="section-sub">Download logos, screenshots, and brand assets. All assets are approved for editorial use with attribution.</p>
+  <div class="kit-grid">
+    <div class="kit-card">
+      <div class="kit-icon">🎨</div>
+      <h4>Logo Pack</h4>
+      <p>SVG + PNG in light and dark variants, all sizes.</p>
+      <a href="mailto:press@mypetclub.app?subject=Media Kit Request: Logos" class="btn-kit">Request →</a>
+    </div>
+    <div class="kit-card">
+      <div class="kit-icon">📱</div>
+      <h4>App Screenshots</h4>
+      <p>High-res iOS and Android screenshots of key flows.</p>
+      <a href="mailto:press@mypetclub.app?subject=Media Kit Request: Screenshots" class="btn-kit">Request →</a>
+    </div>
+    <div class="kit-card">
+      <div class="kit-icon">📸</div>
+      <h4>Founder Photos</h4>
+      <p>Professional headshots of Sai and Eshwar Kolanupaka.</p>
+      <a href="mailto:press@mypetclub.app?subject=Media Kit Request: Founder Photos" class="btn-kit">Request →</a>
+    </div>
+    <div class="kit-card">
+      <div class="kit-icon">📊</div>
+      <h4>Fact Sheet</h4>
+      <p>One-page PDF with all key facts, stats, and milestones.</p>
+      <a href="mailto:press@mypetclub.app?subject=Media Kit Request: Fact Sheet" class="btn-kit">Request →</a>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- CONTACT -->
+<section>
+  <div class="section-tag">Get in touch</div>
+  <h2 class="section-title">Press contact</h2>
+  <div class="contact-box">
+    <div class="contact-left">
+      <h3>Media enquiries</h3>
+      <p>We respond to all media enquiries within 24 hours on business days.</p>
+      <div class="contact-row">
+        <div class="contact-icon">✉️</div>
+        <span><a href="mailto:press@mypetclub.app">press@mypetclub.app</a></span>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon">💬</div>
+        <span><a href="https://wa.me/919347411132?text=Hi%20PETclub%20Press%20Team" target="_blank" rel="noreferrer">WhatsApp for urgent press</a></span>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon">📍</div>
+        <span>Sahara, LB Nagar, Hyderabad – 500074</span>
+      </div>
+    </div>
+    <div class="response-note">
+      <h4>⏱ Response SLA</h4>
+      <p>Weekdays (Mon–Fri): within 4 business hours<br />Weekends: within 24 hours<br /><br />For breaking news or embargoed stories, mention "URGENT" in the subject line and we will prioritise.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 PETclub · <a href="/">Home</a> · <a href="/about.html">About</a> · <a href="/careers.html">Careers</a> · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a></p>
+</footer>
+
+</body>
+</html>

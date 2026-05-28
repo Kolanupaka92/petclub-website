@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — PETclub</title>
+  <meta name="description" content="Pet care tips, guides, and stories from the PETclub team. Grooming, training, vet advice, walking and boarding — everything your pet needs." />
+  <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #f97316;
+      --orange-light: #fb923c;
+      --orange-dim: rgba(249,115,22,.12);
+      --bg: #0a0f1a;
+      --bg2: #0f1623;
+      --bg3: #141d2e;
+      --border: rgba(255,255,255,.07);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(10,15,26,.92); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+    .nav-logo { display: flex; align-items: center; gap: .5rem; text-decoration: none; }
+    .nav-logo-icon { width: 32px; height: 32px; background: var(--orange); border-radius: 8px; display: grid; place-items: center; font-size: 18px; }
+    .nav-logo-text { font-weight: 800; font-size: 1.1rem; color: #fff; }
+    .nav-links { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: .9rem; transition: color .2s; }
+    .nav-links a:hover { color: var(--orange); }
+    .btn-nav { background: var(--orange); color: #fff; border: none; border-radius: 8px; padding: .45rem 1rem; font-size: .85rem; font-weight: 700; cursor: pointer; text-decoration: none; transition: background .2s; }
+    .btn-nav:hover { background: var(--orange-light); }
+
+    .hero {
+      padding: 5rem 1.5rem 4rem; text-align: center;
+      background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(249,115,22,.10) 0%, transparent 70%);
+    }
+    .hero-badge { display: inline-block; background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(249,115,22,.3); border-radius: 99px; padding: .3rem .9rem; font-size: .8rem; font-weight: 600; margin-bottom: 1.5rem; }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; color: #fff; line-height: 1.15; margin-bottom: 1rem; }
+    .hero h1 span { color: var(--orange); }
+    .hero p { max-width: 500px; margin: 0 auto; color: var(--muted); font-size: 1.05rem; }
+
+    .cats {
+      display: flex; gap: .6rem; flex-wrap: wrap; justify-content: center;
+      padding: 2rem 1.5rem 0;
+    }
+    .cat { background: var(--bg2); border: 1px solid var(--border); border-radius: 99px; padding: .4rem 1rem; font-size: .8rem; color: var(--muted); cursor: pointer; transition: all .2s; }
+    .cat.active, .cat:hover { background: var(--orange-dim); border-color: rgba(249,115,22,.4); color: var(--orange); }
+
+    /* FEATURED */
+    .featured { max-width: 960px; margin: 3rem auto 0; padding: 0 1.5rem; }
+    .featured-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 20px;
+      overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      transition: border-color .2s;
+    }
+    .featured-card:hover { border-color: var(--orange); }
+    @media (max-width: 640px) { .featured-card { grid-template-columns: 1fr; } }
+    .featured-img {
+      background: linear-gradient(135deg, #1a2744 0%, #0f1623 100%);
+      min-height: 280px; display: grid; place-items: center; font-size: 5rem;
+    }
+    .featured-body { padding: 2rem; display: flex; flex-direction: column; justify-content: center; }
+    .post-tag { display: inline-block; background: var(--orange-dim); color: var(--orange); border-radius: 6px; padding: .2rem .6rem; font-size: .75rem; font-weight: 700; margin-bottom: 1rem; }
+    .featured-body h2 { font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: .75rem; line-height: 1.3; }
+    .featured-body p { color: var(--muted); font-size: .9rem; margin-bottom: 1.25rem; }
+    .post-meta { display: flex; gap: 1rem; font-size: .8rem; color: var(--muted); flex-wrap: wrap; }
+    .read-link { color: var(--orange); font-weight: 700; font-size: .9rem; text-decoration: none; }
+    .read-link:hover { text-decoration: underline; }
+
+    /* GRID */
+    .posts-section { max-width: 960px; margin: 3rem auto; padding: 0 1.5rem 4rem; }
+    .posts-section h3 { font-size: 1.1rem; font-weight: 700; color: var(--muted); margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: .07em; font-size: .8rem; }
+    .posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+    .post-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 16px;
+      overflow: hidden; display: flex; flex-direction: column;
+      transition: border-color .2s, transform .2s;
+    }
+    .post-card:hover { border-color: var(--orange); transform: translateY(-3px); }
+    .post-thumb { height: 140px; display: grid; place-items: center; font-size: 3.5rem; }
+    .post-thumb.orange { background: linear-gradient(135deg, #431407 0%, #1c0a00 100%); }
+    .post-thumb.purple { background: linear-gradient(135deg, #2e1065 0%, #0f0620 100%); }
+    .post-thumb.green  { background: linear-gradient(135deg, #052e16 0%, #021407 100%); }
+    .post-thumb.rose   { background: linear-gradient(135deg, #4c0519 0%, #1f0008 100%); }
+    .post-thumb.blue   { background: linear-gradient(135deg, #0c1a4a 0%, #060d24 100%); }
+    .post-thumb.amber  { background: linear-gradient(135deg, #451a03 0%, #1c0a00 100%); }
+    .post-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+    .post-body h4 { font-size: .95rem; font-weight: 700; color: #fff; margin-bottom: .5rem; line-height: 1.35; }
+    .post-body p { font-size: .825rem; color: var(--muted); margin-bottom: 1rem; flex: 1; }
+    .post-footer { display: flex; justify-content: space-between; align-items: center; font-size: .75rem; color: var(--muted); }
+
+    /* NEWSLETTER */
+    .newsletter {
+      max-width: 960px; margin: 0 auto 4rem; padding: 0 1.5rem;
+    }
+    .nl-box {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 20px;
+      padding: 2.5rem; text-align: center;
+    }
+    .nl-box h2 { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: .5rem; }
+    .nl-box p { color: var(--muted); margin-bottom: 1.5rem; }
+    .nl-form { display: flex; gap: .75rem; max-width: 420px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+    .nl-input {
+      flex: 1; min-width: 220px;
+      background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+      padding: .65rem 1rem; color: #fff; font-size: .9rem; font-family: inherit;
+      outline: none; transition: border-color .2s;
+    }
+    .nl-input::placeholder { color: var(--muted); }
+    .nl-input:focus { border-color: var(--orange); }
+    .btn-nl {
+      background: var(--orange); color: #fff; border: none; border-radius: 10px;
+      padding: .65rem 1.25rem; font-weight: 700; font-size: .9rem; cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-nl:hover { background: var(--orange-light); }
+
+    footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: center; }
+    footer p { color: var(--muted); font-size: .85rem; }
+    footer a { color: var(--orange); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    .divider { border: none; border-top: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-icon">🐾</div>
+    <span class="nav-logo-text">PETclub</span>
+  </a>
+  <div class="nav-links">
+    <a href="/about.html">About</a>
+    <a href="/careers.html">Careers</a>
+    <a href="https://app.mypetclub.app" target="_blank" rel="noreferrer" class="btn-nav">Open App</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">PETclub Blog</div>
+  <h1>Tips, guides &amp; stories for<br /><span>happy, healthy pets</span></h1>
+  <p>Expert advice from verified groomers, trainers, vets, walkers, and boarders — written in plain language.</p>
+</div>
+
+<div class="cats">
+  <div class="cat active">All</div>
+  <div class="cat">Grooming</div>
+  <div class="cat">Training</div>
+  <div class="cat">Vet &amp; Health</div>
+  <div class="cat">Dog Walking</div>
+  <div class="cat">Boarding</div>
+  <div class="cat">Nutrition</div>
+  <div class="cat">PETclub News</div>
+</div>
+
+<!-- FEATURED -->
+<div class="featured">
+  <div class="featured-card">
+    <div class="featured-img">🐶</div>
+    <div class="featured-body">
+      <div class="post-tag">⭐ Featured</div>
+      <h2>How to spot early signs of stress in your dog — and what to do</h2>
+      <p>Dogs communicate stress in subtle ways. Our in-house vet breaks down the 9 signals most owners miss, and how to address each one safely at home.</p>
+      <div class="post-meta">
+        <span>Dr. Arun Reddy, Vet</span>
+        <span>May 22, 2025</span>
+        <span>6 min read</span>
+      </div>
+      <br />
+      <a href="#" class="read-link">Read article →</a>
+    </div>
+  </div>
+</div>
+
+<!-- POSTS -->
+<div class="posts-section">
+  <h3>Latest articles</h3>
+  <div class="posts-grid">
+
+    <div class="post-card">
+      <div class="post-thumb orange">✂️</div>
+      <div class="post-body">
+        <div class="post-tag">Grooming</div>
+        <h4>The right grooming frequency for every dog breed</h4>
+        <p>Golden Retrievers need weekly brushing. Beagles? Monthly. Here's the full breed-by-breed breakdown.</p>
+        <div class="post-footer"><span>May 18, 2025</span><span>4 min</span></div>
+      </div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-thumb purple">🐕‍🦺</div>
+      <div class="post-body">
+        <div class="post-tag">Training</div>
+        <h4>5 commands every dog should know by 6 months</h4>
+        <p>Sit, stay, come, leave it, and the one most owners skip — trainer Arjun explains each with step-by-step cues.</p>
+        <div class="post-footer"><span>May 12, 2025</span><span>5 min</span></div>
+      </div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-thumb rose">💉</div>
+      <div class="post-body">
+        <div class="post-tag">Vet &amp; Health</div>
+        <h4>India's mandatory vaccination schedule for dogs and cats</h4>
+        <p>Core vs. non-core vaccines, when to give boosters, and how to store digital records in your PETclub app.</p>
+        <div class="post-footer"><span>May 8, 2025</span><span>7 min</span></div>
+      </div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-thumb green">🦮</div>
+      <div class="post-body">
+        <div class="post-tag">Dog Walking</div>
+        <h4>How much exercise does your dog actually need?</h4>
+        <p>Small breeds vs. large breeds, age factors, and the dangers of over-exercising puppies under 12 months.</p>
+        <div class="post-footer"><span>May 5, 2025</span><span>3 min</span></div>
+      </div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-thumb amber">🏠</div>
+      <div class="post-body">
+        <div class="post-tag">Boarding</div>
+        <h4>What to pack when your pet goes to a boarder</h4>
+        <p>The 10-item checklist that makes your pet's home-stay stress-free — for both of you.</p>
+        <div class="post-footer"><span>Apr 30, 2025</span><span>3 min</span></div>
+      </div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-thumb blue">🐱</div>
+      <div class="post-body">
+        <div class="post-tag">Vet &amp; Health</div>
+        <h4>Indoor cats still need vet check-ups — here's why</h4>
+        <p>Cats hide illness masterfully. Our vet explains the annual exam findings that save lives — even for house cats.</p>
+        <div class="post-footer"><span>Apr 25, 2025</span><span>5 min</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- NEWSLETTER -->
+<div class="newsletter">
+  <div class="nl-box">
+    <h2>Get pet care tips in your inbox</h2>
+    <p>One email a week. No fluff. Written by real vets, groomers, and trainers.</p>
+    <div class="nl-form">
+      <input class="nl-input" type="email" placeholder="you@example.com" />
+      <button class="btn-nl">Subscribe</button>
+    </div>
+    <p style="margin-top:1rem; font-size:.8rem; color:var(--muted);">No spam ever. Unsubscribe anytime.</p>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 PETclub · <a href="/">Home</a> · <a href="/about.html">About</a> · <a href="/careers.html">Careers</a> · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a></p>
+</footer>
+
+</body>
+</html>
