@@ -24,7 +24,9 @@ const SERVICES = [
   { icon: '✂️', title: 'Grooming', price: 'from ₹499', desc: 'Bath, haircut, nail trim & styling at your doorstep by certified groomers.', img: IMG.grooming, tag: 'Most Popular', color: 'orange', bookable: true },
   { icon: '🐕‍🦺', title: 'Training', price: 'from ₹699', desc: 'Obedience, agility & behaviour training by certified professional trainers.', img: IMG.training, tag: 'High Demand', color: 'purple', bookable: true },
   { icon: '🏥', title: 'Vet Care', price: 'from ₹399', desc: 'In-home vet visits, vaccinations & digital health records for your pet.', img: IMG.vet, tag: 'Trusted', color: 'rose', bookable: true },
-  { icon: '🍖', title: 'Pet Food', price: 'Free Delivery', desc: 'Premium nutrition, treats & supplements delivered to your door daily.', img: IMG.food, tag: 'Coming Soon', color: 'green', bookable: false },
+  { icon: '🦮', title: 'Dog Walking', price: 'from ₹299', desc: 'GPS-tracked solo & group walks by verified walkers. Live updates sent to you.', img: IMG.training, tag: 'New', color: 'green', bookable: true },
+  { icon: '🏠', title: 'Pet Boarding', price: 'from ₹499/night', desc: 'Cage-free home stays with verified boarders. Daily photos & updates guaranteed.', img: IMG.grooming, tag: 'New', color: 'amber', bookable: true },
+  { icon: '🍖', title: 'Pet Food', price: 'Free Delivery', desc: 'Premium nutrition, treats & supplements delivered to your door daily.', img: IMG.food, tag: 'Coming Soon', color: 'teal', bookable: false },
 ];
 
 const STEPS = [
@@ -479,7 +481,7 @@ function Hero() {
             </h1>
 
             <p className="text-lg text-white/70 mb-10 leading-relaxed max-w-lg">
-              Verified groomers, trainers &amp; vets — GPS-tracked, background-checked, loved by 50,000+ pet parents.
+              Verified groomers, trainers, vets, walkers &amp; boarders — GPS-tracked, background-checked, loved by 50,000+ pet parents.
             </p>
 
             {/* ── TWO CLEAR JOURNEYS ── */}
@@ -490,7 +492,7 @@ function Hero() {
                 className="group relative bg-orange-500 hover:bg-orange-400 rounded-2xl p-5 transition-all shadow-brand hover:shadow-xl active:scale-[0.98] text-left">
                 <div className="text-2xl mb-2">🐾</div>
                 <div className="font-extrabold text-white text-base mb-0.5">I&apos;m a Pet Owner</div>
-                <div className="text-orange-100/80 text-xs leading-snug mb-3">Book grooming, training &amp; vet care</div>
+                <div className="text-orange-100/80 text-xs leading-snug mb-3">Book grooming, training, vet, walking &amp; boarding</div>
                 <div className="flex items-center gap-1 text-white text-xs font-bold">
                   Book a Service <span className="group-hover:translate-x-1 transition-transform inline-block">→</span>
                 </div>
@@ -501,7 +503,7 @@ function Hero() {
                 className="group relative bg-white/8 hover:bg-white/12 border border-white/15 rounded-2xl p-5 transition-all hover:shadow-xl active:scale-[0.98] text-left">
                 <div className="text-2xl mb-2">💼</div>
                 <div className="font-extrabold text-white text-base mb-0.5">I&apos;m a Professional</div>
-                <div className="text-white/50 text-xs leading-snug mb-3">Join as groomer, trainer or vet</div>
+                <div className="text-white/50 text-xs leading-snug mb-3">Join as groomer, trainer, vet, walker or boarder</div>
                 <div className="flex items-center gap-1 text-orange-400 text-xs font-bold">
                   Join as Pro <span className="group-hover:translate-x-1 transition-transform inline-block">→</span>
                 </div>
@@ -748,7 +750,7 @@ const JOIN_ROLES = [
     icon: '🐾',
     title: 'Pet Owner',
     subtitle: 'I want to book services',
-    perks: ['Book grooming, training & vet care', 'Live GPS tracking of your pro', 'Digital health records for your pet'],
+    perks: ['Book grooming, training, vet, walking & boarding', 'Live GPS tracking of your pro', 'Digital health records for your pet'],
     color: '#f97316',
     bg: 'bg-orange-50',
     border: 'border-orange-200',
@@ -795,12 +797,38 @@ const JOIN_ROLES = [
     tag: 'Trusted',
     tagColor: 'bg-emerald-100 text-emerald-700',
   },
+  {
+    id: 'walker',
+    icon: '🦮',
+    title: 'Dog Walker',
+    subtitle: 'I walk dogs',
+    perks: ['GPS-tracked walks sent to owners', 'Flexible daily schedule', 'Verified walker badge'],
+    color: '#16a34a',
+    bg: 'bg-green-50',
+    border: 'border-green-200',
+    ring: 'ring-green-400',
+    tag: 'New',
+    tagColor: 'bg-green-100 text-green-700',
+  },
+  {
+    id: 'boarder',
+    icon: '🏠',
+    title: 'Pet Boarder',
+    subtitle: 'I host pets at home',
+    perks: ['Cage-free home environment', 'Daily photo & video updates', 'Verified boarder badge'],
+    color: '#d97706',
+    bg: 'bg-amber-50',
+    border: 'border-amber-200',
+    ring: 'ring-amber-400',
+    tag: 'New',
+    tagColor: 'bg-amber-100 text-amber-700',
+  },
 ];
 
 const LEFT_PANELS = {
   owner: {
     headline: 'Your pet deserves the best.',
-    sub: 'Join 50,000+ pet parents who book verified groomers, trainers & vets — with live GPS tracking.',
+    sub: 'Join 50,000+ pet parents who book verified groomers, trainers, vets, walkers & boarders — with live GPS tracking.',
     img: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=900&auto=format&fit=crop&q=85',
     stats: [{ v: '50K+', l: 'Happy Pets' }, { v: '4.9★', l: 'Rating' }, { v: '100+', l: 'Cities' }],
   },
@@ -821,6 +849,18 @@ const LEFT_PANELS = {
     sub: 'Offer in-clinic and home visit care to verified pet owners. Digital records, seamless booking.',
     img: 'https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?w=900&auto=format&fit=crop&q=85',
     stats: [{ v: 'Verified', l: 'Badge' }, { v: 'Digital', l: 'Rx Records' }, { v: '24/7', l: 'Bookings' }],
+  },
+  walker: {
+    headline: 'Earn doing what you love.',
+    sub: 'Join our GPS-verified walker network. Flexible hours, instant bookings, and a trusted badge that builds your client base.',
+    img: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=900&auto=format&fit=crop&q=85',
+    stats: [{ v: '₹299+', l: 'Per Walk' }, { v: 'GPS', l: 'Tracked' }, { v: '24h', l: 'Approval' }],
+  },
+  boarder: {
+    headline: 'Turn your home into a pet haven.',
+    sub: 'Host pets in your cage-free home and earn. Daily photos, GPS check-ins, and a verified boarder badge builds instant trust.',
+    img: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=900&auto=format&fit=crop&q=85',
+    stats: [{ v: '₹499+', l: 'Per Night' }, { v: 'Home', l: 'Boarding' }, { v: '24h', l: 'Approval' }],
   },
 };
 
@@ -898,7 +938,7 @@ function JoinSection() {
               </div>
               <div className="flex items-center gap-3 bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3">
                 <span className="text-2xl">💼</span>
-                <div><div className="font-extrabold text-gray-900 text-sm">For Service Providers</div><div className="text-xs text-gray-500">Earn by offering grooming, training or vet care</div></div>
+                <div><div className="font-extrabold text-gray-900 text-sm">For Service Providers</div><div className="text-xs text-gray-500">Earn by offering grooming, training, vet care, walking or boarding</div></div>
               </div>
             </div>
 
@@ -1059,6 +1099,18 @@ function JoinSection() {
                 <div className="flex items-start gap-3 bg-emerald-50 border border-emerald-100 rounded-2xl px-4 py-3 text-xs text-emerald-800">
                   <span className="text-base shrink-0">🏥</span>
                   <span>Upload your veterinary license & registration in the app. Verified vets get a <strong>Verified Vet</strong> badge within 24h.</span>
+                </div>
+              )}
+              {role === 'walker' && (
+                <div className="flex items-start gap-3 bg-green-50 border border-green-100 rounded-2xl px-4 py-3 text-xs text-green-800">
+                  <span className="text-base shrink-0">🦮</span>
+                  <span>Upload your ID & a short bio in the app. GPS tracking is auto-enabled for every walk. You'll get a <strong>Verified Walker</strong> badge within 24h.</span>
+                </div>
+              )}
+              {role === 'boarder' && (
+                <div className="flex items-start gap-3 bg-amber-50 border border-amber-100 rounded-2xl px-4 py-3 text-xs text-amber-800">
+                  <span className="text-base shrink-0">🏠</span>
+                  <span>Upload your ID & home photos in the app. Our team reviews your space to ensure a safe, cage-free environment. <strong>Verified Boarder</strong> badge in 24–48h.</span>
                 </div>
               )}
 
