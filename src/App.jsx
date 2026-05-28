@@ -88,7 +88,7 @@ const SERVICES = [
 ];
 
 const STEPS = [
-  { n: '01', icon: '📱', title: 'Download & Sign Up', desc: 'Create your free account in under 60 seconds. Verify your phone with an OTP — no passwords needed.' },
+  { n: '01', icon: '📱', title: 'Open & Sign Up', desc: 'Open mypetclub.app in any browser — no download, no App Store. Create your free account in under 60 seconds with OTP. No passwords needed.' },
   { n: '02', icon: '🐾', title: 'Add Your Pet', desc: 'Build a complete digital profile for your pet — breed, age, health history, vet records — all in one place.' },
   { n: '03', icon: '📅', title: 'Book & Relax', desc: 'Browse verified professionals near you, pick a time, and track your pet\'s appointment live.' },
 ];
@@ -306,7 +306,7 @@ function Navbar() {
     { href: '#services', label: 'Services' },
     { href: '#pets', label: 'Cats & Dogs' },
     { href: '#how', label: 'How It Works' },
-    { href: '#getapp', label: 'Get App' },
+    { href: '#getapp', label: 'Use App' },
     { href: '#join', label: 'Join' },
     { href: '#contact', label: 'Contact' },
   ];
@@ -875,56 +875,116 @@ function Reviews() {
   );
 }
 
-/* ══════════ GET APP ══════════ */
+/* ══════════ USE THE APP ══════════ */
 function GetApp() {
+  const platforms = [
+    {
+      icon: '🍎',
+      title: 'iPhone / iPad',
+      step: 'Open in Safari',
+      desc: 'Tap the Share icon ⎙ → "Add to Home Screen" → Done. Sits on your home screen exactly like a native app — no App Store, no download.',
+      cta: 'Open in Safari →',
+      href: APP_URL,
+      accent: 'rgba(249,115,22,0.18)',
+    },
+    {
+      icon: '🤖',
+      title: 'Android Phone',
+      step: 'Open in Chrome',
+      desc: 'Tap the ⋮ menu → "Add to Home Screen" (or tap the Install banner that appears automatically). One tap — it\'s on your phone.',
+      cta: 'Open in Chrome →',
+      href: APP_URL,
+      accent: 'rgba(52,211,153,0.14)',
+    },
+    {
+      icon: '💻',
+      title: 'Desktop / Laptop',
+      step: 'Open in any browser',
+      desc: 'Works in Chrome, Edge, Safari, Firefox on Windows, Mac & Linux. In Chrome or Edge, click the install icon ⊕ in the address bar to pin it.',
+      cta: 'Open App →',
+      href: APP_URL,
+      accent: 'rgba(139,92,246,0.14)',
+    },
+  ];
+
   return (
     <section id="getapp" className="section-pad overflow-hidden relative" style={{ background: WARM_DARK3 }}>
       <div className="absolute pointer-events-none" style={{ top: -80, right: -80, width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(249,115,22,0.12) 0%, transparent 70%)' }} />
       <div className="absolute pointer-events-none" style={{ bottom: -80, left: -80, width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(245,158,11,0.10) 0%, transparent 70%)' }} />
 
       <div className="container relative z-10">
-        <div className="grid lg:grid-cols-2 gap-14 items-center">
-          <div>
-            <span className="text-sm font-bold tracking-widest uppercase" style={{ color: AMBER }}>Get the App</span>
-            <h2 className="text-4xl md:text-5xl font-black text-white mt-3 mb-6 leading-tight">
-              Your Pet Care Hub.<br />
-              <span className="text-gradient">Always in Your Pocket.</span>
-            </h2>
-            <p className="text-lg mb-10 leading-relaxed" style={{ color: 'rgba(255,255,255,0.60)' }}>
-              Available as a progressive web app — works on any device, any browser. Native iOS &amp; Android apps coming soon.
-            </p>
-            <div className="space-y-4">
-              {[
-                { icon: '📱', title: 'Web App', desc: 'Open in any browser — iPhone, Android, or desktop', cta: 'Open Now', href: APP_URL, primary: true },
-                { icon: '🍎', title: 'iOS App', desc: 'Native iPhone app — coming to App Store soon', cta: 'Coming Soon', href: null },
-                { icon: '▶️', title: 'Android App', desc: 'Native Android app — coming to Play Store soon', cta: 'Coming Soon', href: null },
-              ].map(item => (
-                <div key={item.title} className="flex items-center gap-4 rounded-2xl p-4 transition-colors"
-                  style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}>
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shrink-0" style={{ background: 'rgba(255,255,255,0.10)' }}>{item.icon}</div>
-                  <div className="flex-1">
-                    <div className="font-bold text-white text-sm">{item.title}</div>
-                    <div className="text-xs" style={{ color: 'rgba(255,255,255,0.45)' }}>{item.desc}</div>
-                  </div>
-                  {item.href
-                    ? <a href={item.href} target="_blank" rel="noreferrer" className="text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors shrink-0" style={{ background: ORANGE }}>{item.cta} →</a>
-                    : <span className="text-xs font-semibold px-4 py-2 rounded-xl shrink-0" style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.35)' }}>{item.cta}</span>
-                  }
+
+        {/* Heading */}
+        <div className="text-center mb-12">
+          <span className="text-sm font-bold tracking-widest uppercase" style={{ color: AMBER }}>Use Anywhere</span>
+          <h2 className="text-4xl md:text-5xl font-black text-white mt-3 mb-4 leading-tight">
+            No App Store Needed.<br />
+            <span className="text-gradient">Works Everywhere, Instantly.</span>
+          </h2>
+          <p className="text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: 'rgba(255,255,255,0.60)' }}>
+            PETclub is a web app — open it in your browser and add it to your home screen in two taps.
+            No download, no waiting, no App Store approval. Same experience on every device.
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-10 items-start">
+
+          {/* Platform cards */}
+          <div className="space-y-4">
+            {platforms.map(p => (
+              <div key={p.title} className="rounded-2xl p-5 flex gap-4 items-start"
+                style={{ background: p.accent, border: '1px solid rgba(255,255,255,0.10)' }}>
+                {/* Icon */}
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shrink-0"
+                  style={{ background: 'rgba(255,255,255,0.10)' }}>
+                  {p.icon}
                 </div>
+                {/* Text */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
+                    <span className="font-extrabold text-white text-base">{p.title}</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                      style={{ background: 'rgba(249,115,22,0.25)', color: '#fed7aa' }}>
+                      {p.step}
+                    </span>
+                  </div>
+                  <p className="text-sm leading-relaxed mb-3" style={{ color: 'rgba(255,255,255,0.60)' }}>{p.desc}</p>
+                  <a href={p.href} target="_blank" rel="noreferrer"
+                    className="inline-flex items-center text-xs font-bold rounded-xl px-4 py-2 transition-all hover:opacity-90"
+                    style={{ background: ORANGE, color: '#fff' }}>
+                    {p.cta}
+                  </a>
+                </div>
+              </div>
+            ))}
+
+            {/* No-download assurance strip */}
+            <div className="flex flex-wrap gap-4 pt-2">
+              {['✅ No App Store', '✅ No download', '✅ No waiting', '✅ Free forever'].map(t => (
+                <span key={t} className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.50)' }}>{t}</span>
               ))}
             </div>
           </div>
+
+          {/* QR code + open button */}
           <div className="flex flex-col items-center">
-            <div className="bg-white p-5 rounded-3xl shadow-2xl mb-5 inline-block">
-              <img src={QR_URL} alt="QR Code" width={200} height={200} className="rounded-xl block" />
+            <div className="rounded-3xl p-6 mb-6 text-center"
+              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}>
+              <div className="bg-white p-4 rounded-2xl inline-block mb-4">
+                <img src={QR_URL} alt="Scan to open PETclub" width={180} height={180} className="rounded-xl block" />
+              </div>
+              <p className="text-white font-bold text-sm mb-1">📷 Point your camera here</p>
+              <p className="text-xs" style={{ color: 'rgba(255,255,255,0.45)' }}>iPhone & Android cameras open it instantly — no QR app needed</p>
             </div>
-            <p className="text-sm text-center mb-2" style={{ color: 'rgba(255,255,255,0.55)' }}>📷 Scan with your phone camera</p>
-            <p className="text-xs text-center" style={{ color: 'rgba(255,255,255,0.35)' }}>Opens instantly — no download required</p>
+
             <a href={APP_URL} target="_blank" rel="noreferrer"
-              className="mt-6 inline-flex items-center gap-2 text-white font-bold px-8 py-3.5 rounded-2xl transition-all shadow-brand hover:shadow-lg"
+              className="inline-flex items-center gap-2 text-white font-black px-8 py-4 rounded-2xl transition-all shadow-brand hover:shadow-lg text-base"
               style={{ background: ORANGE }}>
-              🔗 Open PETclub App
+              🚀 Open PETclub Now
             </a>
+            <p className="text-xs mt-3 text-center" style={{ color: 'rgba(255,255,255,0.35)' }}>
+              Works on any device · any browser · any OS
+            </p>
           </div>
         </div>
       </div>
