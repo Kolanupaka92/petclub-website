@@ -615,8 +615,8 @@ function PetsWeServe() {
             {/* Header — real dog photo */}
             <div className="relative overflow-hidden" style={{ height: 220, background: `linear-gradient(135deg, #7c2d12, ${ORANGE})` }}>
               <img src={IMG.dogMain} alt="Golden retriever"
-                className="absolute inset-0 w-full h-full object-cover object-center"
-                style={{ opacity: 0.75 }}
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ opacity: 0.85, objectPosition: '50% 25%' }}
                 onError={e => e.target.style.display = 'none'} />
               {/* Gradient overlay */}
               <div className="absolute inset-0"
@@ -653,8 +653,8 @@ function PetsWeServe() {
             {/* Header — real cat photo */}
             <div className="relative overflow-hidden" style={{ height: 220, background: 'linear-gradient(135deg, #4c1d95, #8b5cf6)' }}>
               <img src={IMG.catMain} alt="Orange tabby cat"
-                className="absolute inset-0 w-full h-full object-cover object-center"
-                style={{ opacity: 0.75 }}
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ opacity: 0.85, objectPosition: '50% 30%' }}
                 onError={e => e.target.style.display = 'none'} />
               {/* Gradient overlay */}
               <div className="absolute inset-0"
