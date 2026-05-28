@@ -149,6 +149,75 @@
     footer a:hover { text-decoration: underline; }
 
     .divider { border: none; border-top: 1px solid var(--border); }
+
+    /* ── APPLICATION MODAL ── */
+    .modal-backdrop {
+      display: none;
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,.75); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center; padding: 1rem;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--bg2); border: 1px solid rgba(249,115,22,.25);
+      border-radius: 20px; width: 100%; max-width: 520px;
+      max-height: 90vh; overflow-y: auto;
+      padding: 2rem; position: relative;
+      animation: slideUp .25s ease;
+    }
+    @keyframes slideUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: var(--bg3); border: 1px solid var(--border); color: var(--muted);
+      width: 32px; height: 32px; border-radius: 8px; cursor: pointer;
+      font-size: 1.1rem; display: grid; place-items: center; transition: color .2s;
+    }
+    .modal-close:hover { color: #fff; }
+    .modal-role-badge {
+      display: inline-block; background: var(--orange-dim); color: var(--orange);
+      border: 1px solid rgba(249,115,22,.3); border-radius: 99px;
+      padding: .25rem .85rem; font-size: .78rem; font-weight: 700; margin-bottom: 1rem;
+    }
+    .modal h2 { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: .35rem; }
+    .modal .modal-sub { font-size: .875rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .mfield { display: flex; flex-direction: column; gap: .35rem; margin-bottom: 1rem; }
+    .mfield label { font-size: .83rem; font-weight: 600; color: var(--text); }
+    .mfield input, .mfield textarea, .mfield select {
+      background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+      padding: .65rem 1rem; color: #fff; font-size: .9rem; font-family: inherit;
+      outline: none; transition: border-color .2s; width: 100%;
+    }
+    .mfield input::placeholder, .mfield textarea::placeholder { color: var(--muted); }
+    .mfield input:focus, .mfield textarea:focus, .mfield select:focus { border-color: var(--orange); }
+    .mfield select option { background: var(--bg3); }
+    .mrow { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 480px) { .mrow { grid-template-columns: 1fr; } }
+    .mfield textarea { resize: vertical; min-height: 90px; }
+    /* File upload */
+    .file-upload-label {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: .5rem; border: 2px dashed var(--border); border-radius: 12px;
+      padding: 1.5rem 1rem; cursor: pointer; transition: border-color .2s, background .2s;
+      text-align: center;
+    }
+    .file-upload-label:hover { border-color: var(--orange); background: var(--orange-dim); }
+    .file-upload-label .upload-icon { font-size: 1.75rem; }
+    .file-upload-label .upload-title { font-size: .9rem; font-weight: 600; color: #fff; }
+    .file-upload-label .upload-sub { font-size: .78rem; color: var(--muted); }
+    .file-upload-label .upload-name { font-size: .8rem; color: var(--orange); font-weight: 600; margin-top: .25rem; }
+    #resume-input { display: none; }
+    .btn-submit-modal {
+      width: 100%; background: var(--orange); color: #fff; border: none;
+      border-radius: 12px; padding: .85rem 1.5rem; font-weight: 700; font-size: 1rem;
+      cursor: pointer; transition: background .2s; margin-top: .5rem;
+      display: flex; align-items: center; justify-content: center; gap: .5rem;
+    }
+    .btn-submit-modal:hover { background: var(--orange-light); }
+    .btn-submit-modal:disabled { opacity: .6; cursor: not-allowed; }
+    .success-state { text-align: center; padding: 2rem 1rem; }
+    .success-state .success-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .success-state h3 { font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: .5rem; }
+    .success-state p { color: var(--muted); font-size: .9rem; }
   </style>
 </head>
 <body>
@@ -232,7 +301,7 @@
           <span class="pill pill-benefit">🏥 Group Health Insurance</span>
         </div>
       </div>
-      <a href="mailto:careers@mypetclub.app?subject=Application: Professional Pet Groomer" class="btn-apply">Apply →</a>
+      <button onclick="openApply('Professional Pet Groomer')" class="btn-apply">Apply →</button>
     </div>
 
     <div class="role-card">
@@ -246,7 +315,7 @@
           <span class="pill pill-benefit">🏥 Group Health Insurance</span>
         </div>
       </div>
-      <a href="mailto:careers@mypetclub.app?subject=Application: Professional Pet Trainer" class="btn-apply">Apply →</a>
+      <button onclick="openApply('Professional Pet Trainer')" class="btn-apply">Apply →</button>
     </div>
 
     <div class="role-card">
@@ -260,7 +329,7 @@
           <span class="pill pill-benefit">🏥 Group Health Insurance</span>
         </div>
       </div>
-      <a href="mailto:careers@mypetclub.app?subject=Application: Professional Dog Walker" class="btn-apply">Apply →</a>
+      <button onclick="openApply('Professional Dog Walker')" class="btn-apply">Apply →</button>
     </div>
 
     <div class="roles-divider">💻 Corporate &amp; Remote Roles</div>
@@ -271,7 +340,7 @@
         <div class="role-title">Full-Stack Engineer (React + Node.js)</div>
         <div class="role-meta"><span>Hyderabad / Remote</span><span>Full-time</span></div>
       </div>
-      <a href="mailto:careers@mypetclub.app?subject=Application: Full-Stack Engineer" class="btn-apply">Apply →</a>
+      <button onclick="openApply('Full-Stack Engineer (React + Node.js)')" class="btn-apply">Apply →</button>
     </div>
 
     <div class="role-card">
@@ -280,7 +349,7 @@
         <div class="role-title">Mobile Engineer (React Native)</div>
         <div class="role-meta"><span>Hyderabad / Remote</span><span>Full-time</span></div>
       </div>
-      <a href="mailto:careers@mypetclub.app?subject=Application: Mobile Engineer" class="btn-apply">Apply →</a>
+      <button onclick="openApply('Mobile Engineer (React Native)')" class="btn-apply">Apply →</button>
     </div>
 
     <div class="role-card">
@@ -289,7 +358,7 @@
         <div class="role-title">Growth & Performance Marketing Manager</div>
         <div class="role-meta"><span>Hyderabad</span><span>Full-time</span></div>
       </div>
-      <a href="mailto:careers@mypetclub.app?subject=Application: Growth Marketing" class="btn-apply">Apply →</a>
+      <button onclick="openApply('Growth & Performance Marketing Manager')" class="btn-apply">Apply →</button>
     </div>
 
     <div class="role-card">
@@ -298,7 +367,7 @@
         <div class="role-title">City Operations Lead — Hyderabad</div>
         <div class="role-meta"><span>Hyderabad</span><span>Full-time</span></div>
       </div>
-      <a href="mailto:careers@mypetclub.app?subject=Application: City Operations Lead" class="btn-apply">Apply →</a>
+      <button onclick="openApply('City Operations Lead — Hyderabad')" class="btn-apply">Apply →</button>
     </div>
 
     <div class="role-card">
@@ -307,7 +376,7 @@
         <div class="role-title">Product Designer (UI/UX)</div>
         <div class="role-meta"><span>Remote</span><span>Full-time</span></div>
       </div>
-      <a href="mailto:careers@mypetclub.app?subject=Application: Product Designer" class="btn-apply">Apply →</a>
+      <button onclick="openApply('Product Designer (UI/UX)')" class="btn-apply">Apply →</button>
     </div>
 
     <div class="role-card">
@@ -316,7 +385,7 @@
         <div class="role-title">Customer Success Specialist</div>
         <div class="role-meta"><span>Hyderabad</span><span>Full-time</span></div>
       </div>
-      <a href="mailto:careers@mypetclub.app?subject=Application: Customer Success" class="btn-apply">Apply →</a>
+      <button onclick="openApply('Customer Success Specialist')" class="btn-apply">Apply →</button>
     </div>
 
   </div>
@@ -385,6 +454,158 @@
 <footer>
   <p>© 2025 PETclub · <a href="/">Home</a> · <a href="/about.html">About</a> · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a></p>
 </footer>
+
+<!-- ── APPLICATION MODAL ── -->
+<div class="modal-backdrop" id="applyBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal" id="applyModal">
+    <button class="modal-close" onclick="closeApply()" aria-label="Close">✕</button>
+
+    <!-- Form state -->
+    <div id="formState">
+      <div class="modal-role-badge" id="modalRoleBadge">Applying for: …</div>
+      <h2 id="modalTitle">Apply to PETclub</h2>
+      <p class="modal-sub">Fill in your details and upload your resume. We'll get back to you within 2 business days.</p>
+
+      <form
+        id="applyForm"
+        action="https://formsubmit.co/hr@mypetclub.app"
+        method="POST"
+        enctype="multipart/form-data"
+        onsubmit="handleSubmit(event)"
+      >
+        <!-- Hidden fields -->
+        <input type="hidden" name="_subject" id="emailSubject" value="New Job Application — PETclub" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="position" id="hiddenPosition" value="" />
+        <input type="hidden" name="_next" value="https://www.mypetclub.app/careers.html?applied=1" />
+
+        <div class="mrow">
+          <div class="mfield">
+            <label for="appName">Full name *</label>
+            <input type="text" id="appName" name="name" placeholder="Ravi Kumar" required />
+          </div>
+          <div class="mfield">
+            <label for="appEmail">Email address *</label>
+            <input type="email" id="appEmail" name="email" placeholder="ravi@email.com" required />
+          </div>
+        </div>
+
+        <div class="mrow">
+          <div class="mfield">
+            <label for="appPhone">Phone number *</label>
+            <input type="tel" id="appPhone" name="phone" placeholder="+91 98765 43210" required />
+          </div>
+          <div class="mfield">
+            <label for="appCity">Current city *</label>
+            <input type="text" id="appCity" name="city" placeholder="Hyderabad" required />
+          </div>
+        </div>
+
+        <div class="mfield">
+          <label for="appExp">Years of experience</label>
+          <select id="appExp" name="experience">
+            <option value="" disabled selected>Select experience level</option>
+            <option value="0-1">Fresher / Less than 1 year</option>
+            <option value="1-3">1–3 years</option>
+            <option value="3-5">3–5 years</option>
+            <option value="5+">5+ years</option>
+          </select>
+        </div>
+
+        <div class="mfield">
+          <label for="appNote">Why do you want to join PETclub? (optional)</label>
+          <textarea id="appNote" name="message" placeholder="Tell us a bit about yourself and why you're excited about this role..."></textarea>
+        </div>
+
+        <div class="mfield">
+          <label>Resume / CV *</label>
+          <label class="file-upload-label" for="resume-input" id="fileLabel">
+            <div class="upload-icon">📄</div>
+            <div class="upload-title">Click to upload your resume</div>
+            <div class="upload-sub">PDF, DOC, or DOCX · Max 5 MB</div>
+            <div class="upload-name" id="fileName"></div>
+          </label>
+          <input type="file" id="resume-input" name="resume" accept=".pdf,.doc,.docx" required onchange="showFileName(this)" />
+        </div>
+
+        <button type="submit" class="btn-submit-modal" id="submitBtn">
+          <span>Submit Application</span>
+          <span>→</span>
+        </button>
+        <p style="margin-top:.75rem; font-size:.78rem; color:var(--muted); text-align:center;">
+          Your info is sent securely to <strong style="color:var(--text);">hr@mypetclub.app</strong>
+        </p>
+      </form>
+    </div>
+
+    <!-- Success state (shown after submit) -->
+    <div id="successState" class="success-state" style="display:none;">
+      <div class="success-icon">🎉</div>
+      <h3>Application submitted!</h3>
+      <p>Thanks for applying. Our HR team at <strong style="color:var(--orange);">hr@mypetclub.app</strong> will review your application and get back to you within 2 business days.</p>
+      <br />
+      <button onclick="closeApply()" class="btn-submit-modal" style="margin-top:.5rem;">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Open modal with role pre-filled
+  function openApply(role) {
+    document.getElementById('modalRoleBadge').textContent = 'Applying for: ' + role;
+    document.getElementById('hiddenPosition').value = role;
+    document.getElementById('emailSubject').value = 'Job Application: ' + role + ' — PETclub';
+    document.getElementById('formState').style.display = '';
+    document.getElementById('successState').style.display = 'none';
+    document.getElementById('applyForm').reset();
+    document.getElementById('fileName').textContent = '';
+    document.getElementById('applyBackdrop').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeApply() {
+    document.getElementById('applyBackdrop').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Close on backdrop click
+  document.getElementById('applyBackdrop').addEventListener('click', function(e) {
+    if (e.target === this) closeApply();
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeApply();
+  });
+
+  // Show selected file name
+  function showFileName(input) {
+    const name = input.files[0] ? input.files[0].name : '';
+    document.getElementById('fileName').textContent = name;
+  }
+
+  // Handle submit — show success state
+  function handleSubmit(e) {
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span>Sending…</span>';
+    // Let the form submit naturally to FormSubmit; show success after short delay
+    setTimeout(function() {
+      document.getElementById('formState').style.display = 'none';
+      document.getElementById('successState').style.display = '';
+    }, 1800);
+  }
+
+  // If redirected back with ?applied=1, show a toast
+  if (new URLSearchParams(window.location.search).get('applied') === '1') {
+    const t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#22c55e;color:#fff;padding:.75rem 1.5rem;border-radius:12px;font-weight:700;font-size:.9rem;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,.4)';
+    t.textContent = '✓ Application received! We\'ll be in touch soon.';
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 5000);
+  }
+</script>
 
 </body>
 </html>
