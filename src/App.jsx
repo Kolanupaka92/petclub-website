@@ -787,13 +787,35 @@ function Services() {
                 {/* Photo header with gradient overlay + CSS gradient fallback */}
                 <div className="relative overflow-hidden group-hover:scale-[1.01] transition-transform duration-500"
                   style={{ height: 210, background: `linear-gradient(135deg, ${s.gradFrom}, ${s.gradTo})` }}>
-                  {s.img && (
+                  {s.img ? (
                     <img
                       src={s.img}
                       alt={s.title}
                       className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                       onError={e => { e.target.style.display = 'none'; }}
                     />
+                  ) : (
+                    /* Illustrated placeholder for Coming Soon cards */
+                    <div className="absolute inset-0 flex items-center justify-center overflow-hidden" aria-hidden="true">
+                      {/* Large watermark icon — centred */}
+                      <span style={{ fontSize: 120, opacity: 0.12, lineHeight: 1, userSelect: 'none', filter: 'blur(1px)' }}>🍖</span>
+                      {/* Floating decorative food icons */}
+                      <span style={{ position:'absolute', top: 16, left: 20,  fontSize: 28, opacity: 0.20, transform: 'rotate(-15deg)' }}>🐟</span>
+                      <span style={{ position:'absolute', top: 12, right: 28, fontSize: 22, opacity: 0.18, transform: 'rotate(20deg)'  }}>🥩</span>
+                      <span style={{ position:'absolute', bottom: 32, left: 36, fontSize: 24, opacity: 0.16, transform: 'rotate(-10deg)' }}>🦴</span>
+                      <span style={{ position:'absolute', bottom: 20, right: 20, fontSize: 20, opacity: 0.18, transform: 'rotate(12deg)'  }}>🐾</span>
+                      {/* Subtle dot pattern */}
+                      {[...Array(6)].map((_, i) => (
+                        <div key={i} style={{
+                          position: 'absolute',
+                          width: 8, height: 8,
+                          borderRadius: '50%',
+                          background: 'rgba(255,255,255,0.15)',
+                          top:  `${[20, 55, 35, 70, 15, 65][i]}%`,
+                          left: `${[15, 25, 70, 80, 48, 55][i]}%`,
+                        }} />
+                      ))}
+                    </div>
                   )}
                   {/* Dual gradient overlay: top branding tint + bottom readability */}
                   <div className="absolute inset-0" style={{
