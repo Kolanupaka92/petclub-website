@@ -44,14 +44,14 @@ const IMG = {
 
 const SERVICES = [
   {
-    icon: '✂️', title: 'Grooming', price: 'from ₹499',
+    icon: '✂️', title: 'Grooming', price: 'from ₹800',
     desc: 'Bath, haircut, nail trim & full styling for dogs AND cats — at your doorstep by certified groomers.',
     img: IMG.grooming, gradFrom: '#9a3412', gradTo: '#f97316',
     tag: 'Most Popular', tagBg: '#fff7ed', tagColor: '#c2410c',
     bookable: true, catFriendly: true,
   },
   {
-    icon: '🐕‍🦺', title: 'Training', price: 'from ₹699',
+    icon: '🐕‍🦺', title: 'Training', price: 'from ₹650',
     desc: 'Obedience, agility & behaviour training for dogs by certified trainers — tailored to your dog\'s breed and temperament.',
     img: IMG.training, gradFrom: '#4c1d95', gradTo: '#8b5cf6',
     tag: 'High Demand', tagBg: '#f5f3ff', tagColor: '#6d28d9',
@@ -65,14 +65,14 @@ const SERVICES = [
     bookable: true, catFriendly: true,
   },
   {
-    icon: '🦮', title: 'Dog Walking', price: 'from ₹299',
+    icon: '🦮', title: 'Dog Walking', price: 'from ₹250',
     desc: 'GPS-tracked solo & group walks by verified walkers. Live updates sent to you.',
     img: IMG.walking, gradFrom: '#14532d', gradTo: '#4ade80',
     tag: 'New', tagBg: '#f0fdf4', tagColor: '#15803d',
     bookable: true, catFriendly: false,
   },
   {
-    icon: '🏠', title: 'Pet Boarding', price: 'from ₹499/night',
+    icon: '🏠', title: 'Pet Boarding', price: 'from ₹800/night',
     desc: 'Cage-free home stays for dogs & cats with verified boarders. Daily photos guaranteed.',
     img: IMG.boarding, gradFrom: '#78350f', gradTo: '#f59e0b',
     tag: 'New', tagBg: '#fffbeb', tagColor: '#b45309',
